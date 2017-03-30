@@ -1,0 +1,44 @@
+package nl.tue.ddss.bimsparql;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.hp.hpl.jena.graph.Graph;
+import com.hp.hpl.jena.graph.compose.MultiUnion;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.query.Query;
+import com.hp.hpl.jena.query.QueryExecution;
+import com.hp.hpl.jena.query.QueryExecutionFactory;
+import com.hp.hpl.jena.query.QueryFactory;
+import com.hp.hpl.jena.query.QuerySolution;
+import com.hp.hpl.jena.query.ResultSet;
+import com.hp.hpl.jena.query.ResultSetFormatter;
+import com.hp.hpl.jena.rdf.model.Model;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
+import com.hp.hpl.jena.rdf.model.RDFNode;
+
+public class JenaTest {
+	
+	
+	private static final String prefixes="PREFIX ifcowl: <http://www.buildingsmart-tech.org/ifcOWL/IFC2X3_TC1#>\n"+"PREFIX list: <http://www.co-ode.org/ontologies/list.owl#>\n"+"PREFIX expr: <http://purl.org/voc/express#>\n"
+			+ "PREFIX qrw:<http://bimsparql.org/query-rewriting#>\n" + "PREFIX pset:<http://bimsparql.org/pset#>\n"+ "PREFIX spt:<http://bimsparql.org/spatial#>\n"+"PREFIX pdt:<http://bimsparql.org/product#>\n";
+	public static Query getQuery(String q){
+		return QueryFactory.create(q);
+	}
+	public static void main(String[] args) throws FileNotFoundException{
+		Model model=ModelFactory.createDefaultModel();
+		InputStream in=new FileInputStream("BimSPARQL_example.ttl");
+		model.read(in,null,"TTL");
+		String query=prefixes+"SELECT ?s\n"+ 
+"WHERE{?s ?p ?o .}";
+		Query q = QueryFactory.create(query);
+		QueryExecution qe = QueryExecutionFactory.create(q, model);
+		ResultSet qresults = qe.execSelect();
+        ResultSetFormatter.out(qresults);
+	}
+
+}

@@ -1,0 +1,148 @@
+@prefix ibc:  <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix unit: <http://data.nasa.gov/qudt/owl/unit#> .
+
+_:table705-8_1
+  ibc:minFSDistance "0"^^unit:Foot  ;
+  ibc:maxFSDistance "3"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0"^^xsd:double  .
+  _:table705-8_2
+  ibc:minFSDistance "0"^^unit:Foot  ;
+  ibc:maxFSDistance "3"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0"^^xsd:double   .
+  _:table705-8_3
+  ibc:minFSDistance "0"^^unit:Foot  ;
+  ibc:maxFSDistance "3"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0"^^xsd:double   .
+  _:table705-8_4
+  ibc:minFSDistance "3"^^unit:Foot  ;
+  ibc:maxFSDistance "5"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0"^^xsd:double   .
+  _:table705-8_5
+  ibc:minFSDistance "3"^^unit:Foot  ;
+  ibc:maxFSDistance "5"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true ; 
+  ibc:allowableArea "0.15"^^xsd:double   .
+  _:table705-8_6
+  ibc:minFSDistance "3"^^unit:Foot  ;
+  ibc:maxFSDistance "5"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true ; 
+  ibc:allowableArea "0.15"^^xsd:double   .
+  _:table705-8_7
+  ibc:minFSDistance "5"^^unit:Foot  ;
+  ibc:maxFSDistance "10"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0.10"^^xsd:double  .
+  _:table705-8_8
+  ibc:minFSDistance "5"^^unit:Foot  ;
+  ibc:maxFSDistance "10"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true ; 
+  ibc:allowableArea "0.25"^^xsd:double   .
+  _:table705-8_9
+  ibc:minFSDistance "5"^^unit:Foot  ;
+  ibc:maxFSDistance "10"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true ; 
+  ibc:allowableArea "0.25"^^xsd:double   .
+  _:table705-8_10
+  ibc:minFSDistance "10"^^unit:Foot  ;
+  ibc:maxFSDistance "15"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0.15"^^xsd:double   .
+  _:table705-8_11
+  ibc:minFSDistance "10"^^unit:Foot  ;
+  ibc:maxFSDistance "15"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0.45"^^xsd:double   .
+  _:table705-8_12
+  ibc:minFSDistance "10"^^unit:Foot  ;
+  ibc:maxFSDistance "15"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0.45"^^xsd:double   .
+_:table705-8_13
+  ibc:minFSDistance "15"^^unit:Foot  ;
+  ibc:maxFSDistance "20"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0.25"^^xsd:double   .
+_:table705-8_14
+  ibc:minFSDistance "15"^^unit:Foot  ;
+  ibc:maxFSDistance "20"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0.75"^^xsd:double   .
+  _:table705-8_15
+  ibc:minFSDistance "15"^^unit:Foot  ;
+  ibc:maxFSDistance "20"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "0.75"^^xsd:double   .
+  _:table705-8_16
+  ibc:minFSDistance "20"^^unit:Foot  ;
+  ibc:maxFSDistance "25"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0.45"^^xsd:double   .
+  _:table705-8_17
+  ibc:minFSDistance "20"^^unit:Foot  ;
+  ibc:maxFSDistance "25"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double   .
+  _:table705-8_18
+  ibc:minFSDistance "20"^^unit:Foot  ;
+  ibc:maxFSDistance "25"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double   .
+  _:table705-8_19
+  ibc:minFSDistance "25"^^unit:Foot  ;
+  ibc:maxFSDistance "30"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "0.7"^^xsd:double   .
+  _:table705-8_20
+  ibc:minFSDistance "25"^^unit:Foot  ;
+  ibc:maxFSDistance "30"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double   .
+  _:table705-8_21
+  ibc:minFSDistance "25"^^unit:Foot  ;
+  ibc:maxFSDistance "30"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double   .
+    _:table705-8_22
+  ibc:minFSDistance "30"^^unit:Foot  ;
+  ibc:maxFSDistance "INF"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection false  ; 
+  ibc:allowableArea "1"^^xsd:double  .
+  _:table705-8_23
+  ibc:minFSDistance "30"^^unit:Foot  ;
+  ibc:maxFSDistance "INF"^^unit:Foot  ;
+  ibc:openingProtection false ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double  .
+   _:table705-8_24
+  ibc:minFSDistance "30"^^unit:Foot  ;
+  ibc:maxFSDistance "INF"^^unit:Foot  ;
+  ibc:openingProtection true ;
+  ibc:sprinklerProtection true  ; 
+  ibc:allowableArea "1"^^xsd:double   . 

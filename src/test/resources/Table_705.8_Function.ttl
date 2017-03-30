@@ -1,0 +1,102 @@
+# baseURI: http://teamwork.topbraidlive.org/unnamed17
+# imports: file:/C:/Users/Chi/Dropbox/TBCMEWorkspace/IBC/Table_705.8.ttl
+# imports: http://spinrdf.org/spin
+# imports: http://teamwork.topbraidlive.org/unnamed16
+
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix qudtspin:  <http://data.qudt.org/qudt/owl/qudt-spin#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sp:      <http://spinrdf.org/sp#> .
+@prefix spin:    <http://spinrdf.org/spin#> .
+@prefix spl:     <http://spinrdf.org/spl#> .
+@prefix unit:    <http://data.nasa.gov/qudt/owl/unit#> .
+@prefix unnamed17:  <http://teamwork.topbraidlive.org/unnamed17#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+<http://teamwork.topbraidlive.org/unnamed17>
+      rdf:type owl:Ontology ;
+      owl:imports <http://spinrdf.org/spin> , <file:/C:/Users/Chi/Dropbox/TBCMEWorkspace/IBC/Table_705.8.ttl> , <http://teamwork.topbraidlive.org/unnamed16> ;
+      owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
+
+<http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/allowableArea_T705-8>
+      rdf:type spin:Function ;
+      rdfs:subClassOf spin:Functions ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "ap"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "min"^^xsd:string
+                                    ] ;
+                            sp:predicate <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/minFSDistance> ;
+                            sp:subject
+                                    [ sp:varName "b1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "max"^^xsd:string
+                                    ] ;
+                            sp:predicate <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/maxFSDistance> ;
+                            sp:subject
+                                    [ sp:varName "b1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg3 ;
+                            sp:predicate <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/sprinklerProtection> ;
+                            sp:subject
+                                    [ sp:varName "b1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg2 ;
+                            sp:predicate <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/openingProtection> ;
+                            sp:subject
+                                    [ sp:varName "b1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "ap"^^xsd:string
+                                    ] ;
+                            sp:predicate <http://www.iccsafe.org/codes-tech-support/codes/2015-i-codes/ibc/allowableArea> ;
+                            sp:subject
+                                    [ sp:varName "b1"^^xsd:string
+                                    ]
+                          ] [ rdf:type sp:Filter ;
+                            sp:expression
+                                    [ rdf:type sp:and ;
+                                      sp:arg1 [ rdf:type sp:ge ;
+                                                sp:arg1 [ rdf:type qudtspin:convertLiteral ;
+                                                          sp:arg1 spin:_arg1 ;
+                                                          sp:arg2 unit:Foot
+                                                        ] ;
+                                                sp:arg2 [ rdf:type xsd:double ;
+                                                          sp:arg1 [ sp:varName "min"^^xsd:string
+                                                                  ]
+                                                        ]
+                                              ] ;
+                                      sp:arg2 [ rdf:type sp:lt ;
+                                                sp:arg1 [ rdf:type qudtspin:convertLiteral ;
+                                                          sp:arg1 spin:_arg1 ;
+                                                          sp:arg2 unit:Foot
+                                                        ] ;
+                                                sp:arg2 [ rdf:type xsd:double ;
+                                                          sp:arg1 [ sp:varName "max"^^xsd:string
+                                                                  ]
+                                                        ]
+                                              ]
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                rdfs:comment "Actural fire separation distance"^^xsd:string ;
+                spl:predicate sp:arg1
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                rdfs:comment "Opening protection"^^xsd:string ;
+                spl:predicate sp:arg2 ;
+                spl:valueType xsd:boolean
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                rdfs:comment "Sprinklered for opening"^^xsd:string ;
+                spl:predicate sp:arg3 ;
+                spl:valueType xsd:boolean
+              ] .

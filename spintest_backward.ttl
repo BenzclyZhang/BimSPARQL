@@ -1,0 +1,2815 @@
+# baseURI: http://rdfrepo.ddss.nl/rule/spin_backward
+# imports: http://rdfrepo.ddss.nl/rewrite
+# imports: http://spinrdf.org/spin
+# imports: http://www.buildingsmart-tech.org/ifcOWL/IFC2X3_TC1
+
+@prefix dce:     <http://purl.org/dc/elements/1.1/> .
+@prefix expr:    <http://purl.org/voc/express#> .
+@prefix ifcowl:  <http://www.buildingsmart-tech.org/ifcOWL/IFC2X3_TC1#> .
+@prefix list:    <http://www.co-ode.org/ontologies/list.owl#> .
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rw:      <http://rdfrepo.ddss.nl/rewrite#> .
+@prefix sp:      <http://spinrdf.org/sp#> .
+@prefix spin:    <http://spinrdf.org/spin#> .
+@prefix spl:     <http://spinrdf.org/spl#> .
+@prefix test:    <http://rdfrepo.ddss.nl/rule/test#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+
+rw:hasActorAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingActor_IfcRelAssignsToActor ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelAssignsToActor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcActor ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcControl ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasApprovalAssociation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesApproval ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingApproval_IfcRelAssociatesApproval ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcApproval ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasClassificationAssociation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesClassification ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingClassification_IfcRelAssociatesClassification ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a4"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:referencedSource_IfcClassificationReference ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcClassificationReference ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcClassification ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a4"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasControlAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingControl_IfcRelAssignsToControl ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelAssignsToControl ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcControl ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasControlFlow
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelFlowControlElements ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedControlElements_IfcRelFlowControlElements ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingFlowElement_IfcRelFlowControlElements ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcDistributionControlElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcDistributionFlowElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasCoordinateX
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "val"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "y"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:coordinates_IfcCartesianPoint ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "z"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasContents ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "z"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcCartesianPoint ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasCoordinateY
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "val"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "y"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:coordinates_IfcCartesianPoint ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "list2"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasNext ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "z"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasContents ;
+                            sp:subject
+                                    [ sp:varName "list2"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "z"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcCartesianPoint ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "list2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasCoordinateZ
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "val"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "y"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:coordinates_IfcCartesianPoint ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "list2"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasNext ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "list3"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasNext ;
+                            sp:subject
+                                    [ sp:varName "list2"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "z"^^xsd:string
+                                    ] ;
+                            sp:predicate list:hasContents ;
+                            sp:subject
+                                    [ sp:varName "list3"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "z"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "y"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "list2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcLengthMeasure_List ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "list3"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasDocumentAssociation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesDocument ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingDocument_IfcRelAssociatesDocument ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcDocumentInformation ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasElementComposition
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAggregates ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasElementCovering
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelCoversBldgElements ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingBuildingElement_IfcRelCoversBldgElements ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedCoverings_IfcRelCoversBldgElements ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcCovering ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasElementDecomposition
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAggregates ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasElementFilling
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a0"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasElementVoiding ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingOpeningElement_IfcRelFillsElement ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a0"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedBuildingElement_IfcRelFillsElement ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelFillsElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a0"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasElementVoiding
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelVoidsElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingBuildingElement_IfcRelVoidsElement ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedOpeningElement_IfcRelVoidsElement ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcOpeningElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasFireRating
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ] [ sp:object "FireRating" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasGroupAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssignsToGroup ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingGroup_IfcRelAssignsToGroup ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcGroup ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcProduct ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasHeight
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "Height" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasLibraryAssociation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingLibrary_IfcRelAssociatesLibrary ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a4"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:referenceIntoLibrary_IfcLibraryReference ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelAssociatesLibrary ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcLibraryReference ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcLibraryInformation ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a4"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasMaterial
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesMaterial ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingMaterial_IfcRelAssociatesMaterial ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcMaterial ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasNosingLength
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "NosingLength" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasNumberOfRiser
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "NumberOfRiser" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasInteger ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasNumberOfStoreys
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "NumberOfStoreys" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasInteger ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasNumberOfTreads
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "NumberOfTreads" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasInteger ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasObjectNesting
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelNests ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasObjectTyping
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelDefinesByType ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDefines ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingType_IfcRelDefinesByType ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcTypeObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasPortNesting
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelNests ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcDistributionElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcDistributionPort ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProcessAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssignsToProcess ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingProcess_IfcRelAssignsToProcess ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcResource ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProcess ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProductAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingProduct_IfcRelAssignsToProduct ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelAssignsToProduct ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProduct ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProjectClassificationInformation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesClassification ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingClassification_IfcRelAssociatesClassification ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcClassification ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProjectDocumentInformation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesDocument ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingDocument_IfcRelAssociatesDocument ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcDocumentInformation ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] .
+
+rw:hasProjectLibraryInformation
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssociatesLibrary ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingLibrary_IfcRelAssociatesLibrary ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcLibraryInformation ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProjectedArea
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "ProjectedArea" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasProperty
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "p"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "pSet"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasPropertySet ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:hasProperties_IfcPropertySet ;
+                            sp:subject
+                                    [ sp:varName "pSet"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProperty ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasPropertySet
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "pSet"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDefines ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "pSet"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingPropertyDefinition_IfcRelDefinesByProperties ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcPropertySet ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "pSet"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelDefinesByProperties ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasQuantity
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a15"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasQuantitySets ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "a15"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:quantities_IfcElementQuantity ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcPhysicalQuantity ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a15"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasQuantitySets
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelDefinesByProperties ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssociates ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingMaterial_IfcRelAssociatesMaterial ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObject ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcElementQuantity ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasReference
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "reference"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "Reference" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "reference"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcPropertySingleValue ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasResourceAssignment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssignsToResource ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingResource_IfcRelAssignsToResource ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcResource ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcActor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAssignsToResource ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingResource_IfcRelAssignsToResource ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelAssigns ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcResource ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcProduct ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasRiserHeight
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "RiserHeight" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasServiceSystem
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelServicesBuildings ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedBuildings_IfcRelServicesBuildings ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingSystem_IfcRelServicesBuildings ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcSpatialStructureElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcSystem ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSlope
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "Slope" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSpaceBoundaries
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelSpaceBoundary ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedBuildingElement_IfcRelSpaceBoundary ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingSpace_IfcRelSpaceBoundary ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcSpace ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSpan
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "Span" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSpatialContainer
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelContainedInSpatialStructure ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedElements_IfcRelContainedInSpatialStructure ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingStructure_IfcRelContainedInSpatialStructure ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcSpatialStructureElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcProduct ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSpatialContainment
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingStructure_IfcRelContainedInSpatialStructure ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedElements_IfcRelContainedInSpatialStructure ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelContainedInSpatialStructure ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcSpatialStructureElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSpatialDecomposition
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelAggregates ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcObjectDefinition ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcSpatialStructureElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasStructuralActivity
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a3"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedStructuralActivity_IfcRelConnectsStructuralActivity ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a3"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingElement_IfcRelConnectsStructuralActivity ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a1"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:appliedLoad_IfcStructuralActivity ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcStructuralActivity ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcRelConnectsStructuralActivity ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcStructuralItem ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a3"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcStructuralLoad ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasStructuralConnectivity
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelConnectsStructuralMember ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingStructuralMember_IfcRelConnectsStructuralMember ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedStructuralConnection_IfcRelConnectsStructuralMember ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcStructuralMember ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcStructuralConnection ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasSuccessorProcess
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "a2"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcRelSequence ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedProcess_IfcRelSequence ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatingProcess_IfcRelSequence ;
+                            sp:subject
+                                    [ sp:varName "a1"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcProcess ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcProcess ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "a2"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasTotalArea
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "TotalArea" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasTreadLength
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "TreadLength" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasTreadLengthAtInnerSide
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "TreadLengthAtInnerSide" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasTreadLengthAtOffset
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "TreadLengthAtOffset" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasWaistThickness
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "WaistThickness" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:hasWalkingLineOffset
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "WalkingLineOffset" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:isConnectedByDoorTo
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "space"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "d"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasSpaceBoundaries ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcDoor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "d"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasSpaceBoundaries ;
+                            sp:subject
+                                    [ sp:varName "space"^^xsd:string
+                                    ]
+                          ] [ rdf:type sp:Filter ;
+                            sp:expression
+                                    [ rdf:type sp:ne ;
+                                      sp:arg1 spin:_arg1 ;
+                                      sp:arg2 [ sp:varName "space"^^xsd:string
+                                              ]
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:isExtendToStructure
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "ExtendToStructure" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasBoolean ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:isExternal
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "IsExternal" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasBoolean ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:isLoadBearing
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "str"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "p"^^xsd:string
+                                    ] ;
+                            sp:predicate rw:hasProperty ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object
+                                    [ sp:varName "name"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcProperty ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object "LoadBearing" ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "name"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "val"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:nominalValue_IfcPropertySingleValue ;
+                            sp:subject
+                                    [ sp:varName "p"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "str"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasBoolean ;
+                            sp:subject
+                                    [ sp:varName "val"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+rw:name
+      rdf:type spin:MagicProperty ;
+      rdfs:subClassOf spin:MagicProperties ;
+      spin:body
+              [ rdf:type sp:Select ;
+                sp:resultVariables ([ sp:varName "x4"^^xsd:string
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "x2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:name_IfcRoot ;
+                            sp:subject spin:_arg1
+                          ] [ sp:object ifcowl:IfcLabel ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "x2"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "x4"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasString ;
+                            sp:subject
+                                    [ sp:varName "x2"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelConnectsWithRealizingElements ;
+                            sp:predicate rdf:type ;
+                            sp:subject spin:_arg1
+                          ])
+              ] ;
+      spin:constraint
+              [ rdf:type spl:Argument ;
+                spl:predicate sp:arg1 ;
+                spl:valueType rdfs:Resource
+              ] .
+
+<http://rdfrepo.ddss.nl/rule/spin_backward>
+      rdf:type owl:Ontology ;
+      owl:imports <http://www.buildingsmart-tech.org/ifcOWL/IFC2X3_TC1> , <http://spinrdf.org/spin> , <http://rdfrepo.ddss.nl/rewrite> ;
+      owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
+
+list:hasContents
+      rdf:type owl:ObjectProperty .
+
+list:hasNext
+      rdf:type owl:ObjectProperty .
+
+list:isFollowedBy
+      rdf:type rdf:Property .
+
+owl:Thing
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:InternalWall ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcWall ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ] [ sp:object "false"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:ExternalWindow ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcWindow ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ] [ sp:object "true"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:ExternalDoor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcDoor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ] [ sp:object "true"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:ElevatedSpace ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "x"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object
+                                    [ sp:varName "x"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedObjects_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "floor"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingObject_IfcRelDecomposes ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "elev"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:elevation_IfcBuildingStorey ;
+                            sp:subject
+                                    [ sp:varName "floor"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "y"^^xsd:string
+                                    ] ;
+                            sp:predicate expr:hasDouble ;
+                            sp:subject
+                                    [ sp:varName "elev"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcBuildingStorey ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "floor"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcSpace ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "x"^^xsd:string
+                                    ]
+                          ] [ rdf:type sp:Filter ;
+                            sp:expression
+                                    [ rdf:type sp:gt ;
+                                      sp:arg1 [ sp:varName "y"^^xsd:string
+                                              ] ;
+                                      sp:arg2 0.0
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:InternalDoor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcDoor ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ] [ sp:object "false"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:ExternalWall ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcWall ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ] [ sp:object "true"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "wall"^^xsd:string
+                                    ]
+                          ])
+              ] ;
+      spin:rule
+              [ rdf:type sp:Construct ;
+                sp:templates ([ sp:object rw:InternalWindow ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ]) ;
+                sp:where ([ sp:object ifcowl:IfcWindow ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ] [ sp:object "false"^^xsd:boolean ;
+                            sp:predicate rw:isExternal ;
+                            sp:subject
+                                    [ sp:varName "d"^^xsd:string
+                                    ]
+                          ])
+              ] .
