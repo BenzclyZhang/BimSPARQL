@@ -30,10 +30,9 @@
     <version>1.0.0</version>
 </dependency>	
 		<dependency>
-		<groupId>org.orbisgis</groupId>
-		<artifactId>jdelaunay</artifactId>
-        <version>1.0.0</version>
-        <scope>compile</scope>
+    <groupId>org.orbisgis</groupId>
+    <artifactId>jdelaunay</artifactId>
+    <version>0.5.2</version>
 </dependency>
 		<dependency>
 			<groupId>org.topbraid</groupId>
