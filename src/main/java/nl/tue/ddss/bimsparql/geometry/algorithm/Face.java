@@ -17,8 +17,7 @@ public class Face {
 	
 	public Face(Polygon polygon, int index) {
 		this.polygon=polygon;
-		this.index=index;
-		
+		this.index=index;		
 	}
 
 	public Vector3d getNormal() {

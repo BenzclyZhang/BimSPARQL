@@ -1,3 +1,19 @@
+/*******************************************************************************
+ * Copyright (C) 2017 Chi
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ ******************************************************************************/
 package nl.tue.ddss.bimsparql.geometry.algorithm;
 
 import java.util.ArrayList;
@@ -14,7 +30,6 @@ import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.Segment;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.Sphere;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
@@ -39,6 +54,8 @@ public class Distance {
 	public double distanceSegmentSegment2D(Segment gA, Segment gB) {
 		return 0;
 	}
+	
+	
 
 
 //----------------------
@@ -61,14 +78,10 @@ public class Distance {
 		case TYPE_TRIANGLE:
 			return distanceTriangleGeometry3D((Triangle) gA, gB);
 
-		case TYPE_SOLID:
-			return distanceSolidGeometry3D((Solid) gA, gB);
 
-		// collection dispatch
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
 		case TYPE_GEOMETRYCOLLECTION:
 		case TYPE_TRIANGULATEDSURFACE:
 		case TYPE_POLYHEDRALSURFACE:
@@ -92,13 +105,10 @@ public class Distance {
 
 		case TYPE_POLYGON:
 			return distancePointPolygon3D(gA, (Polygon) gB);
-		case TYPE_SOLID:
-			return distancePointSolid3D(gA, (Solid) gB);
 
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
 		case TYPE_GEOMETRYCOLLECTION:
 		case TYPE_TRIANGULATEDSURFACE:
 		case TYPE_POLYHEDRALSURFACE:
@@ -157,23 +167,6 @@ public class Distance {
 		return distanceGeometryCollectionToGeometry3D(triangulateSurfaceB, gA);
 	}
 
-	static double distancePointSolid3D(Point gA, Solid gB) throws GeometryException {
-		if (gA.isEmpty() || gB.isEmpty()) {
-			return Double.POSITIVE_INFINITY;
-		}
-
-		if (Intersects.intersectsPointSolid3D(gA, gB)!=0) {
-			return 0.0;
-		}
-
-		double dMin = Double.POSITIVE_INFINITY;
-
-		for (int i = 0; i < gB.numShells(); i++) {
-			dMin = Math.min(dMin, distanceGeometryCollectionToGeometry3D(gB.shellN(i), gA));
-		}
-
-		return dMin;
-	}
 
 	static double distanceLineStringGeometry3D(LineString gA, Geometry gB) throws GeometryException{
 		// SFCGAL_DEBUG( boost::format("dispatch
@@ -192,13 +185,9 @@ public class Distance {
 		case TYPE_POLYGON:
 			return distanceLineStringPolygon3D(gA, (Polygon) gB);
 
-		case TYPE_SOLID:
-			return distanceLineStringSolid3D(gA, (Solid) gB);
-
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
 		case TYPE_GEOMETRYCOLLECTION:
 		case TYPE_TRIANGULATEDSURFACE:
 		case TYPE_POLYHEDRALSURFACE:
@@ -259,24 +248,6 @@ public class Distance {
 		return distanceGeometryCollectionToGeometry3D(triangulateSurfaceB, gA);
 	}
 
-	public static double distanceLineStringSolid3D(LineString gA, Solid gB) {
-		if (gA.isEmpty() || gB.isEmpty()) {
-			return Double.POSITIVE_INFINITY;
-		}
-
-		if (Intersects.intersectsLineStringSolid3D(gA, gB)!=0) {
-			return 0.0;
-		}
-
-		double dMin = Double.POSITIVE_INFINITY;
-
-		for (int i = 0; i < gB.numShells(); i++) {
-			dMin = Math.min(dMin, gB.shellN(i).distance3D(gA));
-		}
-
-		return dMin;
-	}
-
 	public static double distanceTriangleGeometry3D(Triangle gA, Geometry gB) throws GeometryException {
 		// SFCGAL_DEBUG( boost::format("dispatch
 		// distanceTriangleGeometry3D(%s,%s)") % gA.asText() % gB.asText() );
@@ -294,13 +265,9 @@ public class Distance {
 		case TYPE_POLYGON:
 			return distancePolygonGeometry3D((Polygon) gB, gA);
 
-		case TYPE_SOLID:
-			return distanceTriangleSolid3D(gA, (Solid) gB);
-
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
 		case TYPE_GEOMETRYCOLLECTION:
 		case TYPE_TRIANGULATEDSURFACE:
 		case TYPE_POLYHEDRALSURFACE:
@@ -311,23 +278,6 @@ public class Distance {
 				String.format("distance3D(%s,%s) is not implemented", gA.geometryType(), gB.geometryType()));
 	}
 
-	public static double distanceTriangleSolid3D(Triangle gA, Solid gB) {
-		if (gA.isEmpty() || gB.isEmpty()) {
-			return Double.POSITIVE_INFINITY;
-		}
-
-		if (Intersects.intersectsTriangleGeometry3D(gA, gB)==2) {
-			return 0.0;
-		}
-
-		double dMin = Double.POSITIVE_INFINITY;
-
-		for (int i = 0; i < gB.numShells(); i++) {
-			dMin = Math.min(dMin, gB.shellN(i).distance3D(gA));
-		}
-
-		return dMin;
-	}
 
 	public static double distancePolygonGeometry3D(Polygon gA, Geometry gB) throws GeometryException {
 		// SFCGAL_DEBUG( boost::format("dispatch
@@ -341,62 +291,6 @@ public class Distance {
 		Triangulation.triangulate(gA, triangulateSurfaceA);
 		return distanceGeometryCollectionToGeometry3D(triangulateSurfaceA, gB);
 	}
-
-	public static double distanceSolidGeometry3D(Solid gA, Geometry gB) throws GeometryException {
-		// SFCGAL_DEBUG( boost::format("dispatch
-		// distanceSolidGeometry3D(%s,%s)") % gA.asText() % gB.asText() );
-
-		switch (gB.geometryTypeId()) {
-		case TYPE_POINT:
-			return distancePointSolid3D((Point) gB, gA); // symetric
-
-		case TYPE_LINESTRING:
-			return distanceLineStringSolid3D((LineString) gB, gA); // symetric
-
-		case TYPE_TRIANGLE:
-			return distanceTriangleSolid3D((Triangle) gB, gA); // symetric
-
-		case TYPE_POLYGON:
-			return distancePolygonGeometry3D((Polygon) gB, gA); // symetric
-
-		case TYPE_SOLID:
-			return distanceSolidSolid3D(gA, (Solid) gB);
-
-		case TYPE_MULTIPOINT:
-		case TYPE_MULTILINESTRING:
-		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
-		case TYPE_GEOMETRYCOLLECTION:
-		case TYPE_TRIANGULATEDSURFACE:
-		case TYPE_POLYHEDRALSURFACE:
-			return distanceGeometryCollectionToGeometry3D(gB, gA);
-		}
-
-		throw new GeometryException(
-				String.format("distance3D(%s,%s) is not implemented", gA.geometryType(), gB.geometryType()));
-	}
-
-	public static double distanceSolidSolid3D(Solid gA, Solid gB) throws GeometryException {
-		if (gA.isEmpty() || gB.isEmpty()) {
-			return Double.POSITIVE_INFINITY;
-		}
-
-		if (Intersects.intersects3D(gA, gB)==2) {
-			return 0.0;
-		}
-
-		double dMin = Double.POSITIVE_INFINITY;
-
-		for (int i = 0; i < gA.numShells(); i++) {
-			for (int j = 0; j < gB.numShells(); j++) {
-				dMin = Math.min(dMin, gA.shellN(i).distance3D(gB.shellN(j)));
-			}
-		}
-
-		return dMin;
-	}
-
-
 
 	public static Sphere boundingSphere(Geometry geom) {
 		if (geom.isEmpty()) {

@@ -1,8 +1,6 @@
 package nl.tue.ddss.bimsparql.geometry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.GraphUtil;
@@ -42,19 +40,4 @@ public class ProductUtil {
 			}			
 	}
 	
-	
-    public static List<Surface> getSurfaces(Product product){
-    	List<Surface> surfaces= new ArrayList<Surface>();
-    	for (Triangle t:product.getTriangles()){
-    		if(surfaces.size()==0){
-    			Surface surface=new TriangulatedSurface();
-    			surface.getTriangles().add(t);
-    			surfaces.add(surface);
-    		}
-    		else{
-    			
-    		}
-    	}
-    	return surfaces;
-    }
 }

@@ -1,7 +1,6 @@
 package nl.tue.ddss.bimsparql.geometry;
 
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public interface Geometry {
@@ -10,7 +9,17 @@ public interface Geometry {
  
     public boolean isMeasured();
     
-	public AABB   boundingBox();
+    
+    
+	public Box  getAABB();
+	
+	public Box getMVBB();
+	
+	public void setAABB(Box aabb);
+	
+	public void setMVBB(Box mvbb);
+	
+	
 	
 	public void accept(GeometryVisitor visitor);
 

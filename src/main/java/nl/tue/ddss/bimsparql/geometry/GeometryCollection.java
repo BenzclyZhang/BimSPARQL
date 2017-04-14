@@ -3,12 +3,13 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class GeometryCollection implements Geometry{
 	
 	List<Geometry> geometries=new ArrayList<Geometry>();
+	Box aabb;
+	Box mvbb;
 
 	public void addGeometry(Geometry gg) {
 		// TODO Auto-generated method stub
@@ -30,11 +31,6 @@ public class GeometryCollection implements Geometry{
 		return false;
 	}
 
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void accept(GeometryVisitor visitor) {
@@ -88,6 +84,31 @@ public class GeometryCollection implements Geometry{
 	public TriangulatedSurface asTriangulatedSurface() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Box getAABB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Box getMVBB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void setAABB(Box aabb) {
+		this.aabb=aabb;
+		
+	}
+
+	@Override
+	public void setMVBB(Box mvbb) {
+		this.mvbb=mvbb;
+		
 	}
 	
 	

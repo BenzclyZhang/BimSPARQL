@@ -3,12 +3,13 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class TriangulatedSurface extends Surface{
 	
 	List<Triangle> triangles=new ArrayList<Triangle>();
+	private Box aabb;
+	private Box mvbb;
 	
 	public TriangulatedSurface(){
 	    super();
@@ -86,7 +87,7 @@ public class TriangulatedSurface extends Surface{
 
 	public int  numGeometries()
 	{
-	    return triangles.size();
+	    return numTriangles();
 	}
 
 
@@ -121,12 +122,6 @@ public class TriangulatedSurface extends Surface{
 	}
 
 
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 
 	@Override
 	public Geometry boundary() {
@@ -153,6 +148,42 @@ public class TriangulatedSurface extends Surface{
 	public TriangulatedSurface asTriangulatedSurface() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	public List<Triangle> getTriangles() {
+		// TODO Auto-generated method stub
+		return triangles;
+	}
+
+
+	@Override
+	public Box getAABB() {
+		// TODO Auto-generated method stub
+		return aabb;
+	}
+
+
+	@Override
+	public Box getMVBB() {
+		// TODO Auto-generated method stub
+		return mvbb;
+	}
+
+
+
+
+	@Override
+	public void setAABB(Box aabb) {
+		// TODO Auto-generated method stub
+		this.aabb=aabb;
+	}
+
+
+	@Override
+	public void setMVBB(Box mvbb) {
+		// TODO Auto-generated method stub
+		this.mvbb=mvbb;
 	}
 
 

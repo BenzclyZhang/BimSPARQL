@@ -8,5 +8,6 @@ public class BimSPARQLNS {
 	public final static String QTO="http://bimsparql.org/qset#";
 	public final static String SCHM="http://bimsparql.org/schema#";
 	public final static String GEOM="http://bimsparql.org/geometry#";
+	public final static String IMPL="http://bimsparql.org/impl#";
 
 }

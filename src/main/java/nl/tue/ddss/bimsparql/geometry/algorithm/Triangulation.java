@@ -14,7 +14,6 @@ import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -31,14 +30,10 @@ public class Triangulation {
 			triangulate((Polygon)g, triangulatedSurface);;
 		case TYPE_TRIANGLE:
 			triangulate((Triangle)g, triangulatedSurface);
-		case TYPE_SOLID:
-			triangulate((Solid)g, triangulatedSurface);
 		// collection dispatch
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-			triangulate((GeometryCollection)g, triangulatedSurface);
-		case TYPE_MULTISOLID:
 			triangulate((GeometryCollection)g, triangulatedSurface);
 		case TYPE_GEOMETRYCOLLECTION:
 			triangulate((GeometryCollection)g, triangulatedSurface);
@@ -110,15 +105,6 @@ public class Triangulation {
 	    }
 	}
 
-	public static void triangulate(
-	    Solid g,
-	    TriangulatedSurface triangulatedSurface
-	)
-	{
-	    for (int i = 0; i < g.numShells(); i++ ) {
-	        triangulate( g.shellN( i ), triangulatedSurface );
-	    }
-	}
 
 	private static Triangle toTriangle(DTriangle dt){
 		return new Triangle(toPoint(dt.getPoint(0)),toPoint(dt.getPoint(1)),toPoint(dt.getPoint(2)));

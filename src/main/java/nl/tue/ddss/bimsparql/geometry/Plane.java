@@ -19,13 +19,15 @@ public class Plane {
 		this.p0=p0;
 		this.p1=p1;
 		this.p2=p2;
-		findEquation(p0,p1,p2);
 		normal=getNormal();
+		findEquation();
+		
 	}
 	
 	public Plane(Point3d p0, Vector3d normal) {
 		this.p0=p0;
 		this.normal=normal;
+		findEquation();
 	}
 	
 	public Plane(double a, double b,double c,double d){
@@ -35,23 +37,22 @@ public class Plane {
 		this.d=d;
 	}
 
-	public void findEquation(Point3d p0,Point3d p1,Point3d p2){
-		Vector3d v1=new Vector3d(p0.x-p2.x,p0.y-p2.y,p0.z-p2.z);
-		Vector3d v2=new Vector3d(p1.x-p2.x,p1.y-p2.y,p1.z-p2.z);
-		a=v1.y*v1.z-v2.y*v2.z;
-		b=v1.x*v1.z-v2.x*v2.z;
-		c=v1.x*v1.y-v2.x*v2.y;
+	public void findEquation(){
+		a=normal.x;
+		b=normal.y;
+		c=normal.z;
 		d=-a*p0.x-b*p0.y-c*p0.z;	
 	}
 	
 	
 	
 	public Vector3d getNormal(){
-		double nx = (p1.y - p0.y)*(p2.z - p0.z) - (p1.z - p0.z)*(p2.y - p0.y);
-		double ny = (p1.z - p0.z)*(p2.x - p0.x) - (p1.x - p0.x)*(p2.z - p0.z);
-		double nz = (p1.x - p0.x)*(p2.y - p0.y) - (p1.y - p0.y)*(p2.x - p0.x);
-		Vector3d normal=new Vector3d(nx,ny,nz);
-		normal.normalize();
+		Vector3d v1=GeometryUtils.vectorSubtract(p1, p0);
+		Vector3d v2=GeometryUtils.vectorSubtract(p2, p1);
+		Vector3d u=new Vector3d();
+		u.cross(v1, v2);
+		u.normalize();
+		this.normal=u;
 		return normal;
 	}
 	

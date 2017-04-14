@@ -1,14 +1,12 @@
 package nl.tue.ddss.bimsparql.ifcdoc;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
@@ -31,6 +29,10 @@ import com.hp.hpl.jena.vocabulary.RDF;
 import com.hp.hpl.jena.vocabulary.RDFS;
 import com.hp.hpl.jena.vocabulary.XSD;
 
+import nl.tue.ddss.convert.Namespace;
+
+
+
 public class PropertyParser {
 	
 	HashMap<Long,IfcdocVO> linemap;
@@ -42,10 +44,11 @@ public class PropertyParser {
 	
 	static final String IFCDOC="http://www.buildingsmart-tech.org/ifc/IFC4/final#";
 	static final String PSET="http://bimsparql.org/pset#";
-	static final String EXPRESS="http://purl.org/voc/express#";
-	static final String IFCOWL="http://www.buildingsmart-tech.org/ifcOWL/IFC2X3_TC1#";
-	static final String QRW="http://bimsparql.org/query-rewriting#";
+	static final String EXPRESS=Namespace.EXPRESS;
+	static final String IFCOWL=Namespace.IFC2X3_TC1;
+	static final String SCHM="http://bimsparql.org/schema#";
 	static final String VOIR="http://www.voir.com#";
+	int i=0;
 	
 	public PropertyParser(){
 		this.linemap=new HashMap<Long,IfcdocVO>();
@@ -63,7 +66,7 @@ public class PropertyParser {
 		model.setNsPrefix("rdfs",RDFS.getURI());
 		model.setNsPrefix("rdf",RDF.getURI());
 		model.setNsPrefix("xsd", XSD.getURI());
-		model.setNsPrefix("qrw", QRW);
+		model.setNsPrefix("schm", SCHM);
 		model.setNsPrefix("sp", SP.BASE_URI+"#");
 		model.setNsPrefix("spin", SPIN.BASE_URI+"#");
 		model.setNsPrefix("spl", SPL.BASE_URI+"#");
@@ -72,15 +75,11 @@ public class PropertyParser {
 //	    ifcSchema.read("src/main/java/nl/tue/ddss/bimsparql/resource/IFC2X3_TC1.owl");
 		groups=model.createProperty(PSET,"groups");
 		isGroupedBy=model.createProperty(PSET,"isGroupedBy");
-		
-		try {
-			InputStream in=new FileInputStream("IFC2X3_Schema.rdf");
+
+			InputStream in=getClass().getClassLoader().getResourceAsStream("IFC2X3_TC1.ttl");
 			ifcSchema=ModelFactory.createDefaultModel();
-			ifcSchema.read(in,null);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			ifcSchema.read(in,null,"TTL");
+
 		
 	}
 	
@@ -88,10 +87,9 @@ public class PropertyParser {
 	
 	public static void main(String[] args) throws FileNotFoundException{
 		PropertyParser pp=new PropertyParser();
-		OutputStream out=new FileOutputStream("C:\\users\\chi\\desktop\\experiment.ttl");
-		PrintStream print=new PrintStream(out);
+		OutputStream out=new FileOutputStream("C:\\users\\chi\\desktop\\pset.ttl");
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/nl/tue/ddss/bimsparql/resource/IFC2x3TC1_Properties.ifcdoc"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/IFC2x3TC1_Properties.ifcdoc"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {	      
 		    	   pp.parsePropertySet(line);
@@ -100,9 +98,6 @@ public class PropertyParser {
 		    	if(ifcdocVO!=null&&ifcdocVO.getName()!=null){
 		    	if(ifcdocVO.getName().equals("DOCPROPERTYSET")){
 		    		pp.addPropertySet(ifcdocVO,pp.model);
-		    	}
-		    	else if(ifcdocVO.getName().equals("DOCQUANTITYSET")){
-		    		pp.writeQuantitySet(ifcdocVO,print);
 		    	}
 		    	}
 		    }
@@ -144,9 +139,11 @@ public class PropertyParser {
 	private void addProperty(IfcdocVO pset,IfcdocVO ifcdocVO, Model model) {
 		ArrayList<Object> objectList=ifcdocVO.getObjectList();
 		String propertyName=objectList.get(0).toString();
+		String psetName=(String)pset.getObjectList().get(0);
 		String localName=String.valueOf(propertyName.charAt(0)).toLowerCase()+objectList.get(0).toString().substring(1);
 //				+"_"+pset.getObjectList().get(0).toString().substring(5);
-		Resource property=model.createResource(PSET+localName);
+		
+		Resource property=model.createResource(PSET+localName+psetName.substring(psetName.indexOf("_")));
 		property.addProperty(RDF.type, RDF.Property);
 		property.addProperty(RDF.type, SPIN.MagicProperty);
 		String propertyType=objectList.get(10).toString().replaceAll("\\s*\\.\\s*", "");
@@ -184,6 +181,7 @@ if (propertyType.equals("P_SINGLEVALUE")){
 	
 	private void singleValueInference(Resource property,String propertyName){
 		Resource range=property.getProperty(RDFS.range).getObject().asResource();
+
 		String lastTP=new String();
         if(JenaUtil.hasSuperClass(ifcSchema.getResource(range.getURI()), ifcSchema.getResource(EXPRESS+"NUMBER"))||JenaUtil.hasSuperClass(ifcSchema.getResource(range.getURI()), ifcSchema.getResource(EXPRESS+"REAL"))){
         	lastTP="?val express:hasDouble ?str .\n";
@@ -201,14 +199,16 @@ if (propertyType.equals("P_SINGLEVALUE")){
         	lastTP="?val express:hasLogical ?str .\n";
         }
         else {
+        	++i;
         	System.out.println("Error");
         	System.out.println(property.getURI());
         	System.out.println(range.getURI());
+        	System.out.println(i);
         }
         if(lastTP.length()>0){
 		String query="SELECT ?str\n"
 				+	"WHERE {\n"
-			  + " ?arg1 qrw:hasProperty ?p .\n"
+			  + " ?arg1 schm:hasProperty ?p .\n"
 			    +"?p ifcowl:name_IfcProperty ?name .\n"
 			   + "?name express:hasString \""+propertyName+"\" .\n"
 			   + "?p ifcowl:nominalValue_IfcPropertySingleValue ?val .\n"
@@ -227,10 +227,7 @@ if (propertyType.equals("P_SINGLEVALUE")){
         }
 	}
 	
-	private void writeQuantitySet(IfcdocVO ifcdocVO,PrintStream out) {
-		
-		
-	}
+
 	
 
 	private void parsePropertySet(String line) {

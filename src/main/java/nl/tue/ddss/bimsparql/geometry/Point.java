@@ -1,7 +1,7 @@
 package nl.tue.ddss.bimsparql.geometry;
 
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
+
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public interface Point extends Geometry{
@@ -67,9 +67,25 @@ public double[] getCoordinates();
 public double m();
 
 @Override
-public default AABB boundingBox() {
+public default Box getAABB() {
 	// TODO Auto-generated method stub
 	return null;
+}
+
+@Override
+public default Box getMVBB() {
+	// TODO Auto-generated method stub
+	return null;
+}
+
+@Override
+public default void setAABB(Box aabb){
+	
+}
+
+@Override
+public default void setMVBB(Box mvbb) {
+	// TODO Auto-generated method stub
 }
 
 @Override

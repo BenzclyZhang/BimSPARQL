@@ -15,7 +15,7 @@ import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryType;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
 import nl.tue.ddss.bimsparql.geometry.algorithm.ConvexHull;
-import nl.tue.ddss.bimsparql.geometry.algorithm.OBB;
+import nl.tue.ddss.bimsparql.geometry.algorithm.MVBB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Polyhedron;
 import nl.tue.ddss.bimsparql.geometry.ewkt.EwktReader;
 import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
@@ -30,13 +30,13 @@ public class OBBTest {
 		while(stmts.hasNext()){
 			Statement stmt=stmts.next();
 			System.out.print(stmt.getSubject().getLocalName()+ " : ");
-			String ewkt=stmt.getObject().asResource().getProperty(GEOM.asWKT).getObject().asLiteral().getString();
+			String ewkt=stmt.getObject().asResource().getProperty(GEOM.asBody).getObject().asLiteral().getString();
 			EwktReader reader=new EwktReader(ewkt);
 			Geometry geometry=reader.readGeometry();
 			if (geometry.geometryTypeId()==GeometryType.TYPE_POLYHEDRALSURFACE){
 			PolyhedralSurface ps=new ConvexHull().buildConvexHull((PolyhedralSurface)geometry);
 			Polyhedron ph=new Polyhedron(ps);
-			OBB obb=new OBB(ph);
+			MVBB obb=new MVBB(ph);
 			obb.computeMinBB();
 			Box box=obb.getBox();
 			System.out.println(box.getVolume()/1000000000);

@@ -17,6 +17,7 @@
 	</properties>
 
 	<dependencies>
+<!-- https://mvnrepository.com/artifact/java3d/j3d-core-utils -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

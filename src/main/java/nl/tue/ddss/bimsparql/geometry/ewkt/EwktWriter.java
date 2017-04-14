@@ -6,11 +6,9 @@ import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.MultiLineString;
 import nl.tue.ddss.bimsparql.geometry.MultiPoint;
 import nl.tue.ddss.bimsparql.geometry.MultiPolygon;
-import nl.tue.ddss.bimsparql.geometry.MultiSolid;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -67,30 +65,18 @@ public class EwktWriter {
 	    case TYPE_POLYHEDRALSURFACE:
 	        write( (PolyhedralSurface)g);
 	        return ;
-
-	    case TYPE_SOLID:
-	        write( (Solid)g);
-	        return ;
-
-	    case TYPE_MULTISOLID:
-	        write( (MultiSolid)g);
-	        return ;
 	    }
 
 	   throw new WktWriteException("WktWriter : '" + g.geometryType() + "' is not supported");
 	}
 
-	///
-	///
-	///
+
 	void write(Geometry g) throws WktWriteException
 	{
 	    writeRec( g );
 	}
 
-	///
-	///
-	///
+
 	void writeCoordinateType(Geometry g )
 	{
 	    if ( g.is3D() && g.isMeasured() ) {
@@ -101,9 +87,7 @@ public class EwktWriter {
 	    }
 	}
 
-	///
-	///
-	///
+
 	void writeCoordinate(Point g ) throws WktWriteException
 	{
 	    
@@ -132,9 +116,6 @@ public class EwktWriter {
 	    writeInner( g );
 	}
 
-	///
-	///
-	///
 	void writeInner(Point g ) throws WktWriteException
 	{
 	    if ( g.isEmpty() ) {
@@ -161,9 +142,6 @@ public class EwktWriter {
 	    writeInner( g );
 	}
 
-	///
-	///
-	///
 	void writeInner(LineString g ) throws WktWriteException
 	{
 	    s=s+ "(";
@@ -180,9 +158,6 @@ public class EwktWriter {
 	}
 
 
-	///
-	///
-	///
 	void write(Polygon g ) throws WktWriteException
 	{
 	    s=s+ "POLYGON" ;
@@ -196,9 +171,7 @@ public class EwktWriter {
 	    writeInner( g );
 	}
 
-	///
-	///
-	///
+
 	void writeInner(Polygon g ) throws WktWriteException
 	{
 	    s=s+ "(";
@@ -212,9 +185,7 @@ public class EwktWriter {
 	    s=s+ ")";
 	}
 
-	///
-	///
-	///
+
 	void write(GeometryCollection g ) throws WktWriteException
 	{
 	    s=s+ "GEOMETRYCOLLECTION" ;
@@ -238,9 +209,7 @@ public class EwktWriter {
 	    s=s+ ")" ;
 	}
 
-	///
-	///
-	///
+
 	void write(MultiPoint g ) throws WktWriteException
 	{
 	    s=s+ "MULTIPOINT" ;
@@ -264,9 +233,7 @@ public class EwktWriter {
 	    s=s+ ")";
 	}
 
-	///
-	///
-	///
+
 	void write(MultiLineString g ) throws WktWriteException
 	{
 	    s=s+ "MULTILINESTRING" ;
@@ -290,9 +257,7 @@ public class EwktWriter {
 	    s=s+ ")";
 	}
 
-	///
-	///
-	///
+
 	void write(MultiPolygon g ) throws WktWriteException
 	{
 	    s=s+ "MULTIPOLYGON" ;
@@ -316,36 +281,6 @@ public class EwktWriter {
 	    s=s+ ")";
 	}
 
-
-	///
-	///
-	///
-	void write(MultiSolid g ) throws WktWriteException
-	{
-	    s=s+ "MULTISOLID" ;
-	    writeCoordinateType( g );
-
-	    if ( g.isEmpty() ) {
-	        s=s+ " EMPTY" ;
-	        return ;
-	    }
-
-	    s=s+ "(";
-
-	    for ( int i = 0; i < g.numGeometries(); i++ ) {
-	        if ( i != 0 ) {
-	            s=s+ "," ;
-	        }
-
-	        writeInner( (Solid)g.geometryN( i ));
-	    }
-
-	    s=s+ ")";
-	}
-
-	///
-	///
-	///
 	void write(Triangle g ) throws WktWriteException
 	{
 	    s=s+ "TRIANGLE" ;
@@ -359,9 +294,6 @@ public class EwktWriter {
 	    writeInner( g );
 	}
 
-	///
-	///
-	///
 	void writeInner(Triangle g ) throws WktWriteException
 	{
 	    s=s+ "(";
@@ -380,9 +312,6 @@ public class EwktWriter {
 	    s=s+ ")";
 	}
 
-	///
-	///
-	///
 	void write(TriangulatedSurface g ) throws WktWriteException
 	{
 	    s=s+ "TIN" ;
@@ -406,10 +335,6 @@ public class EwktWriter {
 	    s=s+ ")" ; //end TIN
 	}
 
-
-	///
-	///
-	///
 	void write(PolyhedralSurface g ) throws WktWriteException
 	{
 	    s=s+ "POLYHEDRALSURFACE" ;
@@ -423,9 +348,6 @@ public class EwktWriter {
 	    writeInner( g );
 	}
 
-	///
-	///
-	///
 	void writeInner(PolyhedralSurface g ) throws WktWriteException
 	{
 	    s=s+ "(" ; //begin POLYHEDRALSURFACE
@@ -441,36 +363,9 @@ public class EwktWriter {
 	    s=s+ ")" ; //end POLYHEDRALSURFACE
 	}
 
-	///
-	///
-	///
-	void write(Solid g ) throws WktWriteException
-	{
-	    s=s+ "SOLID" ;
-	    writeCoordinateType( g );
-
-	    if ( g.isEmpty() ) {
-	        s=s+ " EMPTY" ;
-	        return ;
-	    }
-
-	    writeInner( g );
-	}
-
-	///
-	///
-	///
-	void writeInner(Solid g ) throws WktWriteException
-	{
-	    s=s+ "(" ; //begin SOLID
-	    writeInner( g.exteriorShell() );
-
-	    for (int i = 0; i < g.numInteriorShells(); i++ ) {
-	        s=s+ ",";
-	        writeInner( g.interiorShellN( i ) );
-	    }
-
-	    s=s+ ")" ; //end SOLID
+	public String getString() {
+		// TODO Auto-generated method stub
+		return s;
 	}
 
 }

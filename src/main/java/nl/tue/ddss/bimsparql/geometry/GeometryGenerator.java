@@ -35,19 +35,19 @@ public class GeometryGenerator {
 
     
     
-
+   
     
 
       
 
     
-    public HashMap<Integer, InstanceGeometry> generateGeometry(String file) throws FileNotFoundException{
+    public HashMap<Integer, InstanceGeometry> generateGeometry(String file,String ns) throws FileNotFoundException{
     	InputStream in =new FileInputStream(file);
-    	return generateGeometry(in);
+    	return generateGeometry(in,ns);
     }
 
-		public HashMap<Integer, InstanceGeometry> generateGeometry(InputStream in) {	
-			geometryModel.setNsPrefix("inst", "http://www.instance.example/");
+		public HashMap<Integer, InstanceGeometry> generateGeometry(InputStream in,String ns) {	
+			geometryModel.setNsPrefix("inst", ns);
 			geometryModel.setNsPrefix("geom", GEOM.getURI());
 			IfcOpenShellEngine ifcOpenShellEngine;
 			try {
@@ -57,8 +57,8 @@ public class GeometryGenerator {
 					renderEngineModel.generateGeneralGeometry();
 
 					HashMap<Integer,IfcOpenShellEntityInstance> instancesById=((IfcOpenShellModel)renderEngineModel).getInstancesById();
-					
 					for (Integer id:instancesById.keySet()){
+						       
 								IfcOpenShellEntityInstance renderEngineInstance=instancesById.get(id);
 								RenderEngineGeometry geometry=renderEngineInstance.generateGeometry();
 								InstanceGeometry instanceGeometry=new InstanceGeometry();
@@ -97,6 +97,7 @@ public class GeometryGenerator {
 									}*/
 									instanceGeometry.setColors(geometry.getMaterials());
 									instanceGeometry.setMaterialIndices(geometry.getMaterialIndices());
+									
 									double[] tranformationMatrix = new double[16];
 									Matrix.setIdentityM(tranformationMatrix, 0);
 									if (renderEngineInstance.getTransformationMatrix() != null) {
@@ -140,17 +141,18 @@ public class GeometryGenerator {
 	public void addGeometryTriples(InstanceGeometry ig){
     	String s=toWKT(ig);
     	geometryModel.add(geometryModel.getResource(getBaseUri()+ig.getType()+"_"+ig.getId()),GEOM.hasGeometry,geometryModel.createResource(getBaseUri()+"Geometry"+"_"+ig.getId()));
-    	geometryModel.add(geometryModel.getResource(getBaseUri()+"Geometry"+"_"+ig.getId()),GEOM.asWKT,geometryModel.createLiteral(s));	    	
+    	geometryModel.add(geometryModel.getResource(getBaseUri()+"Geometry"+"_"+ig.getId()),GEOM.asBody,geometryModel.createLiteral(s));	    	
 	} 
     
     private String getBaseUri(){    	
-    	return "http://www.instance.example/";
+    	return geometryModel.getNsPrefixURI("inst");
     }
     
     public Geometry toGeometry(InstanceGeometry ig){
-    	PolyhedralSurface geometry=new PolyhedralSurface();
+    	TriangulatedSurface geometry=new TriangulatedSurface();
     	double[] points=ig.getPoints();
     	int[] indices=ig.getPointers();
+    	if(points!=null&&indices!=null){
     	for (int i = 0; i < indices.length; i = i + 3){
     		double d1=points[indices[i]*3];
     		double d2=points[indices[i]*3+1];
@@ -162,8 +164,8 @@ public class GeometryGenerator {
     		double d8=points[indices[i+2]*3+1];
     		double d9=points[indices[i+2]*3+2];
     		Triangle t=new Triangle(new Point3d(d1,d2,d3),new Point3d(d4,d5,d6),new Point3d(d7,d8,d9));
-    		Polygon p=t.toPolygon();
-           geometry.addPolygon(p);  		
+           geometry.addTriangle(t);  		
+    	}
     	}
     	return geometry;
     }
@@ -171,7 +173,7 @@ public class GeometryGenerator {
 	public String toWKT(InstanceGeometry ig){
     	double[] points=ig.getPoints();
     	int[] indices=ig.getPointers();
-    	String s="POLYHEDRALSURFACE Z (";
+    	String s="TIN Z (";
     	for (int i = 0; i < indices.length; i = i + 3){
     		double d1=points[indices[i]*3];
     		double d2=points[indices[i]*3+1];

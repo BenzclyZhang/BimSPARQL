@@ -41,10 +41,6 @@ public class Area {
 
 	    case TYPE_POLYHEDRALSURFACE:
 	        return area( (PolyhedralSurface)g) ;
-
-	    case TYPE_SOLID:
-	    case TYPE_MULTISOLID:
-	        return 0 ;
 	    }
 
 	    throw new GeometryException(String.format( "Unexpected geometry type (%s) in SFCGAL::algorithm::area", g.geometryType() ));
@@ -162,12 +158,7 @@ public class Area {
 
 	    case TYPE_POLYHEDRALSURFACE:
 	        return area3D( (PolyhedralSurface)g);
-
-	    case TYPE_SOLID:
-	    case TYPE_MULTISOLID:
-	        return 0 ;
 	    }
-
 	   throw new GeometryException( "missing case in SFCGAL::algorithm::area3D" );
 	}
 

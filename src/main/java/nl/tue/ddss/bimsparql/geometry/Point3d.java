@@ -3,7 +3,6 @@ package nl.tue.ddss.bimsparql.geometry;
 
 import javax.vecmath.Vector3d;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Distance;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
@@ -104,11 +103,6 @@ public class Point3d extends javax.vecmath.Point3d implements Point{
 		return this;
 	}
 
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void accept(GeometryVisitor visitor) {

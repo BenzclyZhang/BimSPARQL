@@ -3,7 +3,7 @@ package nl.tue.ddss.bimsparql.pfunction.spt;
 
 import nl.tue.ddss.bimsparql.geometry.ExternalPdtIdentifier;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProduct;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductOnGraph;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +20,7 @@ import com.hp.hpl.jena.sparql.engine.binding.Binding;
 import com.hp.hpl.jena.sparql.util.IterLib;
 
 
-public class IsOutsidePF extends FunctionBaseProduct{
+public class IsOutsidePF extends FunctionBaseProductOnGraph{
 	
 	public IsOutsidePF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);

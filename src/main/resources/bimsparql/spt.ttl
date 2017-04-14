@@ -1,0 +1,61 @@
+# baseURI: http://bimsparql.org/spatial
+# imports: http://spinrdf.org/spin
+
+@prefix owl:     <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:    <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sp:      <http://spinrdf.org/sp#> .
+@prefix spin:    <http://spinrdf.org/spin#> .
+@prefix spl:     <http://spinrdf.org/spl#> .
+@prefix spt:     <http://bimsparql.org/spatial#> .
+@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .
+@prefix impl:     <http://bimsparql.org/impl#> .
+
+<http://bimsparql.org/spatial>
+      rdf:type owl:Ontology ;
+      owl:imports <http://spinrdf.org/spin> ;
+      owl:versionInfo "Created with TopBraid Composer"^^xsd:string .
+
+spt:contains
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.ContainsPF" .
+
+spt:disjoints
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.DisjointsPF" .
+
+spt:distance
+      rdf:type owl:DatatypeProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.DistancePF" .
+
+spt:distanceXY
+      rdf:type owl:DatatypeProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.DistanceXYPF" .
+
+spt:distanceZ
+      rdf:type owl:DatatypeProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.DistanceZPF" .
+
+spt:hasLowerFloor
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasLowerFloorPF" .
+
+spt:hasUpperFloor
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasUpperFloorPF" .
+
+spt:intersects
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.IntersectsPF" .
+
+spt:isLocatedInStorey
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.IsLocatedInStoreyPF" .
+
+spt:isOutside
+      rdf:type owl:DatatypeProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.IsOutsidePF" .
+
+spt:touches
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.TouchesPF" .

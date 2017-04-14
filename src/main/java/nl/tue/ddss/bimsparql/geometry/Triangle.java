@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Area;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
@@ -21,6 +20,8 @@ public class Triangle implements Geometry{
 	
     
 	public double area;
+	private Box mvbb;
+	private Box aabb;
 	
     public Triangle(){
     	super();
@@ -34,9 +35,9 @@ public class Triangle implements Geometry{
 		edges[0]=new Segment(p0,p1);
 		edges[1]=new Segment(p1,p2);
 		edges[2]=new Segment(p2,p0);
-		vertices[0]=p0;
-		vertices[1]=p1;
-		vertices[2]=p2;
+		vertices[0]=this.p0;
+		vertices[1]=this.p1;
+		vertices[2]=this.p2;
 	}
 
   
@@ -61,7 +62,7 @@ public class Triangle implements Geometry{
     ///
     int  coordinateDimension()
     {
-        return vertices[0].coordinateDimension() ;
+        return p0.coordinateDimension() ;
     }
 
 
@@ -70,7 +71,7 @@ public class Triangle implements Geometry{
     ///
   public  boolean  isEmpty()
     {
-        return vertices[0].isEmpty();
+        return p0.isEmpty();
     }
 
 
@@ -79,7 +80,7 @@ public class Triangle implements Geometry{
     ///
     public boolean  is3D()
     {
-        return vertices[0].is3D() ;
+        return p0.is3D() ;
     }
 
     ///
@@ -87,7 +88,7 @@ public class Triangle implements Geometry{
     ///
     public boolean  isMeasured()
     {
-        return vertices[0].isMeasured() ;
+        return p0.isMeasured() ;
     }
 
    public Polygon  toPolygon()
@@ -114,18 +115,19 @@ public class Triangle implements Geometry{
     }
 
     public Point vertex(int i ){
-        return vertices[ i % 3 ];
+        switch (i){
+        	case 0: return p0;
+        	case 1: return p1;
+        	case 2: return p2;
+        	case 3: return p0;
+        }
+        return null;
     }
     
     public Point[] getVertices(){
     	return vertices;
     }
 
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public Geometry boundary() {
@@ -185,6 +187,32 @@ public boolean hasPoint(Point3d p){
 public Segment[] getEdges() {
 	// TODO Auto-generated method stub
 	return edges;
+}
+
+@Override
+public Box getAABB() {
+	// TODO Auto-generated method stub
+	return aabb;
+}
+
+@Override
+public Box getMVBB() {
+	// TODO Auto-generated method stub
+	return mvbb;
+}
+
+
+
+@Override
+public void setAABB(Box aabb) {
+	// TODO Auto-generated method stub
+	this.aabb=aabb;
+}
+
+@Override
+public void setMVBB(Box mvbb) {
+	// TODO Auto-generated method stub
+	this.mvbb=mvbb;
 }
 	
 

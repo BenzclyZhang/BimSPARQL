@@ -3,7 +3,6 @@ package nl.tue.ddss.bimsparql.example;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
-import java.sql.ResultSet;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -11,7 +10,6 @@ import org.topbraid.spin.arq.ARQ2SPIN;
 import org.topbraid.spin.arq.ARQFactory;
 import org.topbraid.spin.model.Function;
 import org.topbraid.spin.model.Query;
-import org.topbraid.spin.model.impl.FunctionImpl;
 import org.topbraid.spin.system.SPINModuleRegistry;
 import org.topbraid.spin.vocabulary.ARG;
 import org.topbraid.spin.vocabulary.SP;
@@ -19,7 +17,6 @@ import org.topbraid.spin.vocabulary.SPIN;
 import org.topbraid.spin.vocabulary.SPL;
 import org.xml.sax.SAXException;
 
-import com.hp.hpl.jena.graph.compose.MultiUnion;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
@@ -28,7 +25,6 @@ import com.hp.hpl.jena.query.ResultSetFormatter;
 import com.hp.hpl.jena.rdf.model.Model;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.Resource;
-import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.vocabulary.RDFS;
 
 import nl.tue.ddss.bimsparql.BimSPARQL;
@@ -62,12 +58,17 @@ public class FireSeparationDistance {
 			+ "?wall a ifc:IfcWall .\n"
 			+ "?wall schm:isContainedIn ?storey .\n" + "?storey pset:sprinklerProtection ?bool .\n"
 			+ "?wall ibc:hasAu ?Ap .\n}";
+	
+	final static String test4 = "SELECT ?wall ?Ap\n" + "WHERE{\n"
+			+ "?wall a ifc:IfcWall .\n"
+			+ "?wall ibc:hasA ?storey .\n" + "?storey pset:sprinklerProtection ?bool .\n"
+			+ "?wall ibc:hasAu ?Ap .\n}";
 
 	final static String hasFireSeparationDistance = "SELECT (MIN(?d) AS ?distance)\n" + "WHERE{ ?line a ifc:IfcAnnotation .\n"
 			+ "?line ifc:name_IfcRoot ?name .\n" + "?name expr:hasString \"Lot Line\" .\n"
 			+ "(?arg1 ?line) spt:distanceXY ?d .}GROUP By ?arg1";
 
-	final static String hasAp = "SELECT (?windowArea/?wallArea AS ?area)\n" + "WHERE{"
+	final static String hasAp = "SELECT (?windowArea/?wallArea AS ?Ap)\n" + "WHERE{"
 			+ "?arg1 pdt:hasGrossWallArea ?wallArea .\n" + "?arg1 ibc:hasProtectedOpeningArea ?windowArea .\n"+"}";
 	
 	final static String hasAu = "SELECT (?windowArea/?wallArea AS ?area)\n" + "WHERE{"
@@ -86,9 +87,11 @@ public class FireSeparationDistance {
 		Model model = ModelFactory.createDefaultModel();
 		InputStream in = FireSeparationDistance.class.getClassLoader().getResourceAsStream("lifeline_final.ttl");
 		model.read(in, null, "TTL");
+		System.out.println(model.size());
 		Model geometryModel = ModelFactory.createDefaultModel();
 		InputStream ing = FireSeparationDistance.class.getClassLoader().getResourceAsStream("lifeline_final_geometry.ttl");
 		geometryModel.read(ing, null, "TTL");
+		System.out.println(geometryModel.size());
 		Model schema=loadModel("IFC2X3_TC1.ttl","TTL");
 		BimSPARQL.init(model, geometryModel);
 		Model ibcspin = ModelFactory.createDefaultModel();
@@ -110,6 +113,7 @@ public class FireSeparationDistance {
 		union.add(model);
 		union.add(geometryModel);
 		union.add(ibc);
+		System.out.println(union.size());
 		QueryExecution qe = QueryExecutionFactory.create(query, union);
 		com.hp.hpl.jena.query.ResultSet result = qe.execSelect();
         ResultSetFormatter.out(result);

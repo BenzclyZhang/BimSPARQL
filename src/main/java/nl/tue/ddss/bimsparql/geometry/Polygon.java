@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Normal;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
@@ -13,7 +12,8 @@ public class Polygon implements Geometry{
 	
 	List<LineString> rings=new ArrayList<LineString>();
 
-
+    Box aabb;
+    Box mvbb;
 
 	public Polygon () {
 		super();
@@ -131,11 +131,7 @@ public class Polygon implements Geometry{
 		return rings.get(i+1);
 	}
 
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public Geometry boundary() {
@@ -176,6 +172,32 @@ public class Polygon implements Geometry{
 	public Vector3d getNormal() {
 		// TODO Auto-generated method stub
 		return Normal.normal(this);
+	}
+
+	@Override
+	public Box getAABB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Box getMVBB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void setAABB(Box aabb) {
+		this.aabb=aabb;
+		
+	}
+
+	@Override
+	public void setMVBB(Box mvbb) {
+		// TODO Auto-generated method stub
+		this.mvbb=mvbb;
 	}
 
 

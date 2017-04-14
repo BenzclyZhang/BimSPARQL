@@ -40,7 +40,7 @@ public class WKTTest {
 		t.start();*/
 
 		GeometryGenerator gg=new GeometryGenerator();
-	    gg.generateGeometry(in);
+	    gg.generateGeometry(in,"https://www.instance.com/");
 	    OutputStream output=new FileOutputStream("C:/Users/Chi/Desktop/lifeline_geometry.ttl");
 	    gg.getGeometryModel().write(output, "TTL");
 	    System.out.println(gg.getGeometryModel().size());

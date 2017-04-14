@@ -1,18 +1,18 @@
 package nl.tue.ddss.bimsparql.pfunction.pdt;
 
 import java.util.HashMap;
+import java.util.List;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.core.Var;
-import com.hp.hpl.jena.sparql.engine.ExecutionContext;
-import com.hp.hpl.jena.sparql.engine.QueryIterator;
-import com.hp.hpl.jena.sparql.engine.binding.Binding;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProduct;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Area;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Stitching;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductNumericalValue;
 
-public class HasWallAreaPF extends FunctionBaseProduct{
+public class HasWallAreaPF extends FunctionBaseProductNumericalValue{
 
 
 	public HasWallAreaPF(HashMap<Node, Geometry> hashmap) {
@@ -20,17 +20,28 @@ public class HasWallAreaPF extends FunctionBaseProduct{
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	protected QueryIterator verifyValue(Binding binding, Graph graph, Node product, Geometry geometry,Node object,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
-	protected QueryIterator getValue(Binding binding, Graph graph, Node product, Geometry geometry,Var alloc, ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
+	protected double computeValue(Geometry geometry) {
+		List<TriangulatedSurface> surfaces=null;
+		try {
+			surfaces = new Stitching().stitches(geometry,0.1);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Double.NaN;
+		}
+		TriangulatedSurface largest=null;
+		for (TriangulatedSurface surface:surfaces){
+			if(largest!=null){
+				if(Area.area(surface)>Area.area(largest)){
+					largest=surface;
+				}
+			}else{
+				largest=surface;
+			}
+		}
+		return Area.area(largest);
 	}
 
 

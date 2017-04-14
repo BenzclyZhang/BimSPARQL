@@ -11,7 +11,6 @@ import nl.tue.ddss.bimsparql.geometry.Triangle;
 public class Normal {
 	
 	public static Vector3d normal(LineString ls){
-	    // Newell's formula
 	    double nx, ny, nz;
 	    nx = ny = nz = 0.0;
 

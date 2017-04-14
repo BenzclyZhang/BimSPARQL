@@ -4,7 +4,7 @@ import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryCollection;
 import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
-import nl.tue.ddss.bimsparql.geometry.Solid;
+import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -15,8 +15,6 @@ public class Volume {
 	    if ( g.isEmpty() ) {
 	        return 0;
 	    }
-
-
 	    switch ( g.geometryTypeId() ) {
 	    case TYPE_POINT:
 	    case TYPE_LINESTRING:
@@ -25,22 +23,17 @@ public class Volume {
 	    case TYPE_MULTIPOINT:
 	    case TYPE_MULTILINESTRING:
 	    case TYPE_MULTIPOLYGON:
+	    	 return 0;
 	    case TYPE_TRIANGULATEDSURFACE:
+	    	return volume((TriangulatedSurface)g);
 	    case TYPE_POLYHEDRALSURFACE:
-	        return 0;
-
-	    case TYPE_SOLID:
-	        return volume( (Solid)g);
-
-	    case TYPE_MULTISOLID:
+	        return volume((PolyhedralSurface)g);
 	    case TYPE_GEOMETRYCOLLECTION:
 	        double v=0;
 	        GeometryCollection c = (GeometryCollection)g;
 
 	        for ( int i=0; i<c.numGeometries(); i++ ) {
-	            if ( c.geometryN( i ) instanceof Solid) {
-	                v = v + volume( (Solid)c.geometryN( i ));
-	            }
+	                v = v + volume( c.geometryN( i ));
 	        }
 
 	        return v;
@@ -48,31 +41,37 @@ public class Volume {
 	    throw new GeometryException(String.format("volume( %s ) is not defined", g.geometryType()));
 	}
 	
-	public double volume(Solid solid)
-	{
-	    double vol = 0;
-	    Point3d origin=new Point3d( 0,0,0 );
-	    int numShells = solid.numShells();
-
-	    for ( int i=0; i<numShells; i++ ) {
-	        Geometry t= solid.shellN( i );
-	        TriangulatedSurface tin =t.asTriangulatedSurface();
-	       int numTriangles = tin.numTriangles();
-
-	        for ( int j=0; j<numTriangles; j++ ) {
-	            Triangle tri = tin.triangleN( j );
-	            vol = vol + volume( origin, tri.p0.asPoint3d(),
-	                                      tri.p1.asPoint3d(),
-	                                      tri.p2.asPoint3d());
+	
+	
+	
+    public double volume(PolyhedralSurface ps){
+    	TriangulatedSurface ts=new TriangulatedSurface();
+    	Triangulation.triangulate(ps, ts);
+    	return volume(ts);
+    }
+	
+	public double volume(TriangulatedSurface ts) {
+		double volume=0;
+		 for ( int j=0; j<ts.numTriangles(); j++ ) {
+	            Triangle tri = ts.triangleN( j );
+	            volume = volume + signedVolumeOfTriangle( tri);
 	        }
-	    }
-
-	    return vol;
+	    return Math.abs(volume);
+	}
+	
+	
+	public double signedVolumeOfTriangle(Triangle t){
+		return signedVolumeOfTriangle(t.p0.asPoint3d(),t.p1.asPoint3d(),t.p2.asPoint3d());		
 	}
 
-	private double volume(Point3d origin, Point3d p0, Point3d p1, Point3d p2) {
-		// TODO Auto-generated method stub
-		return 0;
+	public double signedVolumeOfTriangle(Point3d p1, Point3d p2, Point3d p3) {
+	    double v321 = p3.x*p2.y*p1.z;
+	    double v231 = p2.x*p3.y*p1.z;
+	    double v312 = p3.x*p1.y*p2.z;
+	    double v132 = p1.x*p3.y*p2.z;
+	    double v213 = p2.x*p1.y*p3.z;
+	    double v123 = p1.x*p2.y*p3.z;
+	    return (1.0f/6.0f)*(-v321 + v231 + v312 - v132 - v213 + v123);
 	}
 
 

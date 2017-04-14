@@ -13,13 +13,11 @@ import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.MultiLineString;
 import nl.tue.ddss.bimsparql.geometry.MultiPoint;
 import nl.tue.ddss.bimsparql.geometry.MultiPolygon;
-import nl.tue.ddss.bimsparql.geometry.MultiSolid;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Point2d;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -118,18 +116,6 @@ public class EwktReader{
 	        readInnerPolyhedralSurface( g );
 	        return g ;
 	    }
-
-	    case TYPE_SOLID : {
-	        Solid g= new Solid() ;
-	        readInnerSolid( g );
-	        return g ;
-	    }
-
-	    case TYPE_MULTISOLID : {
-	        MultiSolid  g= new MultiSolid();
-	        readInnerMultiSolid( g );
-	        return g ;
-	    }
 	    }
 
 	    throw new WktParseException( "unexpected geometry" );
@@ -168,14 +154,6 @@ public class EwktReader{
 	    }
 	    else if ( imatch( "POLYHEDRALSURFACE" ) ) {
 	        return GeometryType.TYPE_POLYHEDRALSURFACE ;
-	    }
-	    else if ( imatch( "SOLID" ) ) {
-	        //not official
-	        return GeometryType.TYPE_SOLID ;
-	    }
-	    else if ( imatch( "MULTISOLID" ) ) {
-	        //not official
-	        return GeometryType.TYPE_MULTISOLID ;
 	    }
        
 	    throw new WktParseException( "can't parse WKT geometry type (" + context() + ")"  );
@@ -271,9 +249,7 @@ public class EwktReader{
 	}
 
 
-	///
-	///
-	///
+
 	void   readInnerTriangle( Triangle g ) throws WktParseException{
 	    if ( imatch( "EMPTY" ) ) {
 	        return ;
@@ -307,6 +283,10 @@ public class EwktReader{
 	    if (! (points.get(points.size()-1)).equals(points.get(0)) ) {
 	        throw new WktParseException( "WKT parse error, first point different of the last point for triangle" );
 	    }
+	    
+	    g.p0=points.get(0);
+	    g.p1=points.get(1);
+	    g.p2=points.get(2);
 
 	    g = new Triangle( points.get(0), points.get(1), points.get(2) );
 
@@ -504,74 +484,6 @@ private void    readInnerMultiPoint( MultiPoint g ) throws WktParseException, IO
 	         Polygon polygon=new Polygon();
 	        readInnerPolygon( polygon );
 	        g.addPolygon( polygon);
-
-	        //break if not followed by another points
-	        if ( ! match( ',' ) ) {
-	            break ;
-	        }
-	    }
-
-	    if ( ! match( ')' ) ) {
-	        throw new WktParseException( parseErrorMessage() );
-	    }
-	}
-
-
-	///
-	///
-	///
-	void readInnerSolid( Solid g ) throws WktParseException, IOException
-	{
-	    if ( imatch( "EMPTY" ) ) {
-	        return ;
-	    }
-
-	    //solid begin
-	    if ( ! match( '(' ) ) {
-	        throw new WktParseException( parseErrorMessage() );
-	    }
-
-	    for ( int i = 0; ! eof(); i++ ) {
-	        if ( i == 0 ) {
-	            readInnerPolyhedralSurface( g.exteriorShell() );
-	        }
-	        else {
-
-				PolyhedralSurface shell= new PolyhedralSurface();
-	            readInnerPolyhedralSurface( shell );
-	            g.addInteriorShell( shell );
-	        }
-
-	        //break if not followed by another points
-	        if ( ! match( ',' ) ) {
-	            break ;
-	        }
-	    }
-
-	    //solid end
-	    if ( ! match( ')' ) ) {
-	        throw new WktParseException( parseErrorMessage() );
-	    }
-	}
-
-	///
-	///
-	///
-	void readInnerMultiSolid(MultiSolid g ) throws WktParseException, IOException
-	{
-	    if ( imatch( "EMPTY" ) ) {
-	        return ;
-	    }
-
-	    if ( ! match( '(' ) ) {
-	        throw new WktParseException( parseErrorMessage() );
-	    }
-
-	    while( ! eof() ) {
-
-	        Solid solid=new Solid();
-	        readInnerSolid( solid );
-	        if ( !solid.isEmpty() ) g.addGeometry( solid );
 
 	        //break if not followed by another points
 	        if ( ! match( ',' ) ) {

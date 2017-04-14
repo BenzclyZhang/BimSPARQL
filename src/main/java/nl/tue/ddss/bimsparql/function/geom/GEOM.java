@@ -29,9 +29,9 @@ public class GEOM {
 
 
     public static final Property hasGeometry = property( "hasGeometry" );
-    public static final Property asWKT = property( "asWKT" );
+    public static final Property asBody = property( "asBody" );
     public static final Property asAABB =property("asAABB");
-    public static final Property asOBB=property("asOBB");
+    public static final Property asMVBB=property("asMVBB");
 
 
 }

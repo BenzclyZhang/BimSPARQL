@@ -1,18 +1,15 @@
 package nl.tue.ddss.bimsparql.pfunction.spt;
 
 import java.util.HashMap;
-import java.util.List;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.pfunction.GeometryFunctionBase;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Intersects;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseSpatialRelation;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.engine.ExecutionContext;
-import com.hp.hpl.jena.sparql.engine.QueryIterator;
-import com.hp.hpl.jena.sparql.engine.binding.Binding;
 
-public class ContainsPF extends GeometryFunctionBase{
+public class ContainsPF extends FunctionBaseSpatialRelation{
 
 	public ContainsPF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);
@@ -20,17 +17,9 @@ public class ContainsPF extends GeometryFunctionBase{
 	}
 
 	@Override
-	protected QueryIterator verify(Binding binding, Graph queryGraph,
-			Node matchSubject, Node predicate, Node matchObject,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
+	protected boolean evaluateSpatialRelation(Geometry g1, Geometry g2) throws GeometryException {
+		return Intersects.intersects3D(g1, g2)==3;
 	}
 
-	@Override
-	protected List<Node> getRelatedNodes(Node node,ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

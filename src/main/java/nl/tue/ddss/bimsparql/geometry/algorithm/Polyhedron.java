@@ -7,6 +7,7 @@ import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
+import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
 public class Polyhedron {
@@ -29,10 +30,39 @@ public class Polyhedron {
 				if (lastVertex != null) {
 					HalfEdge hf = new HalfEdge(lastVertex, v);
 					f.addHalfEdge(hf);
+					
 					Edge e = addEdge(hf);
 					e.faces.add(f);
+					v.edges.add(e);
 				}
 				if (j != p.exteriorRing().numPoints() - 1) {
+					lastVertex = v;
+				} else {
+					lastVertex = null;
+				}
+
+			}
+			faces.add(f);
+		}
+	}
+	
+	public Polyhedron(TriangulatedSurface ps) {
+		for (int i = 0; i < ps.numTriangles(); i++) {
+			Triangle p = ps.triangleN(i);
+			Polygon polygon=p.toPolygon();
+			Face f = new Face(polygon, i);
+			for (int j = 0; j < polygon.exteriorRing().numPoints(); j++) {
+				Point pt = polygon.exteriorRing().pointN(j);
+				Vertex v = addPoint(pt);
+				f.addVertex(v);
+				if (lastVertex != null) {
+					HalfEdge hf = new HalfEdge(lastVertex, v);
+					f.addHalfEdge(hf);
+					Edge e = addEdge(hf);
+					e.faces.add(f);
+					v.edges.add(e);
+				}
+				if (j != polygon.exteriorRing().numPoints() - 1) {
 					lastVertex = v;
 				} else {
 					lastVertex = null;
@@ -88,30 +118,6 @@ public class Polyhedron {
 		return e;
 	}
 
-	public Polyhedron(TriangulatedSurface ps) {
-		for (int i = 0; i < ps.numTriangles(); i++) {
-			Polygon p = ps.triangleN(i).toPolygon();
-			Face f = new Face(p, i);
-			for (int j = 0; j < p.exteriorRing().numPoints(); j++) {
-				Point pt = p.exteriorRing().pointN(j);
-				Vertex v = addPoint(pt);
-				f.addVertex(v);
-				if (lastVertex != null) {
-					HalfEdge hf = new HalfEdge(lastVertex, v);
-					f.addHalfEdge(hf);
-					Edge e = addEdge(hf);
-					e.faces.add(f);
-				}
-				if (j != p.exteriorRing().numPoints() - 1) {
-					lastVertex = v;
-				} else {
-					lastVertex = null;
-				}
-
-			}
-			faces.add(f);
-		}
-	}
 
 	public List<Face> getFaces() {
 		// TODO Auto-generated method stub

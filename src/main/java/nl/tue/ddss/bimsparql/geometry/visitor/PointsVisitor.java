@@ -10,11 +10,9 @@ import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.MultiLineString;
 import nl.tue.ddss.bimsparql.geometry.MultiPoint;
 import nl.tue.ddss.bimsparql.geometry.MultiPolygon;
-import nl.tue.ddss.bimsparql.geometry.MultiSolid;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -34,22 +32,20 @@ public class PointsVisitor extends GeometryVisitor{
 		case TYPE_TRIANGLE:
 			visitTriangle((Triangle)geometry);
 		case TYPE_POLYGON : visitPolygon((Polygon)geometry);
-		case TYPE_SOLID:
-			visitSolid((Solid)geometry);
 		case TYPE_MULTIPOINT:
 			visitMultiPoint((MultiPoint)geometry);
 		case TYPE_MULTILINESTRING:
 			visitMultiLineString((MultiLineString)geometry);
 		case TYPE_MULTIPOLYGON:
 			visitMultiPolygon((MultiPolygon)geometry);
-		case TYPE_MULTISOLID:
-			visitMultiSolid((MultiSolid)geometry);
 		case TYPE_GEOMETRYCOLLECTION:
 			visitGeometryCollection((GeometryCollection)geometry);
-		case TYPE_TRIANGULATEDSURFACE:
-			visitTriangulatedSurface((TriangulatedSurface)geometry);
-		case TYPE_POLYHEDRALSURFACE:
+		case TYPE_POLYHEDRALSURFACE:{
 			visitPolyhedralSurface((PolyhedralSurface)geometry);
+		}case TYPE_TRIANGULATEDSURFACE:{
+			visitTriangulatedSurface((TriangulatedSurface)geometry);
+		}
+
 		}		
 	}
 	
@@ -58,9 +54,7 @@ public class PointsVisitor extends GeometryVisitor{
 	    points.add( g );
 	}
 
-	///
-	///
-	///
+
 	public void visitLineString(LineString g )
 	{
 	    for ( int i = 0; i < g.numPoints(); i++ ) {
@@ -68,9 +62,7 @@ public class PointsVisitor extends GeometryVisitor{
 	    }
 	}
 
-	///
-	///
-	///
+
 	public void visitPolygon(Polygon g )
 	{
 	    for ( int i = 0; i < g.numRings(); i++ ) {
@@ -78,29 +70,15 @@ public class PointsVisitor extends GeometryVisitor{
 	    }
 	}
 
-	///
-	///
-	///
+
 	public void visitTriangle(Triangle g )
 	{
-	    visitPoint( g.vertex( 0 ) );
-	    visitPoint( g.vertex( 1 ) );
-	    visitPoint( g.vertex( 2 ) );
+	    visitPoint( g.p0 );
+	    visitPoint( g.p1);
+	    visitPoint( g.p2 );
 	}
 
-	///
-	///
-	///
-	public void visitSolid(Solid g )
-	{
-	    for ( int i = 0; i < g.numShells(); i++ ) {
-	        visitPolyhedralSurface( g.shellN(i));
-	    }
-	}
 
-	///
-	///
-	///
 	public void visitMultiPoint(MultiPoint g )
 	{
 	    for ( int i = 0; i < g.numGeometries(); i++ ) {
@@ -108,9 +86,7 @@ public class PointsVisitor extends GeometryVisitor{
 	    }
 	}
 
-	///
-	///
-	///
+
 	public void visitMultiLineString(MultiLineString g )
 	{
 	    for ( int i = 0; i < g.numGeometries(); i++ ) {
@@ -118,21 +94,10 @@ public class PointsVisitor extends GeometryVisitor{
 	    }
 	}
 
-	///
-	///
-	///
 	public void visitMultiPolygon(MultiPolygon g )
 	{
 	    for ( int i = 0; i < g.numGeometries(); i++ ) {
 	        visitPolygon( g.polygonN( i ) );
-	    }
-	}
-
-
-	public void visitMultiSolid(MultiSolid g )
-	{
-	    for ( int i = 0; i < g.numGeometries(); i++ ) {
-	        visitSolid( g.solidN( i ) );
 	    }
 	}
 

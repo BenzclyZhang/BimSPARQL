@@ -3,7 +3,6 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class LineString implements Geometry{
@@ -148,13 +147,6 @@ public class LineString implements Geometry{
 
 
 	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
 	public Geometry boundary() {
 		// TODO Auto-generated method stub
 		return null;
@@ -193,6 +185,35 @@ public class LineString implements Geometry{
 	public TriangulatedSurface asTriangulatedSurface() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+	@Override
+	public Box getAABB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Box getMVBB() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public void setAABB(Box aabb) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setMVBB(Box mvbb) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

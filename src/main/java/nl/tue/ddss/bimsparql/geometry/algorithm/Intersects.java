@@ -9,26 +9,25 @@ import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.GeometryUtils;
 import nl.tue.ddss.bimsparql.geometry.Line3d;
-import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Plane;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
 import nl.tue.ddss.bimsparql.geometry.Segment;
-import nl.tue.ddss.bimsparql.geometry.Solid;
 import nl.tue.ddss.bimsparql.geometry.Square;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
-import nl.tue.ddss.bimsparql.geometry.visitor.BoundingBoxVisitor;
+import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
 
 public class Intersects {
 
-	static final double EPS = Geometry.EPS;
+	static final double EPS = 0.001;
 	
 	static final int DISJOINTS=0;
-	static final int TOUCHES=1;
-	static final int CONTAINS=2;
-	static final int INTERSECTS=3;
+	static final int INTERSECTS=1;
+	static final int TOUCHES=2;
+	static final int CONTAINS=3;
+	static final int EQUALS=4;	
 
 	public static int intersects3D(Geometry gA, Geometry gB) throws GeometryException {
 		
@@ -38,16 +37,14 @@ public class Intersects {
 		case TYPE_POLYGON:
 		case TYPE_TRIANGLE:
 			return intersectsTriangleGeometry3D((Triangle)gA,gB);
-		case TYPE_SOLID:
 		case TYPE_MULTIPOINT:
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
-		case TYPE_MULTISOLID:
 		case TYPE_GEOMETRYCOLLECTION:
 		case TYPE_TRIANGULATEDSURFACE:
 			return intersectsTriangulatedSurfaceGeometry3D((TriangulatedSurface)gA,gB);
 		case TYPE_POLYHEDRALSURFACE:
-			return intersectsPolyhedralSurfaceSurfaceGeometry3D((PolyhedralSurface)gA, gB);
+			return intersectsPolyhedralSurfaceGeometry3D((PolyhedralSurface)gA, gB);
 		}
           throw new GeometryException(String.format("Geometry type is not supported: %s",gA.geometryType()));
 	}
@@ -57,32 +54,73 @@ public class Intersects {
 		return 0;
 	}
 
-	public static int intersectsPolyhedralSurfaceSurfaceGeometry3D(PolyhedralSurface gA, Geometry gB) {
-		// TODO Auto-generated method stub
+	public static int intersectsPolyhedralSurfaceGeometry3D(PolyhedralSurface gA, Geometry gB) throws GeometryException {
+		switch (gB.geometryTypeId()) {
+		case TYPE_POLYHEDRALSURFACE:
+			return intersectsPolyhedralSurfacePolyhedralSurface3D(gA, (PolyhedralSurface)gB);
+		case TYPE_GEOMETRYCOLLECTION:
+			break;
+		case TYPE_LINESTRING:
+			break;
+		case TYPE_MULTILINESTRING:
+			break;
+		case TYPE_MULTIPOINT:
+			break;
+		case TYPE_MULTIPOLYGON:
+			break;
+		case TYPE_POINT:
+			break;
+		case TYPE_POLYGON:
+			break;
+		case TYPE_TRIANGLE:
+			break;
+		case TYPE_TRIANGULATEDSURFACE:
+			break;
+		default:
+			break;
+		}
 		return 0;
 	}
 
-	public static int intersectsTriangulatedSurfaceGeometry3D(TriangulatedSurface gA, Geometry gB) {
-		// TODO Auto-generated method stub
+	private static int intersectsPolyhedralSurfacePolyhedralSurface3D(PolyhedralSurface gA, PolyhedralSurface gB) throws GeometryException {
+		return trangulatedSurfaceTriangulatedSurfaceIntersection(gA.asTriangulatedSurface(),gB.asTriangulatedSurface());
+	}
+
+	public static int intersectsTriangulatedSurfaceGeometry3D(TriangulatedSurface gA, Geometry gB) throws GeometryException {
+		switch (gB.geometryTypeId()) {
+		case TYPE_TRIANGULATEDSURFACE:
+			return trangulatedSurfaceTriangulatedSurfaceIntersection(gA, (TriangulatedSurface)gB);
+		case TYPE_GEOMETRYCOLLECTION:
+			break;
+		case TYPE_LINESTRING:
+			break;
+		case TYPE_MULTILINESTRING:
+			break;
+		case TYPE_MULTIPOINT:
+			break;
+		case TYPE_MULTIPOLYGON:
+			break;
+		case TYPE_POINT:
+			break;
+		case TYPE_POLYGON:
+			break;
+		case TYPE_POLYHEDRALSURFACE:
+			break;
+		case TYPE_TRIANGLE:
+			break;
+		default:
+			break;
+		}
 		return 0;
 	}
 	
-	public static int intersectsLineStringSolid3D(LineString gA, Solid gB) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public static int intersectsPointSolid3D(Point gA, Solid gB) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 	
 
 	public static int trangulatedSurfaceTriangulatedSurfaceIntersection(TriangulatedSurface ts0, TriangulatedSurface ts1) throws GeometryException {
-		BoundingBoxVisitor bv0=new BoundingBoxVisitor();
+		AABBVisitor bv0=new AABBVisitor();
 		ts0.accept(bv0);
 		AABB box0 = bv0.getAABB();
-		BoundingBoxVisitor bv1=new BoundingBoxVisitor();
+		AABBVisitor bv1=new AABBVisitor();
 		ts1.accept(bv1);
 		AABB box1 = bv1.getAABB();
 		int intersection = 0;
@@ -233,7 +271,6 @@ public class Intersects {
 				return 0;
 			}
 			return 0;
-
 		}
 	}
 
@@ -576,7 +613,7 @@ public class Intersects {
 	}
 
 	public static boolean boxProductIntersection(AxisAlignedBox box, TriangulatedSurface product) throws GeometryException {
-		BoundingBoxVisitor bv=new BoundingBoxVisitor();
+		AABBVisitor bv=new AABBVisitor();
 		product.accept(bv);
 		if (boxBoxIntersection(box, bv.getAABB())) {
 			for (Triangle triangle : product.getTriangles()) {
@@ -589,7 +626,7 @@ public class Intersects {
 	}
 
 	public static boolean squareProductIntersection(Square square, TriangulatedSurface product) throws GeometryException {
-		BoundingBoxVisitor bv=new BoundingBoxVisitor();
+		AABBVisitor bv=new AABBVisitor();
 		product.accept(bv);
 		if (squareBoxIntersection(square, bv.getAABB())) {
 			for (Triangle triangle : product.getTriangles()) {

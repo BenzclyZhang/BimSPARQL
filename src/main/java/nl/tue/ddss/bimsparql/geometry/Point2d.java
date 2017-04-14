@@ -1,6 +1,5 @@
 package nl.tue.ddss.bimsparql.geometry;
 
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class Point2d extends javax.vecmath.Point2d implements Point{
@@ -90,12 +89,6 @@ public class Point2d extends javax.vecmath.Point2d implements Point{
 	public Point2d asPoint2d() {
 		// TODO Auto-generated method stub
 		return this;
-	}
-
-	@Override
-	public AABB boundingBox() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
