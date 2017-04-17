@@ -19,6 +19,7 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Triangulation;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
@@ -26,7 +27,7 @@ public class PolyhedralSurface extends Surface{
 	
 	List<Polygon> polygons=new ArrayList<Polygon>();
 	
-	Box aabb;
+	AABB aabb;
 	Box mvbb;
 	
 	public PolyhedralSurface(){
@@ -178,16 +179,16 @@ super();
 	}
 
 	@Override
-	public Box getAABB() {
+	public AABB getAABB() {
 		// TODO Auto-generated method stub
-		return null;
+		return aabb;
 	}
 
 
 
 
 	@Override
-	public void setAABB(Box aabb) {
+	public void setAABB(AABB aabb) {
 		// TODO Auto-generated method stub
 		this.aabb=aabb;
 	}
@@ -201,7 +202,7 @@ super();
 	@Override
 	public Box getMVBB() {
 		// TODO Auto-generated method stub
-		return null;
+		return mvbb;
 	}
 
 

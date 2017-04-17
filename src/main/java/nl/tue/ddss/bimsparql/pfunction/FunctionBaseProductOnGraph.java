@@ -69,7 +69,7 @@ public abstract class FunctionBaseProductOnGraph {
 	}
 
 
-	private Geometry getGeometry(Node product, Graph graph) {
+	protected Geometry getGeometry(Node product, Graph graph) {
 		Geometry geometry=hashmap.get(product);
 		if(geometry!=null){
 			return geometry;

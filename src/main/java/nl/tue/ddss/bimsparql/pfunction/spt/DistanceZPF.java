@@ -18,14 +18,11 @@ package nl.tue.ddss.bimsparql.pfunction.spt;
 
 import java.util.HashMap;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.core.Var;
-import com.hp.hpl.jena.sparql.engine.ExecutionContext;
-import com.hp.hpl.jena.sparql.engine.QueryIterator;
-import com.hp.hpl.jena.sparql.engine.binding.Binding;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
+import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
 import nl.tue.ddss.bimsparql.pfunction.FunctionBaseGroupProduct2;
 
 public class DistanceZPF extends FunctionBaseGroupProduct2{
@@ -36,17 +33,21 @@ public class DistanceZPF extends FunctionBaseGroupProduct2{
 	}
 
 	@Override
-	protected QueryIterator verifyValue(Binding binding, Graph graph, Node product1, Node product2, Node distance,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
+	protected Object computeValue(Geometry g1, Geometry g2) {
+		 AABBVisitor visitor1=new AABBVisitor();
+			g1.accept(visitor1);
+			AABB aabb1=visitor1.getAABB();
+			 AABBVisitor visitor2=new AABBVisitor();
+				g2.accept(visitor2);
+				AABB aabb2=visitor2.getAABB();
+				if(aabb1.max.z<aabb2.min.z){
+					return aabb2.min.z-aabb1.max.z;
+				}else if(aabb2.max.z<aabb1.min.z){
+					return aabb1.min.z-aabb2.max.z;
+				}	else{
+						return 0;
+					}			
 	}
 
-	@Override
-	protected QueryIterator getValue(Binding binding, Graph graph, Node product1, Node product2, Var alloc,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

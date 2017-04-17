@@ -31,6 +31,10 @@ public class AABBVisitor extends GeometryVisitor {
 
 	@Override
 	public void visit(Geometry geometry) {
+		if(geometry.getAABB()!=null){
+			box=geometry.getAABB();
+			return;
+		}
 		PointsVisitor pv=new PointsVisitor();
 		geometry.accept(pv);
 		for(Point point:pv.getPoints()){

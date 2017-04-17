@@ -19,12 +19,13 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class GeometryCollection implements Geometry{
 	
 	List<Geometry> geometries=new ArrayList<Geometry>();
-	Box aabb;
+	AABB aabb;
 	Box mvbb;
 
 	public void addGeometry(Geometry gg) {
@@ -103,20 +104,20 @@ public class GeometryCollection implements Geometry{
 	}
 
 	@Override
-	public Box getAABB() {
+	public AABB getAABB() {
 		// TODO Auto-generated method stub
-		return null;
+		return aabb;
 	}
 
 	@Override
 	public Box getMVBB() {
 		// TODO Auto-generated method stub
-		return null;
+		return mvbb;
 	}
 
 
 	@Override
-	public void setAABB(Box aabb) {
+	public void setAABB(AABB aabb) {
 		this.aabb=aabb;
 		
 	}

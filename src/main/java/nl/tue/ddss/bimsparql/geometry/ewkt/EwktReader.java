@@ -11,6 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  * 
+ * This file is the java version of the ewkt in http://www.sfcgal.org/.
+ * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -49,23 +51,6 @@ public class EwktReader{
 		this.s=s;
 	}
 
-    public int readSRID() throws IOException, WktParseException
-	{
-	    int srid = 0;
-
-	    if ( imatch( "SRID=" ) ) {
-	    	try{
-	          srid=Integer.parseInt(bufferedRead());
-	    	}catch (NumberFormatException e){
-	    		throw new WktParseException("");
-	    	}
-	        if (! match( ';' ) ) {
-	            throw new WktParseException( parseErrorMessage() );
-	        }
-	    }
-
-	    return srid;
-	}
 
 	public Geometry  readGeometry() throws WktParseException, IOException{
 	   GeometryType   geometryType   = readGeometryType() ;
@@ -415,9 +400,6 @@ private void    readInnerMultiPoint( MultiPoint g ) throws WktParseException, IO
 
 
 
-	///
-	///
-	///
 	void   readInnerGeometryCollection( GeometryCollection g ) throws WktParseException, IOException
 	{
 	    if ( imatch( "EMPTY" ) ) {
@@ -474,17 +456,6 @@ private void    readInnerMultiPoint( MultiPoint g ) throws WktParseException, IO
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-
-
-
-	///
-	///
-	///
-
-
-
-
 
 	void readInnerPolyhedralSurface( PolyhedralSurface g ) throws WktParseException, IOException
 	{

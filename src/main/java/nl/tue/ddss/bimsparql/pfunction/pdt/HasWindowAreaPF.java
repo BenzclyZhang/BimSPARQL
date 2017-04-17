@@ -20,9 +20,15 @@ import java.util.HashMap;
 
 import com.hp.hpl.jena.graph.Node;
 
+import nl.tue.ddss.bimsparql.geometry.Box;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
-import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.Plane;
+import nl.tue.ddss.bimsparql.geometry.Polygon;
+import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Area;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Projection;
+import nl.tue.ddss.bimsparql.geometry.visitor.MVBBVisitor;
 import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductNumericalValue;
 
 public class HasWindowAreaPF extends FunctionBaseProductNumericalValue{
@@ -35,15 +41,38 @@ public class HasWindowAreaPF extends FunctionBaseProductNumericalValue{
 
 	@Override
 	protected double computeValue(Geometry geometry) {
-		// TODO Auto-generated method stub
-		double b=0;
-        AABBVisitor visitor=new AABBVisitor();
-		geometry.accept(visitor);
-		AABB aabb=visitor.getAABB();
-		if(aabb!=null){
-		b= aabb.getXYLength()*aabb.getHeight()/1000000;
+		MVBBVisitor mv=new MVBBVisitor();
+		geometry.accept(mv);
+		Box mvbb=mv.getMVBB();
+		PolyhedralSurface ps=mvbb.toPolyhedralSurface();
+		Polygon largest=null;
+		double area=0;
+		for(Polygon p:ps.getPolygons()){
+			double pArea=0;
+			try {
+				pArea = Area.area(p);
+			} catch (GeometryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return Double.NaN;
+				
+			}
+			if(pArea>area){
+				largest=p;
+				area=pArea;
+			}
 		}
-		return b;
+		Plane p=largest.getPlane();
+		Geometry projection;
+		try {
+			projection = Projection.projectToPlane(geometry, p);
+			return Area.area(projection);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Double.NaN;
+		}
+		
 	}
 
 }

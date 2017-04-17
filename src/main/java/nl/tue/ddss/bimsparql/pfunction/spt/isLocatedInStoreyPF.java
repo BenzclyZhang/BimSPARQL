@@ -17,11 +17,12 @@
 package nl.tue.ddss.bimsparql.pfunction.spt;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.hp.hpl.jena.graph.Node;
+import com.hp.hpl.jena.sparql.engine.ExecutionContext;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.pfunction.FunctionBaseSpatialRelationOnGraph;
 
 public class isLocatedInStoreyPF extends FunctionBaseSpatialRelationOnGraph{
@@ -32,9 +33,17 @@ public class isLocatedInStoreyPF extends FunctionBaseSpatialRelationOnGraph{
 	}
 
 	@Override
-	protected boolean evaluateSpatialRelation(Geometry g1, Geometry g2) throws GeometryException {
+	protected HashSet<Node> getRelatedObjects(Node node, ExecutionContext execCxt) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
+
+	@Override
+	protected HashSet<Node> getRelatedSubjects(Node node, ExecutionContext execCxt) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
 
 }

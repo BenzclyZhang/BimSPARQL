@@ -26,7 +26,7 @@ import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
 public class Volume {
 	
-	public double volume(Geometry g ) throws GeometryException
+	public static double volume(Geometry g ) throws GeometryException
 	{
 	    if ( g.isEmpty() ) {
 	        return 0;
@@ -60,13 +60,13 @@ public class Volume {
 	
 	
 	
-    public double volume(PolyhedralSurface ps){
+    public static double volume(PolyhedralSurface ps){
     	TriangulatedSurface ts=new TriangulatedSurface();
     	Triangulation.triangulate(ps, ts);
     	return volume(ts);
     }
 	
-	public double volume(TriangulatedSurface ts) {
+	public static double volume(TriangulatedSurface ts) {
 		double volume=0;
 		 for ( int j=0; j<ts.numTriangles(); j++ ) {
 	            Triangle tri = ts.triangleN( j );
@@ -76,11 +76,11 @@ public class Volume {
 	}
 	
 	
-	public double signedVolumeOfTriangle(Triangle t){
+	public static double signedVolumeOfTriangle(Triangle t){
 		return signedVolumeOfTriangle(t.p0.asPoint3d(),t.p1.asPoint3d(),t.p2.asPoint3d());		
 	}
 
-	public double signedVolumeOfTriangle(Point3d p1, Point3d p2, Point3d p3) {
+	public static double signedVolumeOfTriangle(Point3d p1, Point3d p2, Point3d p3) {
 	    double v321 = p3.x*p2.y*p1.z;
 	    double v231 = p2.x*p3.y*p1.z;
 	    double v312 = p3.x*p1.y*p2.z;

@@ -20,6 +20,8 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
@@ -30,6 +32,26 @@ import nl.tue.ddss.bimsparql.geometry.Triangle;
 public class Extrude {
 	
 	
+	public static PolyhedralSurface extrude(Geometry geometry,double deep) throws GeometryException{
+		switch (geometry.geometryTypeId()){
+		case TYPE_POINT:
+		case TYPE_LINESTRING:
+		case TYPE_POLYGON:
+			return extrude((Polygon)geometry,deep);
+		case TYPE_TRIANGLE:
+			return extrude((Triangle)geometry,deep);
+		case TYPE_MULTIPOINT:
+		case TYPE_MULTILINESTRING:
+		case TYPE_MULTIPOLYGON:
+		case TYPE_GEOMETRYCOLLECTION:
+		case TYPE_TRIANGULATEDSURFACE:
+		case TYPE_POLYHEDRALSURFACE:
+		}
+
+		throw new GeometryException(
+				String.format("stitch(%s) is not implemented", geometry.geometryType()));
+		
+	}
 	
 	public static PolyhedralSurface extrude(Triangle t,double deep){
 		return extrude(t.toPolygon(),deep);

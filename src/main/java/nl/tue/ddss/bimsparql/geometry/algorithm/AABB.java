@@ -16,7 +16,10 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.geometry.algorithm;
 
+import javax.vecmath.Vector3d;
+
 import nl.tue.ddss.bimsparql.geometry.AxisAlignedBox;
+import nl.tue.ddss.bimsparql.geometry.BoxOrientation;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 
 public class AABB extends AxisAlignedBox {
@@ -24,10 +27,17 @@ public class AABB extends AxisAlignedBox {
 	public AABB(Point3d max, Point3d min) throws Exception {
 		super(max, min);
 		// TODO Auto-generated constructor stub
+		super.orientation=new BoxOrientation();
+	       orientation.setN1(new Vector3d(1,0,0));
+	       orientation.setN2(new Vector3d(0,1,0));
+	       orientation.setN3(new Vector3d(0,0,1));
 	}
 
 	public AABB() {
-        
+       super.orientation=new BoxOrientation();
+       orientation.setN1(new Vector3d(1,0,0));
+       orientation.setN2(new Vector3d(0,1,0));
+       orientation.setN3(new Vector3d(0,0,1));
 	}
 
 

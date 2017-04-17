@@ -16,14 +16,32 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.geometry.visitor;
 
+import nl.tue.ddss.bimsparql.geometry.Box;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
+import nl.tue.ddss.bimsparql.geometry.algorithm.ConvexHull;
+import nl.tue.ddss.bimsparql.geometry.algorithm.MVBB;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Polyhedron;
 
 public class MVBBVisitor extends GeometryVisitor{
+	
+	public Box mvbb;
 
 	@Override
 	public void visit(Geometry geometry) {
-		// TODO Auto-generated method stub
-		
+		if(geometry.getMVBB()!=null){
+			mvbb=geometry.getMVBB();
+			return;
+		}
+		PolyhedralSurface ps=new ConvexHull().buildConvexHull(geometry);
+		Polyhedron ph=new Polyhedron(ps);
+		MVBB obb=new MVBB(ph);
+		obb.computeMinBB();
+		mvbb=obb.getBox();		
+	}
+	
+	public Box getMVBB(){
+		return mvbb;
 	}
 
 }

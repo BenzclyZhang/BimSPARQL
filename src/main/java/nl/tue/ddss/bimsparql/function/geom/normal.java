@@ -16,15 +16,33 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.function.geom;
 
+
+import javax.vecmath.Vector3d;
+
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase1;
+
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.Point3d;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Normal;
 
 public class normal extends FunctionBase1{
 
 	@Override
 	public NodeValue exec(NodeValue v) {
-		// TODO Auto-generated method stub
-		return null;
+		Geometry g=GFUtils.read(v);
+		Vector3d normal;
+		try {
+			normal = Normal.normal(g);
+			Point3d p=new Point3d(normal.x,normal.y,normal.z);
+			return GFUtils.write(p);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return NodeValue.nvEmptyString;
+		}
+		
 	}
 
 }

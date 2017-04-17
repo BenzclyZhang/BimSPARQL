@@ -47,16 +47,17 @@ public class Distance {
 //----------------------
 
     public static double distance2D(Geometry gA,Geometry gB){
-    	return 5;
+		try {
+			Geometry g1 = Projection.projectToXY(gA);
+	    	Geometry g2=Projection.projectToXY(gB);
+	    	return distance3D(g1,g2);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Double.POSITIVE_INFINITY;
+		}
+
     }
-	
-
-	public double distanceSegmentSegment2D(Segment gA, Segment gB) {
-		return 0;
-	}
-	
-	
-
 
 //----------------------
 //  distance 3D
@@ -461,7 +462,7 @@ public class Distance {
 	}
 
 	static double distanceSegmentTriangle3D(Segment sAB, Triangle tABC) throws GeometryException {
-		if (Intersects.intersectsSegmentTriangle3D(sAB, tABC)==2) {
+		if (Topology.intersectsSegmentTriangle3D(sAB, tABC)==2) {
 			return 0.0;
 		}
 
@@ -564,7 +565,7 @@ public class Distance {
 
 
 	public static double distanceTriangleTriangle3D(Triangle triangleA, Triangle triangleB) throws GeometryException {
-		if (Intersects.intersectsTriangleTriangle3D(triangleA, triangleB)==2) {
+		if (Topology.intersectsTriangleTriangle3D(triangleA, triangleB)==2) {
 			return 0;
 		}
 

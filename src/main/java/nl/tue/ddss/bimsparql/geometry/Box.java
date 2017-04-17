@@ -112,8 +112,7 @@ public class Box {
 		ls0.addPoint(p2);
 		ls0.addPoint(p1);
 		ls0.addPoint(p0);
-		Polygon polygon0=new Polygon();
-		polygon0.rings.add(ls0);
+		Polygon polygon0=new Polygon(ls0);
 		
 		LineString ls1=new LineString();
 		ls1.addPoint(p0);
@@ -121,8 +120,7 @@ public class Box {
 		ls1.addPoint(p7);
 		ls1.addPoint(p3);
 		ls1.addPoint(p0);
-		Polygon polygon1=new Polygon();
-		polygon1.rings.add(ls1);
+		Polygon polygon1=new Polygon(ls1);
 		
 		LineString ls2=new LineString();
 		ls2.addPoint(p0);
@@ -130,8 +128,7 @@ public class Box {
 		ls2.addPoint(p5);
 		ls2.addPoint(p4);
 		ls2.addPoint(p0);
-		Polygon polygon2=new Polygon();
-		polygon2.rings.add(ls2);
+		Polygon polygon2=new Polygon(ls2);
 		
 		LineString ls3=new LineString();
 		ls3.addPoint(p1);
@@ -139,8 +136,7 @@ public class Box {
 		ls3.addPoint(p6);
 		ls3.addPoint(p5);
 		ls3.addPoint(p1);
-		Polygon polygon3=new Polygon();
-		polygon3.rings.add(ls3);
+		Polygon polygon3=new Polygon(ls3);
 		
 		LineString ls4=new LineString();
 		ls4.addPoint(p2);
@@ -148,8 +144,7 @@ public class Box {
 		ls4.addPoint(p7);
 		ls4.addPoint(p6);
 		ls4.addPoint(p2);
-		Polygon polygon4=new Polygon();
-		polygon4.rings.add(ls4);
+		Polygon polygon4=new Polygon(ls4);
 		
 		LineString ls5=new LineString();
 		ls5.addPoint(p4);
@@ -157,8 +152,7 @@ public class Box {
 		ls5.addPoint(p6);
 		ls5.addPoint(p7);
 		ls5.addPoint(p4);
-		Polygon polygon5=new Polygon();
-		polygon5.rings.add(ls5);
+		Polygon polygon5=new Polygon(ls5);
 		
 		ps.addPolygon(polygon0);
 		ps.addPolygon(polygon1);
@@ -166,7 +160,7 @@ public class Box {
 		ps.addPolygon(polygon3);
 		ps.addPolygon(polygon4);
 		ps.addPolygon(polygon5);
-		
+			
 		return ps;
 	}
     

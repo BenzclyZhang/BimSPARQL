@@ -16,14 +16,21 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.pfunction.pdt;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.hp.hpl.jena.graph.Node;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktTValue;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Stitching;
+import nl.tue.ddss.bimsparql.geometry.ewkt.EwktWriter;
+import nl.tue.ddss.bimsparql.geometry.ewkt.WktWriteException;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktValue;
 
-public class HasSurfacePF extends FunctionBaseProductEwktTValue{
+public class HasSurfacePF extends FunctionBaseProductEwktValue{
 
 	public HasSurfacePF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);
@@ -32,8 +39,24 @@ public class HasSurfacePF extends FunctionBaseProductEwktTValue{
 
 	@Override
 	protected String computeValue(Geometry geometry) {
-		// TODO Auto-generated method stub
-		return null;
+		List<TriangulatedSurface> surfaces=null;
+		try {
+			surfaces = new Stitching().stitches(geometry);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		List<String> results=new ArrayList<String>();
+		for(TriangulatedSurface ts:surfaces){
+			EwktWriter ew=new EwktWriter("");
+			try {
+				ew.writeRec(ts);
+			} catch (WktWriteException e) {
+				e.printStackTrace();
+			}
+		}
+		return results.get(0);
 	}
 
 

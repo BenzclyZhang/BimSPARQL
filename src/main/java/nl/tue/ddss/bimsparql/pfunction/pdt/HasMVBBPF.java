@@ -22,15 +22,12 @@ import com.hp.hpl.jena.graph.Node;
 
 import nl.tue.ddss.bimsparql.geometry.Box;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
-import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
-import nl.tue.ddss.bimsparql.geometry.algorithm.ConvexHull;
-import nl.tue.ddss.bimsparql.geometry.algorithm.MVBB;
-import nl.tue.ddss.bimsparql.geometry.algorithm.Polyhedron;
 import nl.tue.ddss.bimsparql.geometry.ewkt.EwktWriter;
 import nl.tue.ddss.bimsparql.geometry.ewkt.WktWriteException;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktTValue;
+import nl.tue.ddss.bimsparql.geometry.visitor.MVBBVisitor;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktValue;
 
-public class HasMVBBPF extends FunctionBaseProductEwktTValue{
+public class HasMVBBPF extends FunctionBaseProductEwktValue{
 
 	public HasMVBBPF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);
@@ -39,11 +36,9 @@ public class HasMVBBPF extends FunctionBaseProductEwktTValue{
 
 	@Override
 	protected String computeValue(Geometry geometry) {
-		PolyhedralSurface ps=new ConvexHull().buildConvexHull(geometry);
-		Polyhedron ph=new Polyhedron(ps);
-		MVBB obb=new MVBB(ph);
-		obb.computeMinBB();
-		Box box=obb.getBox();
+		MVBBVisitor mv=new MVBBVisitor();
+		geometry.accept(mv);
+		Box box=mv.getMVBB();
 		EwktWriter ew=new EwktWriter("");
 		try {
 			ew.writeRec(box.toPolyhedralSurface());

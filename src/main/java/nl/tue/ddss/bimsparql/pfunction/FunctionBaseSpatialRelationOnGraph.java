@@ -17,8 +17,8 @@
 package nl.tue.ddss.bimsparql.pfunction;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,7 +44,6 @@ import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import nl.tue.ddss.bimsparql.function.geom.GEOM;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryCollection;
-import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.ewkt.EwktReader;
 import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 import nl.tue.ddss.convert.Namespace;
@@ -88,7 +87,6 @@ public abstract class FunctionBaseSpatialRelationOnGraph extends PropertyFunctio
 					lt = getGeomQuery(binding, queryGraph,
 							Var.alloc(matchSubject), predicate, matchObject,
 							execCxt);
-
 				}
 				for (Triple triple:lt) {
 					BindingMap map = new BindingHashMap(binding);
@@ -123,19 +121,21 @@ public abstract class FunctionBaseSpatialRelationOnGraph extends PropertyFunctio
 			ExecutionContext execCxt) {
 		List<Triple> lt = queryGraph.find(matchSubject, predicate, null).toList();
 		if(Var.isVar(matchSubject)&&Var.isVar(matchObject)){
-			HashMap<Node,Node> nodeMap=getNodeMap(execCxt);
+			HashMap<Node,HashSet<Node>> nodeMap=getNodeMap(execCxt);
 			for(Node node:nodeMap.keySet()){
-				lt.add(new Triple(node,predicate,nodeMap.get(node)));
+				for(Node n:nodeMap.get(node)){
+				lt.add(new Triple(node,predicate,n));
+				}
 			}
 		}
 		if(Var.isVar(matchSubject)){
-			List<Node> nodes=getRelatedNodes(matchObject,execCxt);
+			HashSet<Node> nodes=getRelatedSubjects(matchObject,execCxt);
 			for (Node node:nodes){
 				lt.add(new Triple(node,predicate,matchObject));
 			}
 		}
 		else if(Var.isVar(matchObject)){
-			List<Node> nodes=getRelatedNodes(matchSubject,execCxt);
+			HashSet<Node> nodes=getRelatedObjects(matchSubject,execCxt);
 			for (Node node:nodes){
 				lt.add(new Triple(matchSubject,predicate,node));
 			}
@@ -189,61 +189,33 @@ public abstract class FunctionBaseSpatialRelationOnGraph extends PropertyFunctio
 	
 	protected QueryIterator verify(Binding binding, Graph queryGraph, Node matchSubject, Node predicate,
 			Node matchObject, ExecutionContext execCxt) {
-		Geometry s=getGeometry(matchSubject, execCxt.getActiveGraph());
-		Geometry o=getGeometry(matchObject, execCxt.getActiveGraph());
-		try {
-			if(evaluateSpatialRelation(s,o)){
+		HashSet<Node> nodes=getRelatedObjects(matchSubject,execCxt);		
+			if(nodes.contains(matchObject)){
 				return IterLib.result(binding, execCxt);
 			}
 			else{
 				return IterLib.noResults(execCxt);
 			}
-		} catch (GeometryException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}return IterLib.noResults(execCxt);
+
 	}
+	
 
-
-	protected List<Node> getRelatedNodes(Node node, ExecutionContext execCxt) {
-		Geometry geometry=getGeometry(node, execCxt.getActiveGraph());
-		List<Node> nodes=new ArrayList<Node>();
+	protected HashMap<Node, HashSet<Node>> getNodeMap(ExecutionContext execCxt) {
+		HashMap<Node,HashSet<Node>> nodeMap=new HashMap<Node,HashSet<Node>>();		
 		for (Node n:hashmap.keySet()){
-			try {
-				if(evaluateSpatialRelation(geometry, getGeometry(n,execCxt.getActiveGraph()))){
-					nodes.add(n);
-				}
-			} catch (GeometryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		nodes.remove(node);
-		return nodes;   
-	}
-
-
-	protected HashMap<Node, Node> getNodeMap(ExecutionContext execCxt) {
-		HashMap<Node,Node> nodeMap=new HashMap<Node,Node>();
-		for (Node n:hashmap.keySet()){
-			Geometry g1=getGeometry(n,execCxt.getActiveGraph());
-			for(Node no:hashmap.keySet()){
-				if(no!=n){
-				Geometry g2=getGeometry(no,execCxt.getActiveGraph());
-				try {
-					if(evaluateSpatialRelation(g1, g2)){
-						nodeMap.put(n,no);
-					}
-				} catch (GeometryException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}						
-				}
-			}
+			HashSet<Node> nodes=getRelatedObjects(n,execCxt);
+			nodeMap.put(n, nodes);
 		}
 		return nodeMap;   
 	}
+	
+	protected abstract HashSet<Node> getRelatedObjects(Node node, ExecutionContext execCxt);
 
-	protected abstract boolean evaluateSpatialRelation(Geometry g1, Geometry g2) throws GeometryException;
+
+    protected abstract HashSet<Node> getRelatedSubjects(Node node,ExecutionContext execCxt);
+	
+
+
+
 
 }

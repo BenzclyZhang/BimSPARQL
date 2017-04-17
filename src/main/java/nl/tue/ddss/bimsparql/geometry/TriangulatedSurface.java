@@ -19,12 +19,13 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class TriangulatedSurface extends Surface{
 	
 	List<Triangle> triangles=new ArrayList<Triangle>();
-	private Box aabb;
+	private AABB aabb;
 	private Box mvbb;
 	
 	public TriangulatedSurface(){
@@ -56,9 +57,7 @@ public class TriangulatedSurface extends Surface{
 	    return 2 ;
 	}
 
-	///
-	///
-	///
+
 	public int coordinateDimension()
 	{
 	    if ( triangles.size()==0 ) {
@@ -69,9 +68,7 @@ public class TriangulatedSurface extends Surface{
 	    }
 	}
 
-	///
-	///
-	///
+
 	public boolean isEmpty()
 	{
 	    return triangles.size()==0 ;
@@ -82,18 +79,13 @@ public class TriangulatedSurface extends Surface{
 	    return triangles.size()!=0 && triangles.get(0).is3D() ;
 	}
 
-	///
-	///
-	///
+
 	public boolean isMeasured()
 	{
 	    return triangles.size()!=0 && triangles.get(0).isMeasured() ;
 	}
 
 
-	///
-	///
-	///
 	public void  addTriangles(TriangulatedSurface other )
 	{
 	    triangles.addAll(other.triangles);
@@ -174,7 +166,7 @@ public class TriangulatedSurface extends Surface{
 
 
 	@Override
-	public Box getAABB() {
+	public AABB getAABB() {
 		// TODO Auto-generated method stub
 		return aabb;
 	}
@@ -190,7 +182,7 @@ public class TriangulatedSurface extends Surface{
 
 
 	@Override
-	public void setAABB(Box aabb) {
+	public void setAABB(AABB aabb) {
 		// TODO Auto-generated method stub
 		this.aabb=aabb;
 	}

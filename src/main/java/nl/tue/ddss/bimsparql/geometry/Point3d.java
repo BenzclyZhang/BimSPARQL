@@ -48,9 +48,6 @@ public class Point3d extends javax.vecmath.Point3d implements Point{
 	    return 0 ;
 	}
 
-	///
-	///
-	///
 	public int coordinateDimension()
 	{
 	    return coordinates.length + ( isMeasured() ? 1 : 0 ) ;
@@ -63,9 +60,6 @@ public class Point3d extends javax.vecmath.Point3d implements Point{
 	    return coordinates==null||coordinates.length==0 ;
 	}
 
-	///
-	///
-	///
 	public boolean is3D()
 	{
 	    return true ;

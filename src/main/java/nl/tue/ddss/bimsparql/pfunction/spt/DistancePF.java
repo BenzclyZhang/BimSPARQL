@@ -18,14 +18,12 @@ package nl.tue.ddss.bimsparql.pfunction.spt;
 
 import java.util.HashMap;
 
-import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
-import com.hp.hpl.jena.sparql.core.Var;
-import com.hp.hpl.jena.sparql.engine.ExecutionContext;
-import com.hp.hpl.jena.sparql.engine.QueryIterator;
-import com.hp.hpl.jena.sparql.engine.binding.Binding;
+
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Distance;
 import nl.tue.ddss.bimsparql.pfunction.FunctionBaseGroupProduct2;
 
 public class DistancePF extends FunctionBaseGroupProduct2{
@@ -36,17 +34,19 @@ public class DistancePF extends FunctionBaseGroupProduct2{
 	}
 
 	@Override
-	protected QueryIterator verifyValue(Binding binding, Graph graph, Node product1, Node product2, Node distance,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
+	protected Object computeValue(Geometry g1, Geometry g2) {
+		Double distance;
+		try {
+			distance = Distance.distance3D(g1, g2);
+			return distance;
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Double.POSITIVE_INFINITY;
+		}
+
 	}
 
-	@Override
-	protected QueryIterator getValue(Binding binding, Graph graph, Node product1, Node product2, Var alloc,
-			ExecutionContext execCxt) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }

@@ -19,12 +19,25 @@ package nl.tue.ddss.bimsparql.function.geom;
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase1;
 
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Projection;
+
 public class projectionXY extends FunctionBase1{
 
 	@Override
 	public NodeValue exec(NodeValue v) {
-		// TODO Auto-generated method stub
-		return null;
+	
+			Geometry g=GFUtils.read(v);
+		    try {
+				Geometry projection=Projection.projectToXY(g);
+				return GFUtils.write(projection);
+			} catch (GeometryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return NodeValue.nvEmptyString;
+			}
+		    
 	}
 
 }

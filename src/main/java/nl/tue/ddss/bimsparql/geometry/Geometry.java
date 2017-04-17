@@ -17,6 +17,7 @@
 package nl.tue.ddss.bimsparql.geometry;
 
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public interface Geometry {
@@ -27,11 +28,11 @@ public interface Geometry {
     
     
     
-	public Box  getAABB();
+	public AABB  getAABB();
 	
 	public Box getMVBB();
 	
-	public void setAABB(Box aabb);
+	public void setAABB(AABB aabb);
 	
 	public void setMVBB(Box mvbb);
 	
@@ -39,26 +40,14 @@ public interface Geometry {
 	
 	public void accept(GeometryVisitor visitor);
 
-	///
-	///
-	///
 	public Geometry boundary();
 
 
-	///
-	///
-	///
 	public double distance( Geometry other );
 
-	///
-	///
-	///
 	public double distance3D( Geometry other );
 
 
-	///
-	///
-	///
 	public int numGeometries();
 	
 	

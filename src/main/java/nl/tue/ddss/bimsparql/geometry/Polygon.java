@@ -21,14 +21,16 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Normal;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Triangulation;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class Polygon implements Geometry{
 	
 	List<LineString> rings=new ArrayList<LineString>();
 
-    Box aabb;
+    AABB aabb;
     Box mvbb;
 
 	public Polygon () {
@@ -181,8 +183,9 @@ public class Polygon implements Geometry{
 
 	@Override
 	public TriangulatedSurface asTriangulatedSurface() {
-		// TODO Auto-generated method stub
-		return null;
+		TriangulatedSurface ts=new TriangulatedSurface();
+		Triangulation.triangulate(this, ts);
+		return ts;
 	}
 
 	public Vector3d getNormal() {
@@ -191,21 +194,21 @@ public class Polygon implements Geometry{
 	}
 
 	@Override
-	public Box getAABB() {
+	public AABB getAABB() {
 		// TODO Auto-generated method stub
-		return null;
+		return aabb;
 	}
 
 	@Override
 	public Box getMVBB() {
 		// TODO Auto-generated method stub
-		return null;
+		return mvbb;
 	}
 
 
 
 	@Override
-	public void setAABB(Box aabb) {
+	public void setAABB(AABB aabb) {
 		this.aabb=aabb;
 		
 	}
@@ -214,6 +217,11 @@ public class Polygon implements Geometry{
 	public void setMVBB(Box mvbb) {
 		// TODO Auto-generated method stub
 		this.mvbb=mvbb;
+	}
+
+	public Plane getPlane() {
+		LineString ls=this.exteriorRing();
+		return new Plane(ls.pointN(0).asPoint3d(),ls.pointN(1).asPoint3d(),ls.pointN(2).asPoint3d());
 	}
 
 

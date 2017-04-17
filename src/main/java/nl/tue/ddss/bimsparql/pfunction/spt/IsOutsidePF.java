@@ -76,7 +76,7 @@ public class IsOutsidePF extends FunctionBaseProductOnGraph{
 				for(Geometry pdt:hashmap.values()){
 					allGeometries.add(pdt);
 				}
-		b = new ExternalPdtIdentifier(geometry,allGeometries).getIsExternal();
+		     b = new ExternalPdtIdentifier(geometry,allGeometries).getIsExternal();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

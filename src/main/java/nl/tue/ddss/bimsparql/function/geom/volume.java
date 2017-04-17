@@ -16,15 +16,34 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.function.geom;
 
+import java.io.IOException;
+
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase1;
+
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Volume;
+import nl.tue.ddss.bimsparql.geometry.ewkt.EwktReader;
+import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 
 public class volume extends FunctionBase1{
 
 	@Override
 	public NodeValue exec(NodeValue v) {
-		// TODO Auto-generated method stub
-		return null;
+		EwktReader er=new EwktReader(v.getString());
+			Geometry g;
+			try {
+				g = er.readGeometry();
+
+			double volume = Volume.volume(g);
+			return (NodeValue.makeDouble(volume));
+		} catch (GeometryException | WktParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return (NodeValue.nvZERO);
+		}
+		
 	}
 
 }

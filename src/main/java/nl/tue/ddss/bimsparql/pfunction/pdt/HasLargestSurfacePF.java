@@ -27,9 +27,9 @@ import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Area;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Stitching;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktTValue;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktValue;
 
-public class HasLargestSurfacePF extends FunctionBaseProductEwktTValue{
+public class HasLargestSurfacePF extends FunctionBaseProductEwktValue{
 
 	public HasLargestSurfacePF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);

@@ -29,9 +29,9 @@ import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Normal;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Stitching;
 import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktTValue;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktValue;
 
-public class HasUpperSurfacePF extends FunctionBaseProductEwktTValue{
+public class HasUpperSurfacePF extends FunctionBaseProductEwktValue{
 
 	public HasUpperSurfacePF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);

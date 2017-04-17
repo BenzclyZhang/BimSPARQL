@@ -11,6 +11,8 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
  * 
+ * This file is the java version of the ewkt in http://www.sfcgal.org/.
+ * 
  * You should have received a copy of the GNU Affero General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
@@ -97,6 +99,9 @@ public class EwktWriter {
 	{
 	    if ( g.is3D() && g.isMeasured() ) {
 	        s=s+ " ZM";
+	    }
+	    else if( g.is3D()){
+	    	s=s+" Z";
 	    }
 	    else if ( ! g.is3D() && g.isMeasured() ) {
 	        s=s+ " M";

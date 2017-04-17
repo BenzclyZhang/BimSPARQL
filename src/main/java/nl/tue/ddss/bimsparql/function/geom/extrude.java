@@ -19,12 +19,26 @@ package nl.tue.ddss.bimsparql.function.geom;
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase2;
 
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Extrude;
+
 public class extrude extends FunctionBase2{
 
 	@Override
 	public NodeValue exec(NodeValue v1, NodeValue v2) {
-		// TODO Auto-generated method stub
-		return null;
+		Geometry g=GFUtils.read(v1);
+		double deep=v2.getDouble();
+		try {
+			Geometry geometry=Extrude.extrude(g, deep);
+			return GFUtils.write(geometry);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return NodeValue.nvEmptyString;
+		}
+		
+	     
 	}
 
 

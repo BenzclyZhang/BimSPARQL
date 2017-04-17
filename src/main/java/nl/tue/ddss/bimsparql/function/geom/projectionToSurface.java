@@ -16,15 +16,44 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.function.geom;
 
+
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase2;
+
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.Polygon;
+import nl.tue.ddss.bimsparql.geometry.Triangle;
+import nl.tue.ddss.bimsparql.geometry.GeometryType;
+import nl.tue.ddss.bimsparql.geometry.Plane;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Projection;
 
 public class projectionToSurface extends FunctionBase2{
 
 	@Override
 	public NodeValue exec(NodeValue v1, NodeValue v2) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+		try {
+		Geometry g1=GFUtils.read(v1);
+		Geometry g2=GFUtils.read(v2);
+	    Geometry projection=null;
+		if(g2.geometryTypeId()==GeometryType.TYPE_POLYGON){
+			Plane p=((Polygon)g2).getPlane();
+		
+				projection=Projection.projectToPlane(g1, p);
+			
+		}else if(g2.geometryTypeId()==GeometryType.TYPE_TRIANGLE){
+			Plane p=((Triangle)g2).getPlane();
+			projection=Projection.projectToPlane(g1, p);
+		}
+		if(projection!=null){
+			return GFUtils.write(projection);
+		}else{
+			return NodeValue.nvEmptyString;
+		} 
+		}catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return NodeValue.nvEmptyString;
+		}
+}
 }

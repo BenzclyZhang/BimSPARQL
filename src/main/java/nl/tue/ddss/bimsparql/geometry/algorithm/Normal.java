@@ -18,6 +18,8 @@ package nl.tue.ddss.bimsparql.geometry.algorithm;
 
 import javax.vecmath.Vector3d;
 
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.Polygon;
@@ -25,6 +27,28 @@ import nl.tue.ddss.bimsparql.geometry.Triangle;
 
 
 public class Normal {
+	
+
+
+	public static Vector3d normal(Geometry g) throws GeometryException {
+		 switch ( g.geometryTypeId() ) {
+		    case TYPE_POINT:
+		    case TYPE_LINESTRING:
+		        return normal((LineString)g) ;
+		    case TYPE_POLYGON:
+		        return normal( (Polygon)g);
+		    case TYPE_TRIANGLE:
+		        return normal( (Triangle)g);
+		    case TYPE_MULTIPOINT:
+		    case TYPE_MULTILINESTRING:
+		    case TYPE_MULTIPOLYGON:
+		    case TYPE_GEOMETRYCOLLECTION:
+		    case TYPE_TRIANGULATEDSURFACE:
+		    case TYPE_POLYHEDRALSURFACE:
+		    }
+		   throw new GeometryException( "missing case in SFCGAL::algorithm::area3D" );
+	}
+	
 	
 	public static Vector3d normal(LineString ls){
 	    double nx, ny, nz;
@@ -51,5 +75,6 @@ public class Normal {
 	public static Vector3d normal(Polygon p){
 		return normal( p.exteriorRing());
 	}
+
 
 }

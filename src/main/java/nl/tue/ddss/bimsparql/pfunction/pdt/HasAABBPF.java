@@ -25,9 +25,9 @@ import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.ewkt.EwktWriter;
 import nl.tue.ddss.bimsparql.geometry.ewkt.WktWriteException;
 import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
-import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktTValue;
+import nl.tue.ddss.bimsparql.pfunction.FunctionBaseProductEwktValue;
 
-public class HasAABBPF extends FunctionBaseProductEwktTValue{
+public class HasAABBPF extends FunctionBaseProductEwktValue{
 
 	public HasAABBPF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);

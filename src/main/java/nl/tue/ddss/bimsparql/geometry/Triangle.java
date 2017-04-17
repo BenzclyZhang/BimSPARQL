@@ -23,6 +23,7 @@ import java.util.List;
 
 import javax.vecmath.Vector3d;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Area;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
@@ -34,10 +35,11 @@ public class Triangle implements Geometry{
 	final private Point[] vertices={p0,p1,p2};
 	private Segment[] edges=new Segment[3];
 	
+	
     
 	public double area;
 	private Box mvbb;
-	private Box aabb;
+	private AABB aabb;
 	
     public Triangle(){
     	super();
@@ -206,7 +208,7 @@ public Segment[] getEdges() {
 }
 
 @Override
-public Box getAABB() {
+public AABB getAABB() {
 	// TODO Auto-generated method stub
 	return aabb;
 }
@@ -220,7 +222,7 @@ public Box getMVBB() {
 
 
 @Override
-public void setAABB(Box aabb) {
+public void setAABB(AABB aabb) {
 	// TODO Auto-generated method stub
 	this.aabb=aabb;
 }
@@ -229,6 +231,10 @@ public void setAABB(Box aabb) {
 public void setMVBB(Box mvbb) {
 	// TODO Auto-generated method stub
 	this.mvbb=mvbb;
+}
+
+public Plane getPlane(){
+	return new Plane(p0.asPoint3d(),p1.asPoint3d(),p2.asPoint3d());
 }
 	
 

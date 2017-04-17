@@ -19,11 +19,14 @@ package nl.tue.ddss.bimsparql.geometry;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public class LineString implements Geometry{
 	
    List<Point> points=new ArrayList<Point>();
+   AABB aabb;
+   Box mvbb;
 
 
 	public LineString( List<Point> points ){
@@ -205,31 +208,31 @@ public class LineString implements Geometry{
 
 
 	@Override
-	public Box getAABB() {
+	public AABB getAABB() {
 		// TODO Auto-generated method stub
-		return null;
+		return aabb;
 	}
 
 
 	@Override
 	public Box getMVBB() {
 		// TODO Auto-generated method stub
-		return null;
+		return mvbb;
 	}
 
 
 
 	@Override
-	public void setAABB(Box aabb) {
+	public void setAABB(AABB aabb) {
 		// TODO Auto-generated method stub
-		
+		this.aabb=aabb;
 	}
 
 
 	@Override
 	public void setMVBB(Box mvbb) {
 		// TODO Auto-generated method stub
-		
+		this.mvbb=mvbb;
 	}
 
 }

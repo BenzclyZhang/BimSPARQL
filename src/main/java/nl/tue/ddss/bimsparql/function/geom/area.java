@@ -36,7 +36,7 @@ public class area extends FunctionBase1{
 		} catch (GeometryException | WktParseException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return NodeValue.nvZERO;
+			return NodeValue.makeDouble(0);
 		}
 	}
 

@@ -28,6 +28,7 @@ import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 
 import nl.tue.ddss.convert.Namespace;
 
+import com.hp.hpl.jena.datatypes.xsd.XSDDatatype;
 import com.hp.hpl.jena.graph.Graph;
 import com.hp.hpl.jena.graph.Node;
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -38,10 +39,12 @@ import com.hp.hpl.jena.sparql.core.Var;
 import com.hp.hpl.jena.sparql.engine.ExecutionContext;
 import com.hp.hpl.jena.sparql.engine.QueryIterator;
 import com.hp.hpl.jena.sparql.engine.binding.Binding;
+import com.hp.hpl.jena.sparql.util.IterLib;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 public abstract class FunctionBaseGroupProduct2 extends PFuncListAndSimple{
 	
+	private static final double EPS = Geometry.EPS;
 	protected HashMap<Node, Geometry> hashmap;
 
 
@@ -74,7 +77,6 @@ public abstract class FunctionBaseGroupProduct2 extends PFuncListAndSimple{
 		else
 			return verifyValue(binding, graph, product1, product2, distance,
 					execCxt);
-
 	}
 	
 	protected Geometry getGeometry(Node product, Graph graph) {
@@ -120,13 +122,65 @@ public abstract class FunctionBaseGroupProduct2 extends PFuncListAndSimple{
 	}
 
 
-	protected abstract QueryIterator verifyValue(Binding binding, Graph graph,
-			Node product1, Node product2, Node distance,
-			ExecutionContext execCxt) ;
+	protected QueryIterator verifyValue(Binding binding, Graph graph,
+			Node product1, Node product2, Node node,
+			ExecutionContext execCxt) {
+		Geometry g1=getGeometry(product1,graph);
+		Geometry g2=getGeometry(product2,graph);
+		Object obj=computeValue(g1,g2);
+		if(obj==null){
+			return IterLib.noResults(execCxt);
+		}else{
+			if(obj instanceof Double){
+				try{
+					double value=(Double)node.getLiteralValue();
+					
+				
+					if((Double)obj>value-EPS&&(Double)obj<value+EPS){
+						return IterLib.result(binding, execCxt);
+					}return IterLib.noResults(execCxt);
+			}catch (Exception e){
+				return IterLib.noResults(execCxt);
+			}
+			}
+             else if(obj instanceof String){
+     				try{
+     					String value=(String)node.getLiteralValue()    		;		
+     					if(((String)obj).equals(value)){
+     						return IterLib.result(binding, execCxt);
+     					}return IterLib.noResults(execCxt);
+     			}catch (Exception e){
+     				return IterLib.noResults(execCxt);
+     			}
+				
+			}
+		}
+		return IterLib.noResults(execCxt);
+	}
+	
 
 
-	protected abstract QueryIterator getValue(Binding binding, Graph graph, Node product1,
-			Node product2, Var alloc, ExecutionContext execCxt) ;
+	protected QueryIterator getValue(Binding binding, Graph graph, Node product1,
+			Node product2, Var alloc, ExecutionContext execCxt) {
+		Geometry g1=getGeometry(product1,graph);
+		Geometry g2=getGeometry(product2,graph);
+		Object obj=computeValue(g1,g2);
+		if(obj==null){
+			return IterLib.noResults(execCxt);
+		}else{
+			if(obj instanceof Double){
+				Node node=NodeFactory.createLiteral(Double.toString((Double)obj),null,XSDDatatype.XSDdouble);
+				return IterLib.oneResult(binding, alloc, node, execCxt);
+			}else if(obj instanceof String){
+				Node node=NodeFactory.createLiteral((String)obj,null,XSDDatatype.XSDstring);
+				return IterLib.oneResult(binding, alloc, node, execCxt);
+			}
+		}
+		return IterLib.noResults(execCxt);
+	}
+
+
+	protected abstract Object computeValue(Geometry g1, Geometry g2);
 }
 
 

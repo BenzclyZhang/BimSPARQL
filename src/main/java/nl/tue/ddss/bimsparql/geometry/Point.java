@@ -18,6 +18,7 @@ package nl.tue.ddss.bimsparql.geometry;
 
 
 
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 
 public interface Point extends Geometry{
@@ -83,7 +84,7 @@ public double[] getCoordinates();
 public double m();
 
 @Override
-public default Box getAABB() {
+public default AABB getAABB() {
 	// TODO Auto-generated method stub
 	return null;
 }
@@ -95,8 +96,8 @@ public default Box getMVBB() {
 }
 
 @Override
-public default void setAABB(Box aabb){
-	
+public default void setAABB(AABB aabb){
+
 }
 
 @Override

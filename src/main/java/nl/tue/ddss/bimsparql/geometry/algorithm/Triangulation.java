@@ -83,6 +83,9 @@ public class Triangulation {
 	
 
 	public static void triangulate(Polygon polygon,TriangulatedSurface triangulatedSurface){
+		if(polygon.numRings()==1&&polygon.exteriorRing().numPoints()==4){
+			triangulatedSurface.addTriangle(new Triangle(polygon.exteriorRing().pointN(0),polygon.exteriorRing().pointN(1),polygon.exteriorRing().pointN(2)));
+		}else{
 		ConstrainedMesh mesh = new ConstrainedMesh();
 		try {
 		for (int i=0;i<polygon.numRings();i++){
@@ -90,10 +93,10 @@ public class Triangulation {
 			for(int j=0;j<ls.numPoints()-1;j++){
 				Point3d start=ls.pointN(j).asPoint3d();
 				Point3d end=ls.pointN(j+1).asPoint3d();
-
+                    mesh.addPoint(new DPoint(start.x,start.y,start.z));
 					DEdge	ed = new DEdge(new DPoint(start.x,start.y,start.z),new DPoint(end.x,end.y,end.z));
 					mesh.addConstraintEdge(ed);
-
+               
 
 			}
 		}
@@ -105,6 +108,7 @@ public class Triangulation {
 		List<DTriangle> dTriangles=mesh.getTriangleList();
 		for(DTriangle dt:dTriangles){
 			triangulatedSurface.addTriangle(toTriangle(dt));
+		}
 		}
 		
 	}
