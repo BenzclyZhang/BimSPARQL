@@ -16,14 +16,33 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.function.geom;
 
+import java.io.IOException;
+
 import com.hp.hpl.jena.sparql.expr.NodeValue;
 import com.hp.hpl.jena.sparql.function.FunctionBase1;
+
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Length;
+import nl.tue.ddss.bimsparql.geometry.ewkt.EwktReader;
+import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 
 public class length extends FunctionBase1{
 
 	@Override
 	public NodeValue exec(NodeValue v) {
-		// TODO Auto-generated method stub
+		EwktReader er=new EwktReader(v.getString());
+		try {
+			Geometry geometry=er.readGeometry();
+			
+			return NodeValue.makeDouble(Length.length(geometry));
+		} catch (WktParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 		return null;
 	}
 

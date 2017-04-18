@@ -17,6 +17,8 @@
 package nl.tue.ddss.bimsparql.geometry.algorithm;
 
 
+import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryType;
 import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Segment;
 
@@ -32,5 +34,15 @@ public class Length {
     	   result+=ls.segmentN(i).getLength();
        }
        return result;
+	}
+
+	public static double length(Geometry geometry) {
+		double length=0;
+		if(geometry.geometryTypeId()==GeometryType.TYPE_LINESTRING){
+			for(int i=0;i<((LineString)geometry).numSegments();i++){
+				length=length+length(((LineString)geometry).segmentN(i));
+			}
+		}
+		return length;
 	}
 }

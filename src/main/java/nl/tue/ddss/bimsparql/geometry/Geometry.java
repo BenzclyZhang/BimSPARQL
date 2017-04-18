@@ -23,6 +23,7 @@ import nl.tue.ddss.bimsparql.geometry.visitor.GeometryVisitor;
 public interface Geometry {
 	
 	public static double EPS=0.00000001;
+	public static String EmptyGeometry="EMPTY";
  
     public boolean isMeasured();
     

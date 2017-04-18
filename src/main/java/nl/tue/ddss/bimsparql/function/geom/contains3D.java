@@ -32,7 +32,7 @@ public class contains3D extends FunctionBase2{
 		try {
 			Geometry g1 = GFUtils.read(v1);
 			Geometry g2 = GFUtils.read(v2);
-	    if(Topology.intersects3D(g1, g2)==1){
+	    if(Topology.intersects3D(g1, g2)==3){
 	    	return NodeValue.booleanReturn(true);
 	    }else{
 	    	return NodeValue.booleanReturn(false);

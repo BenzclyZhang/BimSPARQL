@@ -105,7 +105,8 @@ public class ExternalPdtIdentifier {
 	}
 	
 	public ExternalPdtIdentifier(Geometry geometry, List<Geometry> allGeometries) {
-		// TODO Auto-generated constructor stub
+		List<Product> products=new ArrayList<Product>();
+		Product product=new Product();
 	}
 
 	public void init(Product p,List<Product> products,float precision) throws Exception{

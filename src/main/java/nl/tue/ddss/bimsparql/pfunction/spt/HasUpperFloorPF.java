@@ -43,97 +43,104 @@ public class HasUpperFloorPF extends FunctionBaseSpatialRelationOnGraph{
 
 	@Override
 	protected HashSet<Node> getRelatedObjects(Node node, ExecutionContext execCxt) {
-		  HashSet<Node> results=new HashSet<Node>();
-			 
-			Graph graph=execCxt.getActiveGraph();
-			
-			Node clazz=NodeFactory.createURI(Namespace.IFC2X3_TC1+"IfcBuildingStorey");
-			LinkedList<Storey> storeys=new LinkedList<Storey>();
-			if(graph.contains(node, RDF.type.asNode(), clazz)){
-				   Storey storey=new Storey(node,elevation(node,graph));
-		        ExtendedIterator<Triple> triples=graph.find(null,RDF.type.asNode(),clazz);
-		        while (triples.hasNext()){
-			Node subject=triples.next().getSubject();
-		    Storey s=new Storey(subject,elevation(subject,graph));
-			if(s.elevation>storey.elevation){
-			addStorey(storeys,s,graph);
+		HashSet<Node> results = new HashSet<Node>();
+
+		Graph graph = execCxt.getActiveGraph();
+
+		Node clazz = NodeFactory.createURI(Namespace.IFC2X3_TC1 + "IfcBuildingStorey");
+		LinkedList<Storey> storeys = new LinkedList<Storey>();
+		if (graph.contains(node, RDF.type.asNode(), clazz)) {
+			Storey storey = new Storey(node, elevation(node, graph));
+			ExtendedIterator<Triple> triples = graph.find(null, RDF.type.asNode(), clazz);
+			while (triples.hasNext()) {
+				Node subject = triples.next().getSubject();
+				Storey s = new Storey(subject, elevation(subject, graph));
+				if (s.elevation > storey.elevation) {
+					addStorey(storeys, s, graph);
+				}
+			}
+			if (storeys.size() > 0) {
+				results.add(storeys.get(0).storey);
 			}
 		}
-	      if(storeys.size()>0){
-	    	  results.add(storeys.get(0).storey);
-	      }
-		}
-			return results;
+		return results;
 	}
 
 	@Override
 	protected HashSet<Node> getRelatedSubjects(Node node, ExecutionContext execCxt) {
-		  HashSet<Node> results=new HashSet<Node>();
-			 
-			Graph graph=execCxt.getActiveGraph();
-			
-			Node clazz=NodeFactory.createURI(Namespace.IFC2X3_TC1+"IfcBuildingStorey");
-			LinkedList<Storey> storeys=new LinkedList<Storey>();
-			if(graph.contains(node, RDF.type.asNode(), clazz)){
-				   Storey storey=new Storey(node,elevation(node,graph));
-		        ExtendedIterator<Triple> triples=graph.find(null,RDF.type.asNode(),clazz);
-		        while (triples.hasNext()){
-			Node subject=triples.next().getSubject();
-		    Storey s=new Storey(subject,elevation(subject,graph));
-			if(s.elevation<storey.elevation){
-			addStorey(storeys,s,graph);
+		HashSet<Node> results = new HashSet<Node>();
+
+		Graph graph = execCxt.getActiveGraph();
+
+		Node clazz = NodeFactory.createURI(Namespace.IFC2X3_TC1 + "IfcBuildingStorey");
+		LinkedList<Storey> storeys = new LinkedList<Storey>();
+		if (graph.contains(node, RDF.type.asNode(), clazz)) {
+			Storey storey = new Storey(node, elevation(node, graph));
+			ExtendedIterator<Triple> triples = graph.find(null, RDF.type.asNode(), clazz);
+			while (triples.hasNext()) {
+				Node subject = triples.next().getSubject();
+				Storey s = new Storey(subject, elevation(subject, graph));
+				if (s.elevation < storey.elevation) {
+					addStorey(storeys, s, graph);
+				}
+			}
+			if (storeys.size() > 0) {
+				results.add(storeys.get(storeys.size() - 1).storey);
 			}
 		}
-	      if(storeys.size()>0){
-	    	  results.add(storeys.get(storeys.size()-1).storey);
-	      }
+		return results;
+
+	}
+
+	protected void addStorey(LinkedList<Storey> storeys, Storey s, Graph graph) {
+
+		int i = 0;
+		for (i = 0; i < storeys.size(); i++) {
+			if (i < storeys.size() - 1) {
+				if (storeys.get(i).elevation < s.elevation && storeys.get(i + 1).elevation > s.elevation) {
+					break;
+				}
+			}
+
 		}
-			return results;
-	  
+		storeys.add(i + 1, s);
 	}
-	
-	protected void addStorey(LinkedList<Storey> storeys,Storey s,Graph graph){
 
-	    int i=0;
-	    for (i=0;i<storeys.size();i++){
-	    	if(i<storeys.size()-1){
-	    	if(storeys.get(i).elevation<s.elevation&&storeys.get(i+1).elevation>s.elevation){
-	    		break;
-	    	}
-	    	}
+	private double elevation(Node storey, Graph graph) {
+		double elevation;
+		AABB aabb = new AABB();
+		ExtendedIterator<Triple> iterator2 = graph.find(null,
+				NodeFactory.createURI(Namespace.IFC2X3_TC1 + "relatingStructure_fcRelContainedInSpatialStructure"),
+				storey);
+		while (iterator2.hasNext()) {
+			Node rel = iterator2.next().getSubject();
+			ExtendedIterator<Triple> iter = graph.find(rel,
+					NodeFactory.createURI(Namespace.IFC2X3_TC1 + "relatedElements_fcRelContainedInSpatialStructure"),
+					null);
+			while (iter.hasNext()) {
+				Node element = iter.next().getObject();
 
-	    }
-    	storeys.add(i+1, s);
-	}
-	
-	private double elevation(Node storey,Graph graph){
-        double elevation;
-        AABB aabb=new AABB();
-		ExtendedIterator<Triple> iterator2=graph.find(null,NodeFactory.createURI(Namespace.IFC2X3_TC1+"relatingStructure_fcRelContainedInSpatialStructure") , storey);
-		while (iterator2.hasNext()){
-			Node rel=iterator2.next().getSubject();
-			ExtendedIterator<Triple> iter=graph.find(rel,NodeFactory.createURI(Namespace.IFC2X3_TC1+"relatedElements_fcRelContainedInSpatialStructure"),null);
-			while (iter.hasNext()){
-				Node element=iter.next().getObject();
-				
-				if(graph.contains(element,RDF.type.asNode(),NodeFactory.createURI(Namespace.IFC2X3_TC1+"IfcSlab"))||graph.contains(element,RDF.type.asNode(),NodeFactory.createURI(Namespace.IFC2X3_TC1+"IfcRoof"))){
-					Geometry geometry=getGeometry(element, graph);
-					AABBVisitor visitor=new AABBVisitor();
+				if (graph.contains(element, RDF.type.asNode(), NodeFactory.createURI(Namespace.IFC2X3_TC1 + "IfcSlab"))
+						|| graph.contains(element, RDF.type.asNode(),
+								NodeFactory.createURI(Namespace.IFC2X3_TC1 + "IfcRoof"))) {
+					Geometry geometry = getGeometry(element, graph);
+					AABBVisitor visitor = new AABBVisitor();
 					geometry.accept(visitor);
 					aabb.addBoundingBox(visitor.getAABB());
 				}
 			}
-	}elevation=(aabb.getMin().z+aabb.getMax().z)/2;
-	return elevation;
+		}
+		elevation = (aabb.getMin().z + aabb.getMax().z) / 2;
+		return elevation;
 	}
-	
-	private class Storey{
+
+	private class Storey {
 		Node storey;
 		double elevation;
-		
-		Storey(Node storey,double elevation){
-			this.storey=storey;
-			this.elevation=elevation;
+
+		Storey(Node storey, double elevation) {
+			this.storey = storey;
+			this.elevation = elevation;
 		}
 	}
 
