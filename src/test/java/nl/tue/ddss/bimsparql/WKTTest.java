@@ -21,15 +21,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 
-import com.hp.hpl.jena.rdf.model.Model;
-import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import nl.tue.ddss.bimsparql.geometry.GeometryGenerator;
-import nl.tue.ddss.convert.rdf2ifc.IfcWriterException;
-import nl.tue.ddss.convert.rdf2ifc.StreamIfcWriter;
+
 
 public class WKTTest {
 	
