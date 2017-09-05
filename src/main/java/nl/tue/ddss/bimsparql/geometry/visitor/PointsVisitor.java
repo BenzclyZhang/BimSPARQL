@@ -40,28 +40,18 @@ public class PointsVisitor extends GeometryVisitor{
 	public void visit(Geometry geometry) {
 		GeometryType geom=geometry.geometryTypeId();
 		switch(geom){
-		case TYPE_POINT:
-			visitPoint((Point)geometry);
-		case TYPE_LINESTRING:
-			visitLineString((LineString)geometry);
-
-		case TYPE_TRIANGLE:
-			visitTriangle((Triangle)geometry);
-		case TYPE_POLYGON : visitPolygon((Polygon)geometry);
-		case TYPE_MULTIPOINT:
-			visitMultiPoint((MultiPoint)geometry);
-		case TYPE_MULTILINESTRING:
-			visitMultiLineString((MultiLineString)geometry);
-		case TYPE_MULTIPOLYGON:
-			visitMultiPolygon((MultiPolygon)geometry);
-		case TYPE_GEOMETRYCOLLECTION:
-			visitGeometryCollection((GeometryCollection)geometry);
-		case TYPE_POLYHEDRALSURFACE:{
-			visitPolyhedralSurface((PolyhedralSurface)geometry);
-		}case TYPE_TRIANGULATEDSURFACE:{
-			visitTriangulatedSurface((TriangulatedSurface)geometry);
-		}
-
+		case TYPE_POINT: visitPoint((Point)geometry); break;
+		case TYPE_LINESTRING: visitLineString((LineString)geometry); break;
+		case TYPE_TRIANGLE: visitTriangle((Triangle)geometry);break;
+		case TYPE_POLYGON : visitPolygon((Polygon)geometry);break;
+		case TYPE_MULTIPOINT: visitMultiPoint((MultiPoint)geometry);break;
+		case TYPE_MULTILINESTRING: visitMultiLineString((MultiLineString)geometry);break;
+		case TYPE_MULTIPOLYGON: visitMultiPolygon((MultiPolygon)geometry);break;
+		case TYPE_GEOMETRYCOLLECTION: visitGeometryCollection((GeometryCollection)geometry);break;
+		case TYPE_POLYHEDRALSURFACE:
+			visitPolyhedralSurface((PolyhedralSurface)geometry);break;
+		case TYPE_TRIANGULATEDSURFACE:
+			visitTriangulatedSurface((TriangulatedSurface)geometry);break;
 		}		
 	}
 	

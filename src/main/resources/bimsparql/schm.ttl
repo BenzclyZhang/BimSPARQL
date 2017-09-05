@@ -1362,15 +1362,15 @@ schm:isContainedIn
               [ rdf:type sp:Select ;
                 sp:resultVariables ([ sp:varName "a2"^^xsd:string
                           ]) ;
-                sp:where ([ sp:object
-                                    [ sp:varName "a2"^^xsd:string
-                                    ] ;
-                            sp:predicate ifcowl:relatingStructure_IfcRelContainedInSpatialStructure ;
+                sp:where ([ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedElements_IfcRelContainedInSpatialStructure ;
                             sp:subject
                                     [ sp:varName "a1"^^xsd:string
                                     ]
-                          ] [ sp:object spin:_arg1 ;
-                            sp:predicate ifcowl:relatedElements_IfcRelContainedInSpatialStructure ;
+                          ] [ sp:object
+                                    [ sp:varName "a2"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingStructure_IfcRelContainedInSpatialStructure ;
                             sp:subject
                                     [ sp:varName "a1"^^xsd:string
                                     ]
@@ -1397,17 +1397,41 @@ schm:isPlacedIn
               [ rdf:type sp:Select ;
                 sp:resultVariables ([ sp:varName "a1"^^xsd:string
                           ]) ;
-                sp:where ([ sp:object
-                                    [ sp:varName "a2"^^xsd:string
-                                    ] ;
-                            sp:predicate schm:hasVoiding ;
+                sp:where ([ sp:object spin:_arg1 ;
+                            sp:predicate ifcowl:relatedBuildingElement_IfcRelFillsElement ;
                             sp:subject
-                                    [ sp:varName "a1"^^xsd:string
+                                    [ sp:varName "r"^^xsd:string
                                     ]
-                          ] [ sp:object spin:_arg1 ;
-                            sp:predicate schm:hasElementFilling ;
+                          ] [ sp:object
+                                    [ sp:varName "opening"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingOpeningElement_IfcRelFillsElement ;
                             sp:subject
-                                    [ sp:varName "a2"^^xsd:string
+                                    [ sp:varName "r"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelFillsElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "r"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "opening"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatedOpeningElement_IfcRelVoidsElement ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object
+                                    [ sp:varName "a1"^^xsd:string
+                                    ] ;
+                            sp:predicate ifcowl:relatingBuildingElement_IfcRelVoidsElement ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
+                                    ]
+                          ] [ sp:object ifcowl:IfcRelVoidsElement ;
+                            sp:predicate rdf:type ;
+                            sp:subject
+                                    [ sp:varName "rel"^^xsd:string
                                     ]
                           ])
               ] ;

@@ -19,9 +19,16 @@ package nl.tue.ddss.bimsparql.pfunction;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.jena.atlas.iterator.Iter;
+
 import nl.tue.ddss.bimsparql.function.geom.GEOM;
+import nl.tue.ddss.bimsparql.geometry.Box;
 import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryCollection;
+import nl.tue.ddss.bimsparql.geometry.GeometryType;
+import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
+import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
+import nl.tue.ddss.bimsparql.geometry.algorithm.MVBB;
 import nl.tue.ddss.bimsparql.geometry.ewkt.EwktReader;
 import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 import nl.tue.ddss.convert.IfcVersion;
@@ -37,6 +44,7 @@ import com.hp.hpl.jena.sparql.engine.ExecutionContext;
 import com.hp.hpl.jena.sparql.engine.QueryIterator;
 import com.hp.hpl.jena.sparql.engine.binding.Binding;
 import com.hp.hpl.jena.sparql.pfunction.PFuncSimple;
+import com.hp.hpl.jena.sparql.util.IterLib;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 public abstract class FunctionBaseProduct extends PFuncSimple{
@@ -57,6 +65,9 @@ public abstract class FunctionBaseProduct extends PFuncSimple{
 			ExecutionContext execCxt) {
 		Graph graph = execCxt.getActiveGraph();
 		Geometry geometry=getGeometry(product,graph);
+		if(geometry==null){
+			return IterLib.noResults(execCxt);
+		}
 		if (Var.isVar(product))
 			throw new ARQInternalErrorException(
 					this.getClass().getName()+": Subject are variables without binding");
@@ -80,11 +91,44 @@ public abstract class FunctionBaseProduct extends PFuncSimple{
 			Triple t=iterator.next();
 			Node object=t.getObject();
 			ExtendedIterator<Triple> iter=graph.find(object, GEOM.asBody.asNode(), null);
+			ExtendedIterator<Triple> iter1=graph.find(object, GEOM.asAABB.asNode(), null);
+			ExtendedIterator<Triple> iter2=graph.find(object, GEOM.asMVBB.asNode(), null);
 			if(iter.hasNext()){
 				String s=iter.next().getObject().getLiteralValue().toString();
 				try {
 					geometry=new EwktReader(s).readGeometry();
 					return geometry;
+				} catch (WktParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			if(iter1.hasNext()){
+				String s=iter.next().getObject().getLiteralValue().toString();
+				try {
+					Geometry aabbG=new EwktReader(s).readGeometry();
+					if(aabbG.geometryTypeId()==GeometryType.TYPE_POLYHEDRALSURFACE){
+						AABB aabb=AABB.getAABB(aabbG);
+						geometry.setAABB(aabb);
+					}
+				} catch (WktParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}if(iter2.hasNext()){
+				String s=iter.next().getObject().getLiteralValue().toString();
+				try {
+					Geometry mvbbG=new EwktReader(s).readGeometry();
+					if(mvbbG.geometryTypeId()==GeometryType.TYPE_POLYHEDRALSURFACE){
+						Box mvbb=Box.toBox((PolyhedralSurface)mvbbG);
+						geometry.setMVBB(mvbb);
+					}
 				} catch (WktParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

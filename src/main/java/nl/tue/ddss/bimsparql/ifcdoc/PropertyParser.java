@@ -105,7 +105,7 @@ public class PropertyParser {
 		PropertyParser pp=new PropertyParser();
 		OutputStream out=new FileOutputStream("C:\\users\\chi\\desktop\\pset.ttl");
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/IFC2x3TC1_Properties.ifcdoc"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("src/main/resources/IFC4_ADD2 .ifcdoc"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {	      
 		    	   pp.parsePropertySet(line);
@@ -135,6 +135,7 @@ public class PropertyParser {
 	@SuppressWarnings("unchecked")
 	private void addPropertySet(IfcdocVO ifcdocVO,Model model) {
 		ArrayList<Object> objectList=ifcdocVO.getObjectList();
+		if(!objectList.get(0).toString().startsWith("Pset_Material")){
 		Resource pset=model.createResource(PSET+objectList.get(0));
 		pset.addProperty(RDF.type, model.createResource(IFCDOC+"PropertySet"));
 		for (String id:(ArrayList<String>)objectList.get(9)){
@@ -149,6 +150,7 @@ public class PropertyParser {
 		};
 		objectList.get(12);
 		pset.addLiteral(RDFS.comment, objectList.get(1).toString());	
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -190,12 +192,12 @@ public class PropertyParser {
 		else property.addProperty(RDFS.domain, model.createResource(IFCOWL+domain));
 		
 if (propertyType.equals("P_SINGLEVALUE")){
-	singleValueInference(property,propertyName);
+	singleValueInference(property,propertyName,psetName);
 }
 		
 	}
 	
-	private void singleValueInference(Resource property,String propertyName){
+	private void singleValueInference(Resource property,String propertyName,String psetName){
 		Resource range=property.getProperty(RDFS.range).getObject().asResource();
 
 		String lastTP=new String();
@@ -224,11 +226,46 @@ if (propertyType.equals("P_SINGLEVALUE")){
         if(lastTP.length()>0){
 		String query="SELECT ?str\n"
 				+	"WHERE {\n"
-			  + " ?arg1 schm:hasProperty ?p .\n"
-			    +"?p ifcowl:name_IfcProperty ?name .\n"
-			   + "?name express:hasString \""+propertyName+"\" .\n"
-			   + "?p ifcowl:nominalValue_IfcPropertySingleValue ?val .\n"
-			   +lastTP
+			    +"{\n"
+			    +"?r ifcowl:relatedObjects_IfcRelDefines ?arg1.\n"
+			    +"?r a ifcowl:IfcRelDefinesByProperties .\n"
+			    +"?r ifcowl:relatingPropertyDefinition_IfcRelDefinesByProperties ?pset .\n"
+			    +"?pset a ifcowl:IfcPropertySet .\n"
+			    +"?pset ifcowl:name_IfcRoot ?n .\n"
+			    +"?n express:hasString \""+psetName+"\" .\n"
+			    +"?pset ifcowl:hasProperties_IfcPropertySet ?property .\n"
+			    +"?property a ifcowl:IfcPropertySingleValue .\n"
+			    +"?property ifcowl:name_IfcProperty ?name .\n"
+			    +"?name express:hasString \""+propertyName+"\" .\n"
+			    +"?property ifcowl:nominalValue_IfcPropertySingleValue ?value .\n"
+			    +lastTP
+			    +"}UNION{\n"
+			    +"?r ifcowl:relatedObjects_IfcRelDefines ?wall.\n"
+			    +"?r a ifcowl:IfcRelDefinesByType .\n"
+			    +"?r ifcowl:relatingType_IfcRelDefinesByType ?type .\n"
+			    +"?type ifcowl:hasPropertySets_IfcTypeObject ?pset .\n"
+			    +"?pset a ifcowl:IfcPropertySet .\n"
+			    +"?pset ifcowl:name_IfcRoot ?n .\n"
+			    +"?n express:hasString \""+psetName+"\" .\n"
+			    +"?pset ifcowl:hasProperties_IfcPropertySet ?property .\n"
+			    +"?property a ifcowl:IfcPropertySingleValue .\n"
+			    +"?property ifcowl:name_IfcProperty ?name .\n"
+			    +"?name express:hasString \""+propertyName+"\" .\n"
+			    +"?property ifcowl:nominalValue_IfcPropertySingleValue ?value .\n"
+			    +lastTP
+			    +" FILTER NOT EXISTS{\n"
+			    +"?r2 ifcowl:relatedObjects_IfcRelDefines ?wall.\n"
+			    +"?r2 a ifcowl:IfcRelDefinesByProperties .\n"
+			    +"?r2 ifcowl:relatingPropertyDefinition_IfcRelDefinesByProperties ?pset2 .\n"
+			    +"?pset2 a ifcowl:IfcPropertySet .\n"
+			    +"?pset2 ifcowl:name_IfcRoot ?n2 .\n"
+			    +"?n2 express:hasString \""+psetName+"\" .\n"
+			    +"?pset2 ifcowl:hasProperties_IfcPropertySet ?property2 .\n"
+			    +"?property2 a ifcowl:IfcPropertySingleValue .\n"
+			    +"?property2 ifcowl:name_IfcProperty ?name2 .\n"
+			    +"?name2 express:hasString \""+propertyName+"\" .\n"
+			    +"}\n"
+			    +"}\n"
 			+"}";	
 			
 			if(property.getProperty(SPIN.body)==null){

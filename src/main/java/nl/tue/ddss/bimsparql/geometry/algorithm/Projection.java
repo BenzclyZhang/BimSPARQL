@@ -18,6 +18,8 @@ package nl.tue.ddss.bimsparql.geometry.algorithm;
 
 import javax.vecmath.Vector3d;
 
+import com.vividsolutions.jts.geom.Coordinate;
+
 import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryException;
 import nl.tue.ddss.bimsparql.geometry.GeometryUtils;
@@ -118,12 +120,15 @@ public class Projection {
    public static Polygon projectToPlane(TriangulatedSurface ts,Plane p){
 	   TriangulatedSurface triangulatedSurface=new TriangulatedSurface();
 	   for(int i=0;i<ts.numTriangles();i++){
-		   triangulatedSurface.addTriangle(projectToPlane(triangulatedSurface.triangleN(i),p));
+		   triangulatedSurface.addTriangle(projectToPlane(ts.triangleN(i),p));
 	   }
 	   Polyhedron polyhedron=new Polyhedron(triangulatedSurface);
 	   return outline(polyhedron,p);
    }
    
+//   public static com.vividsolutions.jts.geom.Triangle toTriangule(Triangule t){
+//	   new com.vividsolutions.jts.geom.Triangle(new Coordinate(t.p0.x,t.p0.y,t.p0.z),new Coordinate(t.p1.x,t.p1.y,t.p1.z),new Coordinate(t.p2.x,t.p2.y,t.p0.z));
+//   }
    
    private static Polygon outline(Polyhedron polyhedron,Plane p){
 	   Vector3d random=GeometryUtils.vectorSubtract(p.p0, p.p1);
@@ -131,8 +136,7 @@ public class Projection {
    }
    
    
-   private static Polygon outline(Polyhedron polyhedron,Vector3d random){
-	   
+   private static Polygon outline(Polyhedron polyhedron,Vector3d random){	   
 	   random.normalize();
 	   double dot=Double.NEGATIVE_INFINITY;
 	   Vertex start=null;
@@ -148,8 +152,7 @@ public class Projection {
 	   LineString exterior=new LineString();
 	   exterior.addPoint(start.pnt);
 	   while (next!=start){
-		   dot=Double.NEGATIVE_INFINITY;
-		   
+		   dot=Double.NEGATIVE_INFINITY;		   
 	  for(Edge edge:current.edges){
 		  Vertex another=edge.anotherVertex(current);
 		  Vector3d v=GeometryUtils.vectorSubtract(another.pnt, current.pnt);

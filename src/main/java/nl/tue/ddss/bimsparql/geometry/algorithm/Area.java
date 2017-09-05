@@ -84,14 +84,14 @@ public class Area {
 	}
 	
 	
-	public double areaSimplePolygon2D(Polygon polygon) throws GeometryException{
+	public static double areaSimplePolygon2D(Polygon polygon) throws GeometryException{
 		return areaSimplePolygon2D(polygon.exteriorRing());
 	}
 	
-	double areaSimplePolygon2D(LineString ring) throws GeometryException{
+	static double areaSimplePolygon2D(LineString ring) throws GeometryException{
 		double result=0;
 		int numPoints=ring.numPoints();
-		if (ring.numPoints()<=3||!ring.pointN(0).equals(ring.pointN(ring.numPoints()))){
+		if (ring.numPoints()<=3||!Topology.samePoint(ring.pointN(0).asPoint3d(),ring.pointN(ring.numPoints()-1).asPoint3d())){
 			throw new GeometryException("The polygon is not closed");
 		}
 		for (int i=0;i<numPoints-1;i++){
@@ -179,7 +179,7 @@ public class Area {
 	}
 
 
-	public double area3D( Polygon g ) throws GeometryException
+	public static double area(Polygon g) throws GeometryException
 	{
 	    double result = 0.0 ;
 
@@ -187,39 +187,22 @@ public class Area {
 	        return result ;
 	    }
 
-	    Point3d a, b, c ;
+	    Point3d a, b;
 	    Plane plane=GeometryUtils.getPlane(g);
-        a=plane.p0;
-        b=plane.p1;
-        c=plane.p2;
-	    
-
-	    /*
-	     * compute polygon basis (CGAL doesn't build an orthonormal basis so that computing
-	     * the 2D area in this basis would lead to scale effects)
-	     * ux = bc
-	     * uz = bc^ba
-	     * uy = uz^ux
-	     *
-	     * Note that the basis is rounded to double (CGAL::sqrt)
-	     */
-	    Vector3d ux = GeometryUtils.vectorSubtract(c,b) ;
-	    Vector3d uz = new Vector3d();
-	    uz.cross(ux, GeometryUtils.vectorSubtract(a, b));
+        a=g.exteriorRing().pointN(0).asPoint3d();
+        b=g.exteriorRing().pointN(1).asPoint3d();
+        
+	    Vector3d ux = GeometryUtils.vectorSubtract(a,b) ;
 	    ux.normalize();
-	    uz.normalize();
+	    Vector3d uz = plane.getNormal();
 	    Vector3d uy=new Vector3d();
-	    uy.cross(uz, ux );
+	    uy.cross(uz, ux);
 
-	    /*
-	     * compute the area for each ring in the local basis
-	     */
 	    for ( int i = 0; i < g.numRings(); i++ ) {
 	        LineString ring = g.ringN( i );
-
 	        Polygon projectedPolygon=new Polygon();
             projectedPolygon.addRing(new LineString());
-	        for ( int j = 0; j < ring.numPoints() - 1 ; j++ ) {
+	        for ( int j = 0; j < ring.numPoints() ; j++ ) {
 	            Point3d point = ring.pointN( j ).asPoint3d();
 	            Point2d projectedPoint=new Point2d(
 	                GeometryUtils.vectorSubtract(point,b).dot(ux),

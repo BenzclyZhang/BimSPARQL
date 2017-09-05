@@ -44,6 +44,7 @@ public class Plane {
 		this.p0=p0;
 		this.normal=normal;
 		findEquation();
+		
 	}
 	
 	public Plane(double a, double b,double c,double d){
@@ -63,6 +64,9 @@ public class Plane {
 	
 	
 	public Vector3d getNormal(){
+		if(this.normal!=null){
+			return normal;
+		}
 		Vector3d v1=GeometryUtils.vectorSubtract(p1, p0);
 		Vector3d v2=GeometryUtils.vectorSubtract(p2, p1);
 		Vector3d u=new Vector3d();

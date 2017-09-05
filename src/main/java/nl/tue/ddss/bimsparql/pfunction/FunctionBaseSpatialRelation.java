@@ -64,20 +64,20 @@ public abstract class FunctionBaseSpatialRelation extends PropertyFunctionEval {
 
 	public final QueryIterator execEvaluated(Binding binding,
 			PropFuncArg argSubject, Node predicate, PropFuncArg argObject,
-			ExecutionContext execCxt) {
+			ExecutionContext execCxt) {		
 		ExprList subjectExprList = argSubject.asExprList(argSubject);
 		ExprList objectExprList = argObject.asExprList(argObject);
-
 		QueryIterConcat existingValues = null;
 
 		if (objectExprList.size() == 1 && subjectExprList.size() == 1) {
+			
 			Expr subject = subjectExprList.get(0);
 			Expr object = objectExprList.get(0);
 			Node matchSubject = argSubject.getArg();
 			Node matchObject = argObject.getArg();
 
 			Graph queryGraph = execCxt.getActiveGraph();
-
+//			queryGraph.add(new Triple(matchSubject,NodeFactory.createURI("www.tue.nl/try#add"),NodeFactory.createAnon()));
 			List<Triple> lt = new LinkedList<Triple>();
 
 			if (Var.isVar(matchSubject) || Var.isVar(matchObject)) {

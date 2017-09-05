@@ -30,7 +30,8 @@ public class touches3D extends FunctionBase2{
 		try {
 			Geometry g1 = GFUtils.read(v1);
 			Geometry g2 = GFUtils.read(v2);
-	    if(Topology.intersects3D(g1, g2)==2){
+			int result=Topology.intersects3D(g1, g2);
+	    if(result==2||result==3||result==4||result==5){
 	    	return NodeValue.booleanReturn(true);
 	    }else{
 	    	return NodeValue.booleanReturn(false);

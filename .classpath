@@ -35,5 +35,6 @@
 	<classpathentry kind="lib" path="C:/Program Files/Java/Java3D/1.5.2/lib/ext/j3dcore.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/Java3D/1.5.2/lib/ext/j3dutils.jar"/>
 	<classpathentry kind="lib" path="C:/Program Files/Java/Java3D/1.5.2/lib/ext/vecmath.jar"/>
+	<classpathentry kind="lib" path="unbboolean-1.1.exe.jar" sourcepath="C:/Users/Chi/Downloads/unbboolean-code-13.zip"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

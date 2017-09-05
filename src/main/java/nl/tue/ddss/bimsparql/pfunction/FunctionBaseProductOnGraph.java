@@ -28,6 +28,7 @@ import com.hp.hpl.jena.sparql.core.Var;
 import com.hp.hpl.jena.sparql.engine.ExecutionContext;
 import com.hp.hpl.jena.sparql.engine.QueryIterator;
 import com.hp.hpl.jena.sparql.engine.binding.Binding;
+import com.hp.hpl.jena.sparql.pfunction.PFuncSimple;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import nl.tue.ddss.bimsparql.function.geom.GEOM;
@@ -38,7 +39,7 @@ import nl.tue.ddss.bimsparql.geometry.ewkt.WktParseException;
 import nl.tue.ddss.convert.IfcVersion;
 import nl.tue.ddss.convert.Namespace;
 
-public abstract class FunctionBaseProductOnGraph {
+public abstract class FunctionBaseProductOnGraph extends PFuncSimple{
 	
 	protected final static double EPS=Geometry.EPS;
 	

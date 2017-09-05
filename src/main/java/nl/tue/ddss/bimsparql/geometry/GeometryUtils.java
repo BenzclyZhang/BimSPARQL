@@ -54,8 +54,6 @@ public class GeometryUtils {
 			else
 				return 0; // ray disjoint from plane
 		}
-
-		// get intersect point of ray with triangle plane
 		r = a / b;
 		if (r < 0.0|| r >1.0) // ray goes away from triangle
 			return 0; // => no intersect
@@ -94,9 +92,8 @@ public class GeometryUtils {
 		else if((Math.abs(i.x - l.p0.x())<EPS&&Math.abs(i.y - l.p0.y())<EPS&&Math.abs(i.z - l.p0.z())<EPS)||
 				(Math.abs(i.x - l.p1.x())<EPS&&Math.abs(i.y - l.p1.y())<EPS&&Math.abs(i.z - l.p1.z())<EPS)){
 			return 2;
-		}
-			
-		return 3;// I is in T and in l;
+		}			
+		return 3;
 	}
 	
 	private static boolean approEqual(double d0,double d1){
@@ -282,12 +279,6 @@ return false;
  }
 	 
 
-	
-/*	private static Segment3d overlap3d_Segments(Segment3d s1, Segment3d s2) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
 
 	
 	private static Point3d intersect3D_LineSegment(Line3d l1, Segment segment) throws GeometryException {
@@ -436,23 +427,6 @@ return false;
 		return (pl.a*pt.x + pl.b * pt.y + pl.c* pt.z + pl.d) / Math.sqrt(pl.a*pl.a + pl.b*pl.b + pl.c*pl.c);
 	}
 
-	/*
-	 * private static boolean segmentBoxIntersection(){ double st,et,fst = 0,fet
-	 * = 1; double const *bmin = &box.min.x; double const *bmax = &box.max.x;
-	 * double const *si = &start.x; double const *ei = &end.x;
-	 * 
-	 * for (int i = 0; i < 3; i++) { if (*si < *ei) { if (*si > *bmax || *ei <
-	 * *bmin) return false; F32 di = *ei - *si; st = (*si < *bmin)? (*bmin -
-	 * *si) / di: 0; et = (*ei > *bmax)? (*bmax - *si) / di: 1; } else { if (*ei
-	 * > *bmax || *si < *bmin) return false; F32 di = *ei - *si; st = (*si >
-	 * *bmax)? (*bmax - *si) / di: 0; et = (*ei < *bmin)? (*bmin - *si) / di: 1;
-	 * }
-	 * 
-	 * if (st > fst) fst = st; if (et < fet) fet = et; if (fet < fst) return
-	 * false; bmin++; bmax++; si++; ei++; }
-	 * 
-	 * time = fst; return true; } }
-	 */
 
 	private static boolean triangleTriangle3dIntersection(Triangle t0, Triangle t1) throws GeometryException {
 		for (Segment l : t0.getEdges()) {
@@ -593,6 +567,10 @@ return false;
 		return new Vector3d(t0.x - t1.x, t0.y- t1.y, t0.z - t1.z);
 	}
 	
+	public static Point3d pointAdd(Tuple3d t0, Tuple3d t1){
+		return new Point3d(t0.x + t1.x, t0.y+ t1.y, t0.z + t1.z);
+	}
+	
 /*	private static boolean isInside(Point3d p,List<Triangle3d> triangles){
 		Ray r = new Ray(p, new Vector3d(1,0,0));
 		int intersections = 0;
@@ -651,7 +629,45 @@ return false;
 		// TODO Auto-generated method stub
 		return new Vector3d(a.x+b.x,a.y+b.y,a.z+b.z);
 	}
+
+	public static boolean squareGeometryIntersection(Square square, Geometry geometry) throws GeometryException {
+		if(geometry.geometryTypeId()==GeometryType.TYPE_TRIANGULATEDSURFACE){
+		if (squareBoxIntersection(square, AABB.getAABB(geometry))) {
+			for (Triangle triangle : ((TriangulatedSurface)geometry).getTriangles()) {
+				if (squareTriangle3dIntersection(square, triangle)) {
+					return true;
+				}
+			}
+			return false;
+		}
+		}
+		/*else if(geometry.geometryTypeId()==GeometryType.TYPE_LINESTRING){
+			if (squareSquareIntersection(square, BoundingSquare.getBoundingSquare(geometry))) {
+				for (int i=0;i<((LineString)geometry).numSegments();i++) {
+					if (squareSegmentIntersection(square,((LineString)geometry).segmentN(i) )) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}*/
+		return false;
+	}
+
+/*	private static boolean squareSquareIntersection(Square square1, Square square2) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	private static boolean squareSegmentIntersection(Square square, Segment segment) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
+	private static boolean segmentSegmentIntersection(Segment s1,Segment s2){
+		
+        return false;
+	}*/
 
 
 }

@@ -17,6 +17,7 @@
 package nl.tue.ddss.bimsparql.geometry.algorithm;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.vecmath.Vector3d;
 
@@ -29,6 +30,7 @@ import nl.tue.ddss.bimsparql.geometry.Plane;
 import nl.tue.ddss.bimsparql.geometry.Point;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
+import nl.tue.ddss.bimsparql.geometry.Ray;
 import nl.tue.ddss.bimsparql.geometry.Segment;
 import nl.tue.ddss.bimsparql.geometry.Square;
 import nl.tue.ddss.bimsparql.geometry.Triangle;
@@ -37,13 +39,14 @@ import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
 
 public class Topology {
 
-	static final double EPS = 0.001;
+	static final double EPS = 0.00000001;
 	
 	static final int DISJOINTS=0;
 	static final int INTERSECTS=1;
 	static final int TOUCHES=2;
 	static final int CONTAINS=3;
-	static final int EQUALS=4;
+	static final int ISCONTAINEDIN=4;
+	static final int EQUALS=5;
 	
 	
 	
@@ -60,6 +63,7 @@ public class Topology {
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
 		case TYPE_GEOMETRYCOLLECTION:
+			return intersectsGeometryCollectionGeometry3D((TriangulatedSurface)gA,gB);
 		case TYPE_TRIANGULATEDSURFACE:
 			return intersectsTriangulatedSurfaceGeometry3D((TriangulatedSurface)gA,gB);
 		case TYPE_POLYHEDRALSURFACE:
@@ -68,6 +72,11 @@ public class Topology {
           throw new GeometryException(String.format("Geometry type is not supported: %s",gA.geometryType()));
 	}
 	
+	private static int intersectsGeometryCollectionGeometry3D(TriangulatedSurface gA, Geometry gB) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 	public static int intersectsTriangleGeometry3D(Triangle gA, Geometry gB) {
 		// TODO Auto-generated method stub
 		return 0;
@@ -144,21 +153,55 @@ public class Topology {
 		AABB box1 = bv1.getAABB();
 		int intersection = 0;
 		if (box0 == null || box1 == null) {
-			return 0;
+			return DISJOINTS;
 		} else if (!boxBoxIntersection(box0, box1)) {
-			return 0;
+			return DISJOINTS;
 		}
 		for (Triangle t0 : ts0.getTriangles()) {
-			for (Triangle t1 : ts0.getTriangles()) {
+			for (Triangle t1 : ts1.getTriangles()) {
 				if (intersectsTriangleTriangle3D(t0, t1) == 1) {
-					return 1;
+					return INTERSECTS;
 				} else if (intersectsTriangleTriangle3D(t0, t1) == 2) {
 					intersection = 2;
 				}
 			}
+		}		
+		if(intersection==0){
+		   Point3d ref0=ts0.triangleN(0).p0.asPoint3d();
+		   Ray ray0=new Ray(ref0,new Vector3d(1,1,1));
+		   Point3d ref1=ts1.triangleN(0).p0.asPoint3d();
+		   Ray ray1=new Ray(ref1,new Vector3d(1,1,1));
+		   List<Point3d> points0=rayTriangulatedSurfaceIntersection3D(ray0,ts1);
+		   List<Point3d> points1=rayTriangulatedSurfaceIntersection3D(ray1,ts0);
+		   if(points0.size()%2==0&&points1.size()%2==0){
+			   return DISJOINTS;
+		   }else if(points0.size()%2==1&&points1.size()%2==0){
+			   return ISCONTAINEDIN;
+		   }else if(points0.size()%2==0&&points1.size()%2==1){
+			   return CONTAINS;
+		   }else{
+			   throw new GeometryException("Cannot decide the topology relationship");
+		   }
+		}else{
+			   Point3d ref0=ts0.triangleN(0).p0.asPoint3d();
+			   Ray ray0=new Ray(ref0,new Vector3d(1,1,1));
+			   Point3d ref1=ts1.triangleN(0).p0.asPoint3d();
+			   Ray ray1=new Ray(ref1,new Vector3d(1,1,1));
+			   List<Point3d> points0=rayTriangulatedSurfaceIntersection3D(ray0,ts1);
+			   List<Point3d> points1=rayTriangulatedSurfaceIntersection3D(ray1,ts0);
+			   if(points0.size()%2==0&&points1.size()%2==0){
+				   return TOUCHES;
+			   }else if(points0.size()%2==1&&points1.size()%2==0){
+				   return ISCONTAINEDIN;
+			   }else if(points0.size()%2==0&&points1.size()%2==1){
+				   return CONTAINS;
+			   }else{
+				   return EQUALS;
+			   }		
 		}
-		return intersection;
 	}
+    
+	
 
 
 
@@ -231,10 +274,85 @@ public class Topology {
 	}
 
 	private static boolean approEqual(double d0, double d1) {
-		if (d0 - d1 <= EPS || d1 - d0 <= EPS) {
+		if (Math.abs(d0 - d1)< EPS) {
 			return true;
 		}
 		return false;
+	}
+    
+	
+	public static List<Point3d> rayTriangulatedSurfaceIntersection3D(Ray ray, TriangulatedSurface ts){
+		List<Point3d> points=new ArrayList<Point3d>();
+           for (Triangle t:ts.getTriangles()){
+        	   Point3d p=rayTriangleIntersection3D(ray, t);
+        	   if(p!=null){
+        		   if(points.size()==0){
+        			   points.add(p);
+        		   }else{
+        			   for(int i=0;i<points.size();i++){
+        				  if(i==points.size()-1){
+        					  if(!samePoint(points.get(i),p)){
+        						  points.add(p);
+        					  }
+        				  }else{
+        					  if(samePoint(points.get(i),p)){
+        						  break;
+        					  }
+        				  }
+        			   }
+        		   }
+        	   }
+           }
+           return points;
+	}
+	
+	
+	
+	public static Point3d rayTriangleIntersection3D(Ray ray, Triangle t){
+		Plane p=new Plane(t.p0.asPoint3d(),t.p1.asPoint3d(),t.p2.asPoint3d());
+		Line3d l=new Line3d(ray.getPoint(),ray.getDirection());
+		Vector3d n=p.getNormal();
+		if(approEqual(n.dot(ray.getDirection()),0)){
+			return null; // ray parallel with plane or on the plane
+		}else{
+			if(pointOnPlane(ray.getPoint(),p)){
+				if(outsideTriangle(ray.getPoint(),t)){
+					return null;
+				}else{
+					return ray.getPoint();
+				}
+		    }else{
+		   Point3d v0;
+		    if(!isOnLine(t.p0.asPoint3d(),l)){	
+			v0=t.p0.asPoint3d();	
+		    }else{
+		    v0=t.p1.asPoint3d();
+		    }
+		    double si=(n.dot(GeometryUtils.vectorSubtract(v0, ray.getPoint())))/(n.dot(ray.getDirection()));	    
+		    Vector3d inter=GeometryUtils.vectorAdd(GeometryUtils.vectorAdd(v0.asVector3d(),GeometryUtils.vectorSubtract(ray.getPoint(), v0)),GeometryUtils.vectorMul(ray.getDirection(), si));
+		    Point3d point=new Point3d(inter.x,inter.y,inter.z);
+		    if(ray.getDirection().dot(GeometryUtils.vectorSubtract(point, ray.getPoint()))>0-EPS){
+		    	if(outsideTriangle(point,t)){
+		    		return null;
+		    	}return point;
+		    }else{
+		    	return null; // point not on the ray
+		    }
+		}
+	}
+	}
+	
+	
+	public static boolean isOnLine(Point3d p, Line3d l){
+		if(samePoint(p,l.p0)||samePoint(p,l.p1)){
+			return true;
+		}else{
+			Vector3d v0=new Vector3d(p.x-l.p0.x,p.y-l.p0.y,p.z-l.p0.z);
+			Vector3d v1=new Vector3d(p.x-l.p1.x,p.y-l.p1.y,p.z-l.p1.z);
+			if(Math.abs(GeometryUtils.vectorCross(v0, v1).length())<EPS){
+				return true;
+			}return false;
+		}
 	}
 
 	/*
@@ -248,18 +366,21 @@ public class Topology {
 		double distance0 = pointPlaneDistance(t0.p0.asPoint3d(), pl1);
 		double distance1 = pointPlaneDistance(t0.p1.asPoint3d(), pl1);
 		double distance2 = pointPlaneDistance(t0.p2.asPoint3d(), pl1);
+		double distance3 = pointPlaneDistance(t1.p0.asPoint3d(), pl0);
+		double distance4 = pointPlaneDistance(t1.p1.asPoint3d(), pl0);
+		double distance5 = pointPlaneDistance(t1.p2.asPoint3d(), pl0);
 		if (approEqual(distance0, distance1) && approEqual(distance1, distance2)) {
 			if (distance0 < EPS) {
 				if (outsideTriangle(t0.p0.asPoint3d(), t1) && outsideTriangle(t0.p1.asPoint3d(), t1)
 						&& outsideTriangle(t0.p2.asPoint3d(), t1) && outsideTriangle(t1.p0.asPoint3d(), t0)
 						&& outsideTriangle(t1.p1.asPoint3d(), t0) && outsideTriangle(t1.p2.asPoint3d(), t0))
-					return 0;
+					return DISJOINTS;
 				else
-					return 2;
+					return TOUCHES;
 			} else {
-				return 0; // triangles are disjoint and parallel but not on the
+				return DISJOINTS; // triangles are disjoint and parallel but not on the
 							// same plane
-			}
+			}		
 		} else {
 			Line3d l = intersect3D_2Planes(pl0, pl1);
 			Segment s0 = intersectedSegment(l, t0);
@@ -269,22 +390,31 @@ public class Topology {
 					Point3d ip = s0.p0.asPoint3d();
 					int relation = onSegment(ip, s1);
 					if (relation == 1 || relation == 2)
-						return 2;
+						return TOUCHES;
 				} else if (s1.getLength() < EPS) {
 					Point3d ip = s1.p0.asPoint3d();
 					int relation = onSegment(ip, s0);
 					if (relation == 1 || relation == 2)
-						return 2;
+						return TOUCHES;
 				} else {
 					int relation0 = onSegment(s0.p0.asPoint3d(), s1);
 					int relation1 = onSegment(s0.p1.asPoint3d(), s1);
-					if (relation0 == 1 || relation1 == 1) {
-						return 1;
+					int relation2 = onSegment(s1.p0.asPoint3d(), s0);
+					int relation3 = onSegment(s1.p1.asPoint3d(), s0);
+					if (relation0 == 0 && relation1 == 0&&relation2 == 0&&relation3 == 0) {
+						return DISJOINTS;
 					}
-					if (relation0 == 2 || relation1 == 2) {
-						return 2;
+					else if ((relation0 == 0 && relation1 == 2 )||(relation0 == 2 && relation1 == 0 ) ) {
+						return TOUCHES;
 					}
-					return 0;
+					else {
+						if((distance0<EPS&&distance1<EPS)||(distance0<EPS&&distance2<EPS)||(distance1<EPS&&distance2<EPS)){
+							return TOUCHES;
+						} else if((distance3<EPS&&distance4<EPS)||(distance3<EPS&&distance5<EPS)||(distance4<EPS&&distance5<EPS))	{
+							return TOUCHES;
+						} 
+					    return INTERSECTS;
+					}
 				}
 			} else {
 				return 0;
@@ -323,14 +453,27 @@ public class Topology {
 
 	public static Segment intersectedSegment(Line3d l, Triangle t) throws GeometryException {
 		ArrayList<Point3d> points = new ArrayList<Point3d>();
-		for (Segment edge : t.getEdges()) {
-			if (onLine(edge, l)) {
-				return edge;
-			} else {
-				Point3d pt = intersect3D_LineSegment(l, edge);
-				if (pt != null)
-					points.add(pt);
-			}
+		if(isOnLine(t.p0.asPoint3d(),l)){
+			points.add(t.p0.asPoint3d());
+			Point3d pt = intersect3D_LineSegment(l, t.getEdges()[1]);
+			if (pt != null)
+				points.add(pt);
+		}else if(isOnLine(t.p1.asPoint3d(),l)){
+			points.add(t.p1.asPoint3d());
+			Point3d pt = intersect3D_LineSegment(l, t.getEdges()[2]);
+			if (pt != null)
+				points.add(pt);
+		}else if(isOnLine(t.p2.asPoint3d(),l)){
+			points.add(t.p2.asPoint3d());
+			Point3d pt = intersect3D_LineSegment(l, t.getEdges()[0]);
+			if (pt != null)
+				points.add(pt);
+		}else{
+			for (Segment edge : t.getEdges()) {
+					Point3d pt = intersect3D_LineSegment(l, edge);
+					if (pt != null)
+						points.add(pt);
+		}
 		}
 		if (points.size() == 0) {
 			return null;
@@ -338,27 +481,19 @@ public class Topology {
 			return new Segment(points.get(0), points.get(0));
 		} else if (points.size() == 2) {
 			return new Segment(points.get(0), points.get(1));
-		} else if (points.size() == 3) {
-			if (samePoint(points.get(0), points.get(1))) {
-				return new Segment(points.get(0), points.get(2));
-			} else if (samePoint(points.get(0), points.get(2))) {
-				return new Segment(points.get(0), points.get(1));
-			} else if (samePoint(points.get(1), points.get(2))) {
-				return new Segment(points.get(0), points.get(1));
-			} else
-				throw new GeometryException("A line has three intersects with a triangle");
-		} else
-			throw new GeometryException("A triangle has more than three edges");
+		} else{
+					throw new GeometryException("A triangle has more than three edges");	
+		}
 	}
 
-	private static boolean onLine(Segment s, Line3d l) {
+	public static boolean onLine(Segment s, Line3d l) {
 		if (sameLine(l, new Line3d(s.p0.asPoint3d(), s.p1.asPoint3d()))) {
 			return true;
 		}
 		return false;
 	}
 
-	private static boolean sameLine(Line3d l1, Line3d l2) {
+	public static boolean sameLine(Line3d l1, Line3d l2) {
 		Point3d p1 = l1.p0;
 		Point3d p2 = l1.p1;
 		Point3d p3 = l2.p0;
@@ -407,9 +542,9 @@ public class Topology {
 		Line3d l = new Line3d(segment.p0.asPoint3d(), segment.p1.asPoint3d());
 		Point3d ip = intersect3D_Lines(l, l1);
 		if (ip != null) {
-			if (ip.x <= Math.max(l.p0.x, l.p1.x) + EPS && ip.x >= Math.min(l.p0.x, l.p1.x) - EPS
-					&& ip.y <= Math.max(l.p0.y, l.p1.y) + EPS && ip.y >= Math.min(l.p0.y, l.p1.y) - EPS
-					&& ip.z <= Math.max(l.p0.z, l.p1.z) + EPS && ip.z >= Math.min(l.p0.z, l.p1.z) - EPS)
+			if (ip.x < Math.max(l.p0.x, l.p1.x)+EPS  && ip.x > Math.min(l.p0.x, l.p1.x) 
+					&& ip.y < Math.max(l.p0.y, l.p1.y)+EPS  && ip.y > Math.min(l.p0.y, l.p1.y)-EPS 
+					&& ip.z < Math.max(l.p0.z, l.p1.z)+EPS  && ip.z > Math.min(l.p0.z, l.p1.z)-EPS )
 				return ip;
 		}
 		return null;
@@ -418,8 +553,10 @@ public class Topology {
 	private static Point3d intersect3D_Lines(Line3d l1, Line3d l2) throws GeometryException {
 
 		Segment distance = distance3D_Lines(l1, l2);
+		if(distance!=null){
 		if (distance.getLength() < EPS) {
 			return distance.p0.asPoint3d();
+		}
 		}
 		return null;
 	}
@@ -481,7 +618,7 @@ public class Topology {
 		return (shortest);
 	}
 
-	private static boolean samePoint(Point3d p1, Point3d p2) {
+	public static boolean samePoint(Point3d p1, Point3d p2) {
 		return (approEqual(p1.x, p2.x) && approEqual(p1.y, p2.y) && approEqual(p1.z, p2.z));
 	}
 
@@ -540,7 +677,14 @@ public class Topology {
 	}
 
 	public static double pointPlaneDistance(Point3d pt, Plane pl) {
-		return (pl.a * pt.x + pl.b * pt.y + pl.c * pt.z + pl.d) / Math.sqrt(pl.a * pl.a + pl.b * pl.b + pl.c * pl.c);
+		return Math.abs((pl.a * pt.x + pl.b * pt.y + pl.c * pt.z + pl.d) / Math.sqrt(pl.a * pl.a + pl.b * pl.b + pl.c * pl.c));
+	}
+	
+	public static boolean pointOnPlane(Point3d pt, Plane pl){
+		if(pointPlaneDistance(pt,pl)<=EPS){
+			return true;
+		}
+		return false;
 	}
 
 

@@ -29,15 +29,15 @@ public class InstanceGeometry implements Serializable{
 	private int[] pointers;
 	private float[] colors;
 	private double[] reflection;
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	private String id;
+	private int id;
 	private String type;
 	private int[] materialIndices;
 	

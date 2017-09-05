@@ -20,10 +20,10 @@ import javax.vecmath.Vector3d;
 
 public class Ray {
 	
-	Point point;
+	Point3d point;
 	Vector3d direction;
 	
-	public Ray(Point p,Vector3d v){
+	public Ray(Point3d p,Vector3d v){
 		this.point=p;
 		this.direction=v;
 	}
@@ -31,6 +31,23 @@ public class Ray {
 	public boolean is3D(){
 		return point.is3D();
 	}
+
+	public Point3d getPoint() {
+		return point;
+	}
+
+	public void setPoint(Point3d point) {
+		this.point = point;
+	}
+
+	public Vector3d getDirection() {
+		return direction;
+	}
+
+	public void setDirection(Vector3d direction) {
+		this.direction = direction;
+	}
+	
 
 
 }

@@ -16,7 +16,13 @@
  ******************************************************************************/
 package nl.tue.ddss.bimsparql.geometry;
 
+import javax.vecmath.Color3f;
 import javax.vecmath.Vector3d;
+
+import nl.tue.ddss.bimsparql.geometry.algorithm.Edge;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Polyhedron;
+import nl.tue.ddss.bimsparql.geometry.algorithm.Vertex;
+import unbboolean.j3dbool.Solid;
 
 public class Box {
 	
@@ -163,7 +169,63 @@ public class Box {
 			
 		return ps;
 	}
+	
+	public static Box toBox(PolyhedralSurface ps){
+		Polyhedron p=new Polyhedron(ps);
+		Vertex v=p.getVertices().get(0);
+		Point3d pt=v.pnt;
+		Vertex v1=v.edges.get(0).anotherVertex(v);
+		Vertex v2=v.edges.get(1).anotherVertex(v);
+		Vertex v3=v.edges.get(2).anotherVertex(v);
+		Point3d pt1=v1.pnt;
+		Point3d pt2=v2.pnt;
+		Point3d pt3=v3.pnt;
+		Vector3d vector1=GeometryUtils.vectorSubtract(pt1, pt);
+		Vector3d vector2=GeometryUtils.vectorSubtract(pt2, pt);
+		Vector3d vector3=GeometryUtils.vectorSubtract(pt3, pt);			
+		Point3d max=GeometryUtils.pointAdd(pt,vector1);
+		max=GeometryUtils.pointAdd(max,vector2);
+		max=GeometryUtils.pointAdd(max,vector3);
+		vector1.normalize();
+		vector2.normalize();
+		vector3.normalize();
+		BoxOrientation bo=new BoxOrientation(vector1,vector2,vector3);
+        return new Box(pt,max,bo);	
+	}
     
+	
+	public Solid toJ3DSolid(){
+		Vector3d v=GeometryUtils.vectorSubtract(max, min);
+		Vector3d n1=orientation.getN1();
+		Vector3d n2=orientation.getN2();
+		Vector3d n3=orientation.getN3();
+		double l=v.dot(orientation.getN1());
+		double w=v.dot(orientation.getN2());
+		double h=v.dot(orientation.getN3());
+		double a=Math.sqrt(l*l/(n1.x*n1.x+n1.y*n1.y+n1.z*n1.z));
+		double b=Math.sqrt(w*w/(n2.x*n2.x+n2.y*n2.y+n2.z*n2.z));
+		double c=Math.sqrt(h*h/(n3.x*n3.x+n3.y*n3.y+n3.z*n3.z));
+		Vector3d b1=GeometryUtils.vectorMul(n1, a);
+		Vector3d b2=GeometryUtils.vectorMul(n2, b);
+		Vector3d b3=GeometryUtils.vectorMul(n3, c);
+		Point3d p0=min;
+		Point3d p1=new Point3d(p0.x+b1.x,p0.y+b1.y,p0.z+b1.z);
+		Point3d p2=new Point3d(p1.x+b2.x,p1.y+b2.y,p1.z+b2.z);
+		Point3d p3=new Point3d(p0.x+b2.x,p0.y+b2.y,p0.z+b2.z);
+		Point3d p4=new Point3d(p0.x+b3.x,p0.y+b3.y,p0.z+b3.z);
+		Point3d p5=new Point3d(p4.x+b1.x,p4.y+b1.y,p4.z+b1.z);
+		Point3d p6=max;
+		Point3d p7=new Point3d(p4.x+b2.x,p4.y+b2.y,p4.z+b2.z);
+		Point3d[] points={p0,p1,p2,p3,p4,p5,p6,p7};
+		int[] indices={0,1,4,4,1,5,5,1,6,1,2,6,2,1,0,2,0,3,7,4,5,7,5,6,7,0,4,7,3,0,2,3,7,2,7,6};
+		Color3f[] colors=new Color3f[points.length];
+			Color3f color=new Color3f(0,0,0);
+			for(int i=0;i<colors.length;i++){
+ 				colors[i]=color;
+ 			}
+		Solid solid=new Solid(points,indices,colors);
+		return solid;
+	}
     
 
 }

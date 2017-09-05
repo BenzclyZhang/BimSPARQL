@@ -23,6 +23,7 @@ import javax.vecmath.Vector3d;
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.GeometryType;
 import nl.tue.ddss.bimsparql.geometry.GeometryUtils;
 import nl.tue.ddss.bimsparql.geometry.LineString;
 import nl.tue.ddss.bimsparql.geometry.Plane;
@@ -42,21 +43,214 @@ public class Distance {
 
 
 //----------------------
-//  distance 2D
-	
+//  distance 2D	
 //----------------------
 
-    public static double distance2D(Geometry gA,Geometry gB){
+    @SuppressWarnings("incomplete-switch")
+/*	public static double distance2D(Geometry gA,Geometry gB){
 		try {
 			Geometry g1 = Projection.projectToXY(gA);
 	    	Geometry g2=Projection.projectToXY(gB);
-	    	return distance3D(g1,g2);
+	    	GeometryType geom=g1.geometryTypeId();
+	    	switch(geom){
+	    	case TYPE_POINT:
+	    		return distancePointGeometry2D((Point)g1, g2);
+	    	case TYPE_LINESTRING:
+	    		return distanceLineStringGeometry2D((LineString)g1, g2);
+	    	case TYPE_TRIANGLE:
+	    		return distanceTriangleGeometry2D((Triangle)g1, g2);
+	    	case TYPE_POLYGON:
+	    		return distancePolygonGeometry2D((Polygon)g1, g2);
+	    	}
 		} catch (GeometryException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Double.POSITIVE_INFINITY;
 		}
+		return Double.POSITIVE_INFINITY;
+    }*/
+    
+    public static double distance2D(Geometry gA,Geometry gB){
+         double dMin=Double.POSITIVE_INFINITY;
+         if(gA==null||gB==null){
+        	 return Double.NaN;
+         }
+			if (gA.geometryTypeId()==GeometryType.TYPE_TRIANGULATEDSURFACE&&gA.geometryTypeId()==GeometryType.TYPE_TRIANGULATEDSURFACE){
+				Polyhedron pA=new Polyhedron((TriangulatedSurface)gA);
+				Polyhedron pB=new Polyhedron((TriangulatedSurface)gB);
+				for(Edge edge:pA.getEdges()){
+                    Segment segA=new Segment(Projection.projectPointToXY(edge.getVertex(0).pnt).asPoint3d(),Projection.projectPointToXY(edge.getVertex(1).pnt).asPoint3d());
+					for(Edge e:pB.getEdges()){
+						Segment segB=new Segment(Projection.projectPointToXY(e.getVertex(0).pnt).asPoint3d(),Projection.projectPointToXY(e.getVertex(1).pnt).asPoint3d());
+						dMin=Math.min(dMin,distanceSegmentSegment3D(segA,segB));
+						if(dMin==0){
+							return 0;
+						}
+					}
+				}
+			}		
+		return dMin;
+    }
+    
+    
+    
+    private static double distancePolygonGeometry2D(Polygon g1, Geometry g2) {
+    	GeometryType geom=g2.geometryTypeId();
+		switch (geom){
+		case TYPE_POINT:
+			return distancePointPolygon2D((Point)g2,(Polygon)g1);
+		case TYPE_LINESTRING:
+			return distanceLineStringPolygon2D((LineString)g2,(Polygon)g1);
+		case TYPE_TRIANGLE:
+			return distanceTrianglePolygon2D((Triangle)g2,(Polygon)g1);
+		case TYPE_POLYGON:
+			return distancePolygonPolygon2D((Polygon)g2,(Polygon)g1);
+		default:
+			break;
+    }   
+		return Double.POSITIVE_INFINITY;
+	}
 
+
+
+	private static double distancePolygonPolygon2D(Polygon g1, Polygon g2) {
+		LineString ls1=g1.exteriorRing();
+		LineString ls2=g2.exteriorRing();
+		return distanceLineStringLineString2D(ls1,ls2);
+	}
+
+
+
+	private static double distanceTrianglePolygon2D(Triangle g2, Polygon g1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distanceLineStringPolygon2D(LineString g2, Polygon g1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distancePointPolygon2D(Point g2, Polygon g1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distanceTriangleGeometry2D(Triangle g1, Geometry g2) {
+		GeometryType geom=g2.geometryTypeId();
+		switch (geom){
+		case TYPE_POINT:
+			return distancePointTriangle2D((Point)g2,g1);
+		case TYPE_LINESTRING:
+			return distanceLineStringTriangle2D((LineString)g2,g1);
+		case TYPE_TRIANGLE:
+			return distanceTriangleTriangle2D(g1,(Triangle)g2);
+		case TYPE_POLYGON:
+			return distanceTrianglePolygon2D(g1,(Polygon)g2);
+		default:
+			break;
+    }   
+		return Double.POSITIVE_INFINITY;
+	}
+
+
+
+	private static double distanceTriangleTriangle2D(Triangle g1, Triangle g2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distanceLineStringGeometry2D(LineString g1, Geometry g2) {
+		GeometryType geom=g2.geometryTypeId();
+		switch (geom){
+		case TYPE_POINT:
+			return distancePointLineString2D((Point)g2,g1);
+		case TYPE_LINESTRING:
+			return distanceLineStringLineString2D((LineString)g2,g1);
+		case TYPE_TRIANGLE:
+			return distanceLineStringTriangle2D(g1,(Triangle)g2);
+		case TYPE_POLYGON:
+			return distanceLineStringPolygon2D(g1,(Polygon)g2);
+		default:
+			break;
+    }   
+		return Double.POSITIVE_INFINITY;
+	}
+
+
+
+	private static double distanceLineStringTriangle2D(LineString g1, Triangle g2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distanceLineStringLineString2D(LineString ls1, LineString ls2) {
+		double dMin=Double.POSITIVE_INFINITY;
+		for(int i=0;i<ls1.numSegments();i++){
+			for(int j=0;j<ls2.numSegments();j++){
+				dMin=Math.min(dMin, distanceSegmentSegment2D(ls1.segmentN(i),ls2.segmentN(j)));
+				if(dMin==0){
+					return 0;
+				}
+			}
+		}
+		return dMin;
+	}
+
+
+
+	private static double distancePointLineString2D(Point g2, LineString g1) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distancePointGeometry2D(Point g1, Geometry g2) {
+		GeometryType geom=g2.geometryTypeId();
+		switch (geom){
+		case TYPE_POINT:
+			return distancePointPoint2D((Point)g2,g1);
+		case TYPE_LINESTRING:
+			return distancePointLineString2D(g1,(LineString)g2);
+		case TYPE_TRIANGLE:
+			return distancePointTriangle2D(g1,(Triangle)g2);
+		case TYPE_POLYGON:
+			return distancePointPolygon2D(g1,(Polygon)g2);
+		default:
+			break;
+    }   
+		return Double.POSITIVE_INFINITY;
+}
+
+
+
+	private static double distancePointTriangle2D(Point g1, Triangle g2) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+
+	private static double distancePointPoint2D(Point g2, Point g1) {
+		return 0;
+	}
+
+
+
+	@SuppressWarnings("unused")
+	private static double distanceSegmentSegment2D(Segment sA,Segment sB){
+    	return distanceSegmentSegment3D(sA,sB);
     }
 
 //----------------------
@@ -170,8 +364,6 @@ public class Distance {
 
 
 	static double distanceLineStringGeometry3D(LineString gA, Geometry gB) throws GeometryException{
-		// SFCGAL_DEBUG( boost::format("dispatch
-		// distanceLineStringGeometry3D(%s,%s)") % gA.asText() % gB.asText() );
 
 		switch (gB.geometryTypeId()) {
 		case TYPE_POINT:
@@ -250,15 +442,13 @@ public class Distance {
 	}
 
 	public static double distanceTriangleGeometry3D(Triangle gA, Geometry gB) throws GeometryException {
-		// SFCGAL_DEBUG( boost::format("dispatch
-		// distanceTriangleGeometry3D(%s,%s)") % gA.asText() % gB.asText() );
 
 		switch (gB.geometryTypeId()) {
 		case TYPE_POINT:
-			return distancePointTriangle3D((Point) gB, gA); // symetric
+			return distancePointTriangle3D((Point) gB, gA); 
 
 		case TYPE_LINESTRING:
-			return distanceLineStringTriangle3D((LineString) gB, gA); // symetric
+			return distanceLineStringTriangle3D((LineString) gB, gA); 
 
 		case TYPE_TRIANGLE:
 			return distanceTriangleTriangle3D(gA, (Triangle) gB);
@@ -281,8 +471,6 @@ public class Distance {
 
 
 	public static double distancePolygonGeometry3D(Polygon gA, Geometry gB) throws GeometryException {
-		// SFCGAL_DEBUG( boost::format("dispatch
-		// distancePolygonGeometry3D(%s,%s)") % gA.asText() % gB.asText() );
 
 		if (gA.isEmpty() || gB.isEmpty()) {
 			return Double.POSITIVE_INFINITY;
@@ -305,7 +493,6 @@ public class Distance {
 			return new Sphere();
 		}
 
-		// centroid
 		Vector3d c = new Vector3d(0, 0, 0);
 
 		int numPoint = 0;
@@ -334,9 +521,6 @@ public class Distance {
 	}
 
 	static double distanceGeometryCollectionToGeometry3D(Geometry gA, Geometry gB) throws GeometryException {
-		// SFCGAL_DEBUG( boost::format("dispatch
-		// distanceGeometryCollectionToGeometry3D(%s,%s)") % gA.asText() %
-		// gB.asText() );
 
 		if (gA.isEmpty() || gB.isEmpty()) {
 			return Double.MAX_VALUE;
@@ -395,9 +579,6 @@ public class Distance {
 			}
 		}
 
-		// if (!noTest.empty()) std::cout << "pruning " << noTest.size() << "/"
-		// << gA.numGeometries() << "\n";
-
 		double dMin = Double.POSITIVE_INFINITY;
 
 		for (int i = 0; i < gA.numGeometries(); i++) {
@@ -406,6 +587,9 @@ public class Distance {
 			}
 
 			dMin = Math.min(dMin, distance3D(gA.geometryN(i), gB));
+			if(dMin==0){
+				return 0;
+			}
 		}
 
 		return dMin;
@@ -430,9 +614,6 @@ public class Distance {
 		Point3d b = abc.p1.asPoint3d();
 		Point3d c = abc.p2.asPoint3d();
 
-		/*
-		 * project P on ABC plane as projP.
-		 */
 		Point3d projP = new Plane(a, b, c).projects(p);
 
 		double dMin;

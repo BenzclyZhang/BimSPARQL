@@ -20,8 +20,8 @@ import nl.tue.ddss.bimsparql.geometry.algorithm.AABB;
 
 public class BoundingSquare extends Square {
 
-	public BoundingSquare(Point3d max, Point3d min) throws Exception {
-		super(max, min);
+	public BoundingSquare(Point3d min, Point3d max) throws GeometryException {
+		super(min, max);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -56,6 +56,19 @@ public class BoundingSquare extends Square {
 	public void addBoundingBox(AABB bb){
 		addPoint(bb.getMin());
 		addPoint(bb.getMax());
+	}
+
+	public static BoundingSquare getBoundingSquare(Geometry geometry) {
+		AABB aabb=AABB.getAABB(geometry);
+	
+		try {
+			return new BoundingSquare(new Point3d(aabb.min.x,aabb.min.y,(aabb.max.z+aabb.min.z)/2),new Point3d(aabb.max.x,aabb.max.y,(aabb.max.z+aabb.min.z)/2));
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 

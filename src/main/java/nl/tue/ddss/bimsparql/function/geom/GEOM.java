@@ -48,6 +48,8 @@ public class GEOM {
     public static final Property asBody = property( "asBody" );
     public static final Property asAABB =property("asAABB");
     public static final Property asMVBB=property("asMVBB");
+    public static final Property hasMaterials=property("hasMaterials");
+    public static final Property hasMaterialIndices=property("hasMaterialIndices");
 
 
 }

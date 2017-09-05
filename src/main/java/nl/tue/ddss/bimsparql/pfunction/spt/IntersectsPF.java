@@ -33,6 +33,9 @@ public class IntersectsPF extends FunctionBaseSpatialRelation{
 
 	@Override
 	protected boolean evaluateSpatialRelation(Geometry g1, Geometry g2) throws GeometryException {
+		if(g1==null||g2==null){
+			return false;
+		}
 		return Topology.intersects3D(g1, g2)==1;
 	}
 

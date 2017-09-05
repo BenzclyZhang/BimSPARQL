@@ -31,7 +31,6 @@ public class HasMVBBPF extends FunctionBaseProductEwktValue{
 
 	public HasMVBBPF(HashMap<Node, Geometry> hashmap) {
 		super(hashmap);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

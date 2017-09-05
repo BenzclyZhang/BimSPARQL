@@ -235,4 +235,6 @@ public class LineString implements Geometry{
 		this.mvbb=mvbb;
 	}
 
+
+
 }

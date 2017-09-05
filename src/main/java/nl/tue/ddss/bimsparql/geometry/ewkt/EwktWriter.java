@@ -389,4 +389,15 @@ public class EwktWriter {
 		return s;
 	}
 
+	public static String writeGeometry(Geometry g) {
+		EwktWriter ew=new EwktWriter("");
+		try {
+			ew.write(g);
+		} catch (WktWriteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return ew.getString();
+	}
+
 }

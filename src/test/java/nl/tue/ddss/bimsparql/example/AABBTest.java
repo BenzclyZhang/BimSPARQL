@@ -3,8 +3,9 @@ package nl.tue.ddss.bimsparql.example;
 public class AABBTest extends QueryFunctionTest{
 	
 	public static void main(String[] args){		
-        String query="SELECT ?wall ?g\n" + "WHERE{\n" +"?wall a ifcowl:IfcWall .\n"+"?wall pdt:hasAABB ?g .\n"+ "}";
-        executeQuery(query);
+        final String Q="SELECT ?window"
+				+ "\n" + "WHERE{\n" +"?window a ifcowl:IfcWall .\n"+"?window spt:isOutside true.\n"
+			    + "}";
+        executeQuery(Q);
 	}
-
 }

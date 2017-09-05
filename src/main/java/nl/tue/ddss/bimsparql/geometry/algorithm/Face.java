@@ -28,6 +28,15 @@ public class Face {
 	
 	List<HalfEdge> halfEdges=new LinkedList<HalfEdge>();
 	List<Vertex> vertices=new LinkedList<Vertex>();
+	List<Integer> vertexIndices=new LinkedList<Integer>();
+	public List<Integer> getVertexIndices() {
+		return vertexIndices;
+	}
+
+	public void setVertexIndices(List<Integer> vertexIndices) {
+		this.vertexIndices = vertexIndices;
+	}
+
 	Polygon polygon;
 	int index;
 	

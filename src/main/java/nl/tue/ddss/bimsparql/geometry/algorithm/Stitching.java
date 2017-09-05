@@ -22,7 +22,9 @@ import java.util.Stack;
 
 
 import nl.tue.ddss.bimsparql.geometry.Geometry;
+import nl.tue.ddss.bimsparql.geometry.GeometryCollection;
 import nl.tue.ddss.bimsparql.geometry.GeometryException;
+import nl.tue.ddss.bimsparql.geometry.GeometryType;
 import nl.tue.ddss.bimsparql.geometry.PolyhedralSurface;
 import nl.tue.ddss.bimsparql.geometry.TriangulatedSurface;
 
@@ -40,6 +42,7 @@ public class Stitching {
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
 		case TYPE_GEOMETRYCOLLECTION:
+			return stitches((GeometryCollection)geometry);
 		case TYPE_TRIANGULATEDSURFACE:
 			return stitches((TriangulatedSurface)geometry);
 		case TYPE_POLYHEDRALSURFACE:
@@ -49,6 +52,8 @@ public class Stitching {
 		throw new GeometryException(
 				String.format("stitch(%s) is not implemented", geometry.geometryType()));
 		}
+	
+	
 	
 	public List<TriangulatedSurface> stitches(Geometry geometry,double exact) throws GeometryException{
 		switch (geometry.geometryTypeId()){
@@ -60,6 +65,7 @@ public class Stitching {
 		case TYPE_MULTILINESTRING:
 		case TYPE_MULTIPOLYGON:
 		case TYPE_GEOMETRYCOLLECTION:
+			return stitches((GeometryCollection)geometry,exact);
 		case TYPE_TRIANGULATEDSURFACE:
 			return stitches((TriangulatedSurface)geometry,exact);
 		case TYPE_POLYHEDRALSURFACE:
@@ -71,9 +77,32 @@ public class Stitching {
 		}
 
 	
+	public List<TriangulatedSurface> stitches(GeometryCollection gc){
+		return stitches(gc,EPS);
+	}
+	
+	public List<TriangulatedSurface> stitches(GeometryCollection gc,double exact){
+		List<TriangulatedSurface> surfaces=new ArrayList<TriangulatedSurface>();
+		for(int i=0;i<gc.numGeometries();i++){
+			Geometry g=gc.geometryN(i);
+			if(g.geometryTypeId()==GeometryType.TYPE_TRIANGULATEDSURFACE){
+				surfaces.addAll(stitches((TriangulatedSurface)g,exact));
+			}else if(g.geometryTypeId()==GeometryType.TYPE_POLYHEDRALSURFACE){
+				surfaces.addAll(stitches((PolyhedralSurface)g,exact));
+			}else if(g.geometryTypeId()==GeometryType.TYPE_GEOMETRYCOLLECTION){
+				surfaces.addAll(stitches((GeometryCollection)g,exact));
+			}else{
+				
+			}
+		}
+		return surfaces;
+	}
+	
 	public List<TriangulatedSurface> stitches(TriangulatedSurface ts){ 
 		return stitches(ts,EPS);
 	}
+	
+
 	
 	public List<TriangulatedSurface> stitches(TriangulatedSurface ts,double exact){				
 		Polyhedron polyhedron=new Polyhedron(ts);
@@ -121,8 +150,6 @@ public class Stitching {
             Stack<Face> stack=new Stack<Face>();
             Face current;
             stack.push(faces.get(i));
-//			Face f=faces.get(i);
-//			used[f.index]=true;
 			while(!stack.isEmpty()){
 				current=stack.pop();
 				integers.add(current.index);

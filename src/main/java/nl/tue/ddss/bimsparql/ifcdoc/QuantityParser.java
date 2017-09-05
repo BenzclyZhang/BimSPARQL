@@ -59,7 +59,7 @@ public class QuantityParser {
 
 	
 	static final String IFCDOC="http://www.buildingsmart-tech.org/ifc/IFC4/final#";
-	static final String QTO="http://bimsparql.org/pset#";
+	static final String QTO="http://bimsparql.org/qto#";
 	static final String EXPRESS=Namespace.EXPRESS;
 	static final String IFCOWL=Namespace.IFC2X3_TC1;
 	static final String SCHM="http://bimsparql.org/schema#";

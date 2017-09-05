@@ -33,7 +33,6 @@ public class Triangle implements Geometry{
 	public Point p1;
 	public Point p2; 
 	final private Point[] vertices={p0,p1,p2};
-	private Segment[] edges=new Segment[3];
 	
 	
     
@@ -50,9 +49,7 @@ public class Triangle implements Geometry{
 		this.p0 = p0;
 		this.p1 = p1;
 		this.p2 = p2;
-		edges[0]=new Segment(p0,p1);
-		edges[1]=new Segment(p1,p2);
-		edges[2]=new Segment(p2,p0);
+
 		vertices[0]=this.p0;
 		vertices[1]=this.p1;
 		vertices[2]=this.p2;
@@ -203,7 +200,7 @@ public boolean hasPoint(Point3d p){
 }
 
 public Segment[] getEdges() {
-	// TODO Auto-generated method stub
+	Segment[] edges={new Segment(p0,p1),new Segment(p1,p2),new Segment(p2,p0)};
 	return edges;
 }
 

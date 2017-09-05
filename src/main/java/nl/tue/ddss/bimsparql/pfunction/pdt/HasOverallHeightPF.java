@@ -36,6 +36,9 @@ public class HasOverallHeightPF extends FunctionBaseProductNumericalValue{
 	@Override
 	protected double computeValue(Geometry geometry) {
 		double b=0;
+		if(geometry==null){
+			return Double.NaN;
+		}
         AABBVisitor visitor=new AABBVisitor();
 		geometry.accept(visitor);
 		AABB aabb=visitor.getAABB();

@@ -20,7 +20,9 @@ import javax.vecmath.Vector3d;
 
 import nl.tue.ddss.bimsparql.geometry.AxisAlignedBox;
 import nl.tue.ddss.bimsparql.geometry.BoxOrientation;
+import nl.tue.ddss.bimsparql.geometry.Geometry;
 import nl.tue.ddss.bimsparql.geometry.Point3d;
+import nl.tue.ddss.bimsparql.geometry.visitor.AABBVisitor;
 
 public class AABB extends AxisAlignedBox {
 
@@ -41,35 +43,45 @@ public class AABB extends AxisAlignedBox {
 	}
 
 
-	public void addPoint3d(Point3d point) {
+	public void addPoint3d(javax.vecmath.Point3d point3d) {
 		if (max == null && min == null) {
-			max=new Point3d(point.x,point.y,point.z);
-			min=new Point3d(point.x,point.y,point.z);
+			max=new Point3d(point3d.x,point3d.y,point3d.z);
+			min=new Point3d(point3d.x,point3d.y,point3d.z);
 		}  else {
-			if (point.x > max.x) {
-				max.x = point.x;
+			if (point3d.x > max.x) {
+				max.x = point3d.x;
 			}
-			if (point.y > max.y) {
-				max.y = point.y;
+			if (point3d.y > max.y) {
+				max.y = point3d.y;
 			}
-			if (point.z > max.z) {
-				max.z = point.z;
+			if (point3d.z > max.z) {
+				max.z = point3d.z;
 			}
-			if (point.x < min.x) {
-				min.x = point.x;
+			if (point3d.x < min.x) {
+				min.x = point3d.x;
 			}
-			if (point.y < min.y) {
-				min.y = point.y;
+			if (point3d.y < min.y) {
+				min.y = point3d.y;
 			}
-			if (point.z < min.z) {
-				min.z = point.z;
+			if (point3d.z < min.z) {
+				min.z = point3d.z;
 			}
 		}
 	}
 	
 	public void addBoundingBox(AABB bb){
+		if(bb!=null){
 		addPoint3d(bb.min);
 		addPoint3d(bb.max);
+		}
+	}
+
+	public static AABB getAABB(Geometry geometry) {
+		AABBVisitor visitor=new AABBVisitor();
+		if(geometry!=null&&!geometry.isEmpty()){
+		geometry.accept(visitor);
+		return visitor.getAABB();
+		}return null;
 	}
 
 	

@@ -43,6 +43,7 @@ public class Polyhedron {
 				Point pt = p.exteriorRing().pointN(j);
 				Vertex v = addPoint(pt);
 				f.addVertex(v);
+				f.vertexIndices.add(vertices.indexOf(v));
 				if (lastVertex != null) {
 					HalfEdge hf = new HalfEdge(lastVertex, v);
 					f.addHalfEdge(hf);
@@ -71,6 +72,7 @@ public class Polyhedron {
 				Point pt = polygon.exteriorRing().pointN(j);
 				Vertex v = addPoint(pt);
 				f.addVertex(v);
+				f.vertexIndices.add(vertices.indexOf(v));
 				if (lastVertex != null) {
 					HalfEdge hf = new HalfEdge(lastVertex, v);
 					f.addHalfEdge(hf);
@@ -88,6 +90,7 @@ public class Polyhedron {
 			faces.add(f);
 		}
 	}
+
 	
 	public List<Vertex> neighborVertices(Vertex vertex){
 		List<Vertex> neighbors=new ArrayList<Vertex>();

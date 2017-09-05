@@ -42,6 +42,30 @@ public class GeometryGenerator {
 	
 	private Model geometryModel=ModelFactory.createDefaultModel();
 	private HashMap<Integer,InstanceGeometry> geometryById=new HashMap<Integer,InstanceGeometry>();
+	public HashMap<Integer, InstanceGeometry> getGeometryById() {
+		return geometryById;
+	}
+
+
+
+
+
+
+
+
+
+	public void setGeometryById(HashMap<Integer, InstanceGeometry> geometryById) {
+		this.geometryById = geometryById;
+	}
+
+
+
+
+
+
+
+
+
 	private HashMap<Node,Geometry> hashmap=new HashMap<Node,Geometry>();
 	
 	
@@ -79,7 +103,7 @@ public class GeometryGenerator {
 								RenderEngineGeometry geometry=renderEngineInstance.generateGeometry();
 								InstanceGeometry instanceGeometry=new InstanceGeometry();
 								if (geometry != null && geometry.getNrIndices() > 0) {
-                                    instanceGeometry.setId(id.toString());
+                                    instanceGeometry.setId(id);
 									instanceGeometry.setPointers(geometry.getIndices());
 									instanceGeometry.setType(renderEngineInstance.getType());
 
@@ -157,7 +181,8 @@ public class GeometryGenerator {
 	public void addGeometryTriples(InstanceGeometry ig){
     	String s=toWKT(ig);
     	geometryModel.add(geometryModel.getResource(getBaseUri()+ig.getType()+"_"+ig.getId()),GEOM.hasGeometry,geometryModel.createResource(getBaseUri()+"Geometry"+"_"+ig.getId()));
-    	geometryModel.add(geometryModel.getResource(getBaseUri()+"Geometry"+"_"+ig.getId()),GEOM.asBody,geometryModel.createLiteral(s));	    	
+    	geometryModel.add(geometryModel.getResource(getBaseUri()+"Geometry"+"_"+ig.getId()),GEOM.asBody,geometryModel.createLiteral(s));
+    	
 	} 
     
     private String getBaseUri(){    	

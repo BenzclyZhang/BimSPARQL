@@ -26,6 +26,9 @@ import java.util.HashMap;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.hp.hpl.jena.sparql.pfunction.PropertyFunction;
+import com.hp.hpl.jena.sparql.pfunction.PropertyFunctionFactory;
+import com.hp.hpl.jena.sparql.pfunction.PropertyFunctionRegistry;
 import org.topbraid.spin.system.SPINModuleRegistry;
 import org.topbraid.spin.vocabulary.SP;
 import org.topbraid.spin.vocabulary.SPIN;
@@ -47,9 +50,6 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.sparql.function.Function;
 import com.hp.hpl.jena.sparql.function.FunctionFactory;
 import com.hp.hpl.jena.sparql.function.FunctionRegistry;
-import com.hp.hpl.jena.sparql.pfunction.PropertyFunction;
-import com.hp.hpl.jena.sparql.pfunction.PropertyFunctionFactory;
-import com.hp.hpl.jena.sparql.pfunction.PropertyFunctionRegistry;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 import com.hp.hpl.jena.vocabulary.RDF;
 
@@ -60,14 +60,16 @@ public class BimSPARQL {
 	
 	
 	static HashMap<Node,Geometry> hashmap=new HashMap<Node,Geometry>();
-	static Model schema;
-
+	public static Model schema;
+    final static Model rules=loadDefaultRules();
 	
 	public static void init(Model model,Model geometryModel) throws IOException, ClassNotFoundException, ParserConfigurationException, SAXException, URISyntaxException{
-		schema=loadSchema();
-		getSimpleGeometry(geometryModel);      
+		schema=loadDefaultSchema();
+//		getSimpleGeometry(geometryModel);      
         registerAll();       
 	}
+	
+
 	
 	private static void getSimpleGeometry(Model geometryModel) {
 		Graph graph=geometryModel.getGraph();
@@ -93,26 +95,13 @@ public class BimSPARQL {
 		} 
 	}
 	
-	private static void registerAll(){
-		Model rules=ModelFactory.createDefaultModel();
-		rules.add(SPIN.getModel());
-		rules.add(SP.getModel());
-		InputStream in=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/schm.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in, null,"TTL");
-		InputStream in2=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/pset.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in2, null,"TTL");
-		InputStream in3=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/pdt.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in3, null,"TTL");
-		InputStream in4=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/qto.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in4, null,"TTL");
-		InputStream in5=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/geom.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in5, null,"TTL");
-		InputStream in6=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/spt.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
-		rules.read(in6, null,"TTL");
+
+	
+	public static void registerAll(){		
 	    registerAll(rules);		
 	}
 	
-	private static void registerAll(Model rules){
+	public static void registerAll(Model rules){
 		SPINModuleRegistry.get().init();
 		SPINModuleRegistry.get().registerAll(rules, null);
 		Resource function=rules.getResource(BimSPARQLNS.IMPL+"Function");
@@ -195,12 +184,57 @@ public class BimSPARQL {
 		}
 		
 	}
+	
+	public static void unRegisterAll(){
+	    unRegisterAll(rules);		
+	}
+	
+	private static void unRegisterAll(Model rules){
+		SPINModuleRegistry.get().reset();
+		Resource function=rules.getResource(BimSPARQLNS.IMPL+"Function");
+		Resource propertyfunction=rules.getResource(BimSPARQLNS.IMPL+"PropertyFunction");
+		StmtIterator functionstmts=rules.listStatements(null,RDF.type,function);
+		StmtIterator pfstmts=rules.listStatements(null,RDF.type,propertyfunction);
+		StmtIterator mgstmts=rules.listStatements(null,RDF.type,SPIN.MagicProperty);
+		while (functionstmts.hasNext()){
+			Resource r=functionstmts.next().getSubject();
+			FunctionRegistry.get().remove(r.getURI());
+			
+		}
+		while (pfstmts.hasNext()){
+			Resource r=pfstmts.next().getSubject();
+			PropertyFunctionRegistry.get().remove(r.getURI());
+		}
+		while (mgstmts.hasNext()){
+			Resource r=mgstmts.next().getSubject();
+			PropertyFunctionRegistry.get().remove(r.getURI());
+		}
+	}
 
 
-	private static Model loadSchema() throws IOException{
+	private static Model loadDefaultSchema() throws IOException{
 		Model schema=ModelFactory.createDefaultModel();
 		InputStream in=BimSPARQL.class.getClassLoader().getResourceAsStream("IFC2X3_TC1.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
 		return schema.read(in, null,"TTL");
+	}
+	
+	private static Model loadDefaultRules(){
+		Model rules=ModelFactory.createDefaultModel();
+		rules.add(SPIN.getModel());
+		rules.add(SP.getModel());
+		InputStream in=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/schm.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in, null,"TTL");
+		InputStream in2=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/pset.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in2, null,"TTL");
+		InputStream in3=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/pdt.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in3, null,"TTL");
+		InputStream in4=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/qto.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in4, null,"TTL");
+		InputStream in5=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/geom.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in5, null,"TTL");
+		InputStream in6=BimSPARQL.class.getClassLoader().getResourceAsStream("bimsparql/spt.ttl"); //new FileInputStream("IFC2X3_Schema.rdf");
+		rules.read(in6, null,"TTL");
+		return rules;
 	}
 	
 	public static String getOSVersion(){

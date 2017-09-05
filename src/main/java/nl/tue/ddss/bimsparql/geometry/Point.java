@@ -32,42 +32,29 @@ public default String geometryType()
     return "Point";
 }
 
-///
-///
-///
+
 public default GeometryType geometryTypeId()
 {
     return GeometryType.TYPE_POINT ;
 }
 
-///
-///
-///
+
 public default int dimension()
 {
     return 0 ;
 }
 
-///
-///
-///
 public int coordinateDimension();
 
 
 
 public boolean isEmpty();
 
-///
-///
-///
 public boolean is3D();
 
 
 public boolean  isMeasured();
 
-///
-///
-///
 public default void accept( GeometryVisitor visitor ){
 	visitor.visit( this );
     return ;

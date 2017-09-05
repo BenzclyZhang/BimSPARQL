@@ -23,12 +23,12 @@ public class Square {
 	protected Point3d max;
 	protected Point3d min;
 
-	public Square(Point3d min, Point3d max) throws Exception {
+	public Square(Point3d min, Point3d max) throws GeometryException {
 		if (max.x >= min.x && max.y >= min.y && max.z == min.z) {
 			this.max = max;
 			this.min = min;
 		} else
-			throw new Exception(
+			throw new GeometryException(
 					"coordinates of max point are smaller than min point");
 	}
 

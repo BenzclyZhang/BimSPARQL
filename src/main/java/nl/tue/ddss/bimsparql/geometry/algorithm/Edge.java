@@ -23,6 +23,7 @@ public class Edge {
 	
 	List<Face> faces=new ArrayList<Face>();
 	List<HalfEdge> halfEdges=new ArrayList<HalfEdge>();
+	
 
 	
 	
@@ -47,6 +48,7 @@ public class Edge {
 		}
 		return null;
 	}
+	
 	
 	public Vertex anotherVertex(Vertex vertex){
 		if (halfEdges.get(0).start==vertex) return halfEdges.get(0).end;

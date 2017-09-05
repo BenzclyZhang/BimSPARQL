@@ -41,9 +41,12 @@ public class HasWindowAreaPF extends FunctionBaseProductNumericalValue{
 
 	@Override
 	protected double computeValue(Geometry geometry) {
+		Box mvbb=geometry.getMVBB();
+		if(mvbb==null){
 		MVBBVisitor mv=new MVBBVisitor();
 		geometry.accept(mv);
-		Box mvbb=mv.getMVBB();
+		mvbb=mv.getMVBB();
+		}
 		PolyhedralSurface ps=mvbb.toPolyhedralSurface();
 		Polygon largest=null;
 		double area=0;
@@ -62,7 +65,8 @@ public class HasWindowAreaPF extends FunctionBaseProductNumericalValue{
 				area=pArea;
 			}
 		}
-		Plane p=largest.getPlane();
+/*		Plane p=largest.getPlane();
+		
 		Geometry projection;
 		try {
 			projection = Projection.projectToPlane(geometry, p);
@@ -71,8 +75,14 @@ public class HasWindowAreaPF extends FunctionBaseProductNumericalValue{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return Double.NaN;
+		}*/
+		try {
+			return Area.area(largest);
+		} catch (GeometryException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Double.NaN;
 		}
-		
 	}
 
 }

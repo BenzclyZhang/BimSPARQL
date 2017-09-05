@@ -30,7 +30,7 @@ public class GeometryCollection implements Geometry{
 
 	public void addGeometry(Geometry gg) {
 		// TODO Auto-generated method stub
-		
+		geometries.add(gg);
 	}
 	
 	public int numGeometries(){
@@ -51,7 +51,7 @@ public class GeometryCollection implements Geometry{
 
 	@Override
 	public void accept(GeometryVisitor visitor) {
-		// TODO Auto-generated method stub
+		visitor.visit(this);
 		
 	}
 
@@ -76,7 +76,7 @@ public class GeometryCollection implements Geometry{
 	@Override
 	public GeometryType geometryTypeId() {
 		// TODO Auto-generated method stub
-		return null;
+		return GeometryType.TYPE_GEOMETRYCOLLECTION;
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class GeometryCollection implements Geometry{
 	@Override
 	public String geometryType() {
 		// TODO Auto-generated method stub
-		return null;
+		return "GeometryCollection";
 	}
 
 	@Override

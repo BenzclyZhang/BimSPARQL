@@ -169,9 +169,9 @@ public abstract class FunctionBaseSpatialRelationOnGraph extends PropertyFunctio
 			}
 		} else{
 			geometry=new GeometryCollection();
-			ExtendedIterator<Triple> iterator2=graph.find(product,NodeFactory.createURI(Namespace.IFC2X3_TC1+"isDecomposedBy_IfcObjectDefinition") , null);
+			ExtendedIterator<Triple> iterator2=graph.find(null,NodeFactory.createURI(Namespace.IFC2X3_TC1+"relatingObject_IfcRelDecomposes") , product);
 			while (iterator2.hasNext()){
-				Node rel=iterator2.next().getObject();
+				Node rel=iterator2.next().getSubject();
 				ExtendedIterator<Triple> iter=graph.find(rel,NodeFactory.createURI(Namespace.IFC2X3_TC1+"relatedObjects_IfcRelDecomposes"),null);
 				while(iter.hasNext()){
 					Node object=iter.next().getObject();

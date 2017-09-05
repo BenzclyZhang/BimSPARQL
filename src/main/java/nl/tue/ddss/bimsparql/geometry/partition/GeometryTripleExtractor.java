@@ -53,9 +53,9 @@ public class GeometryTripleExtractor {
 			"ifc:IfcRepresentationMap", "ifc:IfcShapeAspect",
 			"ifc:IfcRepresentation" };
 	
-	private Model model=ModelFactory.createDefaultModel();
+	private Model model;
 	private Model schema=ModelFactory.createDefaultModel();
-	private Model geometryModel=ModelFactory.createDefaultModel();
+	private Model geometryModel;
 	
 	protected final Property HASNEXT = schema.getProperty(Namespace.LIST + "hasNext");
 	protected final Property HASCONTENTS = schema.getProperty(Namespace.LIST + "hasContents");
@@ -208,15 +208,6 @@ public class GeometryTripleExtractor {
 		}
 		return resources;
 	}
-	
-/*	public void removeGeometryTriples() throws FileNotFoundException{
-//		List<Statement> statements=new ArrayList<Statement>();
-		for (Resource r:getAllGeometricResources()){
-			HashSet<Statement> sts=listRelatedStatements(r);
-			model.remove(sts);
-		}
-//		model.remove(geometryModel);
-	}*/
 
 	
 	public Model getModel() {

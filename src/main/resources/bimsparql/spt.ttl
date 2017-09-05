@@ -36,13 +36,13 @@ spt:distanceZ
       rdf:type owl:DatatypeProperty, impl:PropertyFunction ;
 	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.DistanceZPF" .
 
-spt:hasLowerFloor
+spt:hasLowerStorey
       rdf:type owl:ObjectProperty, impl:PropertyFunction ;
-	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasLowerFloorPF" .
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasLowerStoreyPF" .
 
-spt:hasUpperFloor
+spt:hasUpperStorey
       rdf:type owl:ObjectProperty, impl:PropertyFunction ;
-	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasUpperFloorPF" .
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.HasUpperStoreyPF" .
 
 spt:intersects
       rdf:type owl:ObjectProperty, impl:PropertyFunction ;
@@ -59,3 +59,11 @@ spt:isOutside
 spt:touches
       rdf:type owl:ObjectProperty, impl:PropertyFunction ;
 	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.TouchesPF" .
+	  
+spt:within
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.WithinPF" .
+	  
+spt:equals
+      rdf:type owl:ObjectProperty, impl:PropertyFunction ;
+	  impl:body "nl.tue.ddss.bimsparql.pfunction.spt.EqualsPF" .

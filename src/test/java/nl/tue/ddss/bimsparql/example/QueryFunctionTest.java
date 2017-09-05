@@ -42,25 +42,21 @@ import nl.tue.ddss.convert.Namespace;
 public class QueryFunctionTest {
 	
 	private static final String prefixes="PREFIX ifcowl: <"+Namespace.IFC2X3_TC1+">\n"+"PREFIX list: <"+Namespace.LIST+">\n"+"PREFIX expr: <"+Namespace.EXPRESS+">\n"
-			+ "PREFIX schm:<"+BimSPARQLNS.SCHM+">\n" + "PREFIX pset:<"+BimSPARQLNS.PSET+">\n"+ "PREFIX spt:<"+BimSPARQLNS.SPT+">\n"+"PREFIX pdt:<"+BimSPARQLNS.PDT+">\n"+"PREFIX qto:<"+BimSPARQLNS.QTO+">\n";
+			+ "PREFIX schm:<"+BimSPARQLNS.SCHM+">\n" + "PREFIX pset:<"+BimSPARQLNS.PSET+">\n"+ "PREFIX spt:<"+BimSPARQLNS.SPT+">\n"+"PREFIX pdt:<"+BimSPARQLNS.PDT+">\n"+"PREFIX qto:<"+BimSPARQLNS.QTO+">\n"+"PREFIX geom:<"+BimSPARQLNS.GEOM+">\n";
 	
 	public static OntModel loadDefaultModel(){
 		InputStream in = BodyGeometryTest.class.getClassLoader()
 				.getResourceAsStream("Duplex_A_20110505.ttl");
 		Model model=ModelFactory.createDefaultModel();
 		model.read(in,null,"TTL");
-		String baseuri=model.getNsPrefixURI("inst");
 		InputStream ins = BodyGeometryTest.class.getClassLoader()
 				.getResourceAsStream("IFC2X3_TC1.ttl");
 		InputStream input = BodyGeometryTest.class.getClassLoader()
-				.getResourceAsStream("Duplex_A_20110505.ifc");
-//		ColladaParser parser = new ColladaParser();
-		GeometryGenerator gg=new GeometryGenerator();
-		gg.generateGeometry(input,baseuri);
-		Model geometryModel=gg.getGeometryModel();
+				.getResourceAsStream("Duplex_A_20110505_geometry.ttl");
+		Model geometryModel=ModelFactory.createDefaultModel();
+		geometryModel.read(input,null,"TTL");
 		Model schema=ModelFactory.createDefaultModel();
 		schema.read(ins,null,"TTL");	
-
 			try {
 				BimSPARQL.init(model,geometryModel);
 			} catch (ClassNotFoundException | IOException | ParserConfigurationException | SAXException
@@ -79,10 +75,13 @@ public class QueryFunctionTest {
 		System.out.println("Load model...");
 		OntModel ontModel=loadDefaultModel();
 		System.out.println("Start to query...");
+		  long start=System.currentTimeMillis();
 		Query q = QueryFactory.create(prefixes+query);
 		QueryExecution qe = QueryExecutionFactory.create(q, ontModel);
 		ResultSet qresults = qe.execSelect();
 		ResultSetFormatter.out(qresults);
+		  long end=System.currentTimeMillis();
+	        System.out.println("Query time: "+((float)(end-start))/1000+ " s");
 	}
 
 }

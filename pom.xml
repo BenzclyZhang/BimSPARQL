@@ -50,6 +50,11 @@
     <artifactId>jdelaunay</artifactId>
     <version>0.5.2</version>
 </dependency>
+<dependency>
+    <groupId>com.vividsolutions</groupId>
+    <artifactId>jts</artifactId>
+    <version>1.13</version>
+</dependency>
 		<dependency>
 			<groupId>org.topbraid</groupId>
 			<artifactId>spin</artifactId>

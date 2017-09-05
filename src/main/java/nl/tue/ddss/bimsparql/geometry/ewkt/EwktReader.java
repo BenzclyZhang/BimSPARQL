@@ -47,11 +47,24 @@ public class EwktReader{
 	   int pointer=0;
 	   String temp=null;
 	
-	public EwktReader(String s){
+	public static Geometry parseGeometry(String s){
+		EwktReader er=new EwktReader(s);
+		
+		Geometry geometry=null;
+		try {
+			geometry = er.readGeometry();
+		} catch (WktParseException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return geometry;
+	}
+	   
+    public EwktReader(String s){
 		this.s=s;
 	}
 
-
+   
 	public Geometry  readGeometry() throws WktParseException, IOException{
 	   GeometryType   geometryType   = readGeometryType() ;
 	   is3D       = imatch( 'Z' );
