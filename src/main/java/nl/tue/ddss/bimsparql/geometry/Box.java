@@ -22,7 +22,6 @@ import javax.vecmath.Vector3d;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Edge;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Polyhedron;
 import nl.tue.ddss.bimsparql.geometry.algorithm.Vertex;
-import unbboolean.j3dbool.Solid;
 
 public class Box {
 	
@@ -194,7 +193,7 @@ public class Box {
 	}
     
 	
-	public Solid toJ3DSolid(){
+/*	public Solid toJ3DSolid(){
 		Vector3d v=GeometryUtils.vectorSubtract(max, min);
 		Vector3d n1=orientation.getN1();
 		Vector3d n2=orientation.getN2();
@@ -225,7 +224,7 @@ public class Box {
  			}
 		Solid solid=new Solid(points,indices,colors);
 		return solid;
-	}
+	}*/
     
 
 }

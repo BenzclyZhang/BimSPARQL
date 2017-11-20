@@ -13,9 +13,9 @@ import nl.tue.ddss.convert.IfcVersion;
 public class MaterialConverterTest {
 	
 	public static void main(String[] args) throws IOException, WktWriteException{
-		InputStream in=new FileInputStream("D:/Final_Test/IFC/Space_contains.ifc");
+		InputStream in=new FileInputStream("D:/Final_Test/Office_A_20110811_optimized.ifc");
 //		OutputStream out1=new FileOutputStream("D:/Final_Test/IFC/Touches_geometry.ttl");
-		OutputStream out2=new FileOutputStream("D:/Final_Test/IFC/Space_contains_material.ttl");
+		OutputStream out2=new FileOutputStream("D:/Final_Test/Office_A_20110811_optimized_material.ttl");
 		GeometryConverter converter=new GeometryConverter("http://www.tue.nl/test/");
 //		converter.parseModel2GeometryStream(in, out1, IfcVersion.IFC2X3_TC1, false);
 		converter.parseModel2MaterialStream(in, out2, IfcVersion.IFC2X3_TC1);

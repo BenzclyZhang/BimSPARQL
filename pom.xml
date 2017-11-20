@@ -31,6 +31,33 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+<!-- <build>
+<plugins>
+ <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-resources-plugin</artifactId>
+    <version>3.0.2</version>
+    <executions>
+      <execution>
+        <id>default-copy-resources</id>
+        <phase>process-resources</phase>
+        <goals>
+          <goal>copy-resources</goal>
+        </goals>
+        <configuration>
+          <overwrite>true</overwrite>
+          <outputDirectory>${project.build.directory}/exe/</outputDirectory>
+          <resources>
+            <resource>
+              <directory>${basedir}/exe/</directory>
+            </resource>
+          </resources>
+        </configuration>
+      </execution>
+    </executions>
+  </plugin>
+  </plugins>
+</build> -->
 
 	<dependencies>
 <!-- https://mvnrepository.com/artifact/java3d/j3d-core-utils -->

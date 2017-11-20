@@ -19,6 +19,9 @@ package nl.tue.ddss.bimsparql.geometry.convert;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 import com.hp.hpl.jena.graph.NodeFactory;
@@ -115,7 +118,10 @@ public class GeometryConverter {
 		public void generateGeometry(InputStream in,boolean boundingbox) throws WktWriteException {	
 			IfcOpenShellEngine ifcOpenShellEngine;
 			try {
-				ifcOpenShellEngine = new IfcOpenShellEngine(GeometryConverter.class.getClassLoader().getResource("exe/64/win/IfcGeomServer.exe").getFile());
+				Path path = Paths.get(GeometryConverter.class.getProtectionDomain().getCodeSource().getLocation().toURI()); 
+				Path parent = path.getParent();
+				String parentDirName = parent.toString();
+				ifcOpenShellEngine = new IfcOpenShellEngine(parentDirName+getEngineForOS());
 	
 			RenderEngineModel renderEngineModel = ifcOpenShellEngine.openModel(in);
 					renderEngineModel.generateGeneralGeometry();
@@ -154,13 +160,44 @@ public class GeometryConverter {
 			} catch (RenderEngineException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} 
 		}
 		
-		public void generateMaterials(InputStream in) throws WktWriteException {	
+		private String getEngineForOS() throws RenderEngineException{
+			String os=System.getProperty("os.name").toLowerCase();
+			String arch=System.getProperty("os.arch");
+			String result="/exe";
+			if(arch.contains("64")){
+				result=result+"/64";
+				if(os.indexOf("win") >= 0){
+					return result+"/win/IfcGeomServer.exe";
+				}else if(os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ){
+					return result+"/linux/IfcGeomServer";
+				}else if(os.indexOf("mac") >= 0){
+					return result+"/osx/IfcGeomServer";
+				}
+			}else if(arch.contains("32")){
+				result=result+"/32";
+				if(os.indexOf("win") >= 0){
+					return result+"/win/IfcGeomServer.exe";
+				}else if(os.indexOf("nix") >= 0 || os.indexOf("nux") >= 0 || os.indexOf("aix") > 0 ){
+					return result+"/linux/IfcGeomServer";
+				}
+			}
+			throw new RenderEngineException("not supported operation system : "+os+" "+arch);
+
+		}
+		
+		public void generateMaterials(InputStream in) throws WktWriteException{	
 			IfcOpenShellEngine ifcOpenShellEngine;
 			try {
-				ifcOpenShellEngine = new IfcOpenShellEngine(GeometryConverter.class.getClassLoader().getResource("exe/64/win/IfcGeomServer.exe").getFile());
+				Path path = Paths.get(GeometryConverter.class.getProtectionDomain().getCodeSource().getLocation().toURI()); 
+				Path parent = path.getParent();
+				String parentDirName = parent.toString();
+				ifcOpenShellEngine = new IfcOpenShellEngine(parentDirName+getEngineForOS());
 	
 			RenderEngineModel renderEngineModel = ifcOpenShellEngine.openModel(in);
 					renderEngineModel.generateGeneralGeometry();
@@ -187,6 +224,9 @@ public class GeometryConverter {
 			} catch (RenderEngineException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
+			} catch (URISyntaxException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			} 
 		}
 		

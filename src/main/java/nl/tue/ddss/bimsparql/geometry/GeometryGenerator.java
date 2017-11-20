@@ -47,28 +47,11 @@ public class GeometryGenerator {
 	}
 
 
-
-
-
-
-
-
-
-	public void setGeometryById(HashMap<Integer, InstanceGeometry> geometryById) {
+    public void setGeometryById(HashMap<Integer, InstanceGeometry> geometryById) {
 		this.geometryById = geometryById;
 	}
 
-
-
-
-
-
-
-
-
 	private HashMap<Node,Geometry> hashmap=new HashMap<Node,Geometry>();
-	
-	
 
 	public GeometryGenerator(){
 	}
